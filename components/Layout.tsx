@@ -1,29 +1,25 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, ReactElement } from 'react';
 import Head from 'next/head';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
-interface Props {
-  children?: ReactNode;
-}
+type LayoutProps = {
+  children: ReactNode;
+};
 
-const date = new Date();
-const year = date.getFullYear();
-const copyright = `© WatchStop ${year}`;
-
-export default function Layout({ children }: Props) {
+export default function Layout({ children }: LayoutProps): ReactElement {
   return (
-    <div>
+    <>
       <Head>
         <title>WatchStop</title>
         <meta name='description' content='WatchStop' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div>
-        <h1>WatchStop</h1>
-      </div>
-      <main className='container'>{children}</main>
-      <footer>
-        <p>{copyright}</p>
-      </footer>
-    </div>
+      <Navbar />
+      <main className='min-h-screen'>
+        <div>{children}</div>
+      </main>
+      <Footer />
+    </>
   );
 }
