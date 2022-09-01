@@ -5,7 +5,7 @@ const year = date.getFullYear().toString();
 
 export default function Footer(): ReactElement {
   return (
-    <footer>
+    <footer className='m-10'>
       <p className='text-center'>{`© WatchStop ${year}`}</p>
     </footer>
   );
