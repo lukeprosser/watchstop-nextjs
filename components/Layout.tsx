@@ -22,7 +22,6 @@ export default function Layout({
           name='description'
           content={description ? description : 'WatchStop'}
         />
-        <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
       <main className='min-h-screen'>

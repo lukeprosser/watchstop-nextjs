@@ -8,6 +8,9 @@ module.exports = {
     minHeight: {
       screen: '80vh',
     },
+    fontFamily: {
+      sans: ['Raleway', 'sans-serif'],
+    },
   },
   plugins: [],
 };

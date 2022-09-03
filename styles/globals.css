@@ -5,6 +5,10 @@
 @layer base {
   body {
     @apply text-gray-900 bg-slate-50;
+    /* Align numerals in Raleway font */
+    -webkit-font-feature-settings: 'lnum';
+    -moz-font-feature-settings: 'lnum';
+    font-feature-settings: 'lnum';
   }
   .image-wrapper > span {
     @apply rounded shadow-md;

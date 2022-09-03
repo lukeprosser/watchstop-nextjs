@@ -20,12 +20,14 @@ export default function Product() {
   return (
     <Layout title={product.name} description={product.description}>
       <div className='container p-6 mx-auto'>
-        <Link href='/'>
-          <a className='block mb-8 text-sm text-slate-500 hover:text-slate-700 lg:text-base'>
-            <ChevronLeftIcon className='inline-block w-4 h-4 cursor-pointer' />
-            Back to products
-          </a>
-        </Link>
+        <div className='mb-8'>
+          <Link href='/'>
+            <a className='text-sm text-slate-500 hover:text-slate-700 lg:text-base'>
+              <ChevronLeftIcon className='inline-block w-4 h-4 cursor-pointer' />
+              Back to products
+            </a>
+          </Link>
+        </div>
         <div className='grid grid-cols-1 gap-8 2xl:items-center md:grid-cols-2'>
           <div className='image-wrapper'>
             <Image
