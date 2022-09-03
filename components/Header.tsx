@@ -5,7 +5,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 export default function Header(): ReactElement {
   const [showMobileNav, setShowMobileNav] = useState(false);
   return (
-    <nav className='text-lg text-slate-50 bg-slate-900 md:py-0'>
+    <header className='text-lg text-slate-50 bg-slate-900 md:py-0'>
       <div className='container flex flex-wrap items-center justify-between px-4 py-2 mx-auto'>
         <Link href='/'>
           <a className='text-xl font-semibold text-slate-50'>WatchStop</a>
@@ -24,7 +24,7 @@ export default function Header(): ReactElement {
           />
         )}
 
-        <div
+        <nav
           className={`${
             showMobileNav ? '' : 'hidden'
           } w-full md:flex md:items-center md:w-auto`}
@@ -41,8 +41,8 @@ export default function Header(): ReactElement {
               </Link>
             </li>
           </ul>
-        </div>
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }

@@ -1,6 +1,6 @@
 import React, { ReactNode, ReactElement } from 'react';
 import Head from 'next/head';
-import Navbar from './Navbar';
+import Header from './Header';
 import Footer from './Footer';
 
 type LayoutProps = {
@@ -24,7 +24,7 @@ export default function Layout({
         />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Navbar />
+      <Header />
       <main className='min-h-screen'>
         <div>{children}</div>
       </main>
