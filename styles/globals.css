@@ -6,4 +6,7 @@
   body {
     @apply text-gray-900 bg-slate-50;
   }
+  .image-wrapper > span {
+    @apply rounded shadow-md;
+  }
 }

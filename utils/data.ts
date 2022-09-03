@@ -3,6 +3,7 @@ const data = {
     {
       id: 1,
       name: 'Pegasus',
+      slug: 'pegasus',
       category: 'Classic',
       image: '/images/products/pegasus.jpg',
       price: 79.99,
@@ -11,11 +12,12 @@ const data = {
       numReviews: 9,
       stockCount: 17,
       description:
-        'A classic timekeeper for casually elegant or perfectly formal occasions. The leather strap and loop of this striking model leads the fashion-conscious eye from the buckle to the case. The sun brushed black dial presents slim tone-on-tone black hour indexes. Black hour and minute hands with tone-on-tone black highlights and a slim black seconds hand mark the time of day.',
+        'A classic timekeeper for casually elegant or formal occasions. The leather strap and loop of this striking model leads the fashion-conscious eye from the buckle to the case. The sun brushed black dial presents slim tone-on-tone black hour indexes. Black hour and minute hands with tone-on-tone black highlights and a slim black seconds hand mark the time of day.',
     },
     {
       id: 2,
       name: 'Grus',
+      slug: 'grus',
       category: 'Casual',
       image: '/images/products/grus.jpg',
       price: 59.99,
@@ -29,6 +31,7 @@ const data = {
     {
       id: 3,
       name: 'Scorpius',
+      slug: 'scorpius',
       category: 'Minimal',
       image: '/images/products/scorpius.jpg',
       price: 69.99,
@@ -42,6 +45,7 @@ const data = {
     {
       id: 4,
       name: 'Vega',
+      slug: 'vega',
       category: 'Modern',
       image: '/images/products/vega.jpg',
       price: 72.99,
@@ -55,6 +59,7 @@ const data = {
     {
       id: 5,
       name: 'Leo',
+      slug: 'leo',
       category: 'Minimal',
       image: '/images/products/leo.jpg',
       price: 89.99,
@@ -68,6 +73,7 @@ const data = {
     {
       id: 6,
       name: 'Corvus',
+      slug: 'corvus',
       category: 'Classic',
       image: '/images/products/corvus.jpg',
       price: 99.99,
@@ -81,6 +87,7 @@ const data = {
     {
       id: 7,
       name: 'Orion',
+      slug: 'orion',
       category: 'Classic',
       image: '/images/products/orion.jpg',
       price: 79.99,
@@ -94,6 +101,7 @@ const data = {
     {
       id: 8,
       name: 'Lyra',
+      slug: 'lyra',
       category: 'Modern',
       image: '/images/products/lyra.jpg',
       price: 49.99,
