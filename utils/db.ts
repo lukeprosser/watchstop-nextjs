@@ -4,7 +4,7 @@ type ConnectionProps = {
   isConnected?: number | boolean;
 };
 
-export interface IDocument {
+interface IDocument {
   _id: Types.ObjectId | string;
   __v: number;
   createdAt: EpochTimeStamp | string;

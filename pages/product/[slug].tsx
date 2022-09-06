@@ -1,15 +1,13 @@
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import data from '../../utils/data';
 import Layout from '../../components/Layout';
+import db from '../../utils/db';
+import Product from '../../models/Product';
+import { IProduct } from '../index';
 
-export default function Product() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((product) => product.slug === slug);
-
+export default function ProductDetail({ product }: { product: IProduct }) {
   if (!product)
     return (
       <div>
@@ -69,3 +67,15 @@ export default function Product() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  await db.connect();
+  const product = await Product.findOne({ slug: params?.slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: db.formatDocValues(product),
+    },
+  };
+};

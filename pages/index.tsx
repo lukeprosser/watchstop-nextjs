@@ -2,10 +2,27 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
-import db, { IDocument } from '../utils/db';
+import db from '../utils/db';
 import Product from '../models/Product';
 
-export default function Home({ products }: { products: Array<IDocument> }) {
+export interface IProduct {
+  _id: string;
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  slug: string;
+  category: string;
+  image: string;
+  price: number;
+  brand: string;
+  rating: number;
+  numReviews: number;
+  stockCount: number;
+  description: string;
+}
+
+export default function Home({ products }: { products: Array<IProduct> }) {
   return (
     <Layout>
       <div className='container p-6 mx-auto'>
