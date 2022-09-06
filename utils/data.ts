@@ -1,7 +1,6 @@
 const data = {
   products: [
     {
-      id: 1,
       name: 'Pegasus',
       slug: 'pegasus',
       category: 'Classic',
@@ -15,7 +14,6 @@ const data = {
         'A classic timekeeper for casually elegant or formal occasions. The leather strap and loop of this striking model leads the fashion-conscious eye from the buckle to the case. The sun brushed black dial presents slim tone-on-tone black hour indexes. Black hour and minute hands with tone-on-tone black highlights and a slim black seconds hand mark the time of day.',
     },
     {
-      id: 2,
       name: 'Grus',
       slug: 'grus',
       category: 'Casual',
@@ -29,7 +27,6 @@ const data = {
         "The perfect watch for a day out. This model features a sun-brushed black dial with yellow print and a day-date window at 3 o'clock, wrapped in a transparent matte clear plastic case. The simple yet sturdy look is held together by a supple brown leather bracelet with white stitching, a brown leather loop and fastened with a transparent matte clear plastic buckle.",
     },
     {
-      id: 3,
       name: 'Scorpius',
       slug: 'scorpius',
       category: 'Minimal',
@@ -43,7 +40,6 @@ const data = {
         'Go uptown with the Scorpius. A polished stainless steel case houses the automatic watch design, while the openwork caseback reveals the inner workings of the self-winding mechanical movement. Strap on the suave premium leather and watch the alligator skin pattern and bottomless blue, sun-brushed dial turn heads wherever the night takes you.',
     },
     {
-      id: 4,
       name: 'Vega',
       slug: 'vega',
       category: 'Modern',
@@ -57,7 +53,6 @@ const data = {
         'Rev up your style with Vega, which combines both sportiness and elegance in one debonair model. Featuring a sun-brushed black and copper dial with white print, it has the added benefits of a date window at 4:30 and hands with superluminova. A polished stainless steel with black PVD bezel is engraved and filled in white, and housed in a case of polished stainless steel. Giving the impression of a long black racing stripe, the bracelet is made of adjustable polished stainless steel with black resin middle links.',
     },
     {
-      id: 5,
       name: 'Leo',
       slug: 'leo',
       category: 'Minimal',
@@ -71,7 +66,6 @@ const data = {
         "Light up your nights with Leo, which features an all-black colour scheme. This model sets a sombre mood with asun-brushed black with black print dial, a date window at 4:30 and hands with superluminova. It's encircled with a polished stainless steel with black PVD engraved bezel and wrapped with a polished stainless steel with black PVD case. Tying together the dark look is an adjustable polished stainless steel with black PVD bracelet.",
     },
     {
-      id: 6,
       name: 'Corvus',
       slug: 'corvus',
       category: 'Classic',
@@ -85,7 +79,6 @@ const data = {
         'Ready, aim, fire! Corvus stands out from the pack with its luxury leather strap and black and copper face. Hardwearing and strong, this watch will stay with you whatever comes your way.',
     },
     {
-      id: 7,
       name: 'Orion',
       slug: 'orion',
       category: 'Classic',
@@ -99,7 +92,6 @@ const data = {
         "A timeless design for the man on the go, the Orion watch features a sun-brushed blue dial with red numerals, silver and white prints, three counters and a date window at 6 o'clock. This sophisticated style is set apart with a polished stainless steel case and a black bezel. A polished stainless steel strap with a traditional link pattern completes the design.",
     },
     {
-      id: 8,
       name: 'Lyra',
       slug: 'lyra',
       category: 'Modern',
