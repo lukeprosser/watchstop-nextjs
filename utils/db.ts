@@ -1,8 +1,25 @@
-import mongoose from 'mongoose';
+import mongoose, { Types, LeanDocument } from 'mongoose';
 
 type ConnectionProps = {
   isConnected?: number | boolean;
 };
+
+export interface IDocument {
+  _id: Types.ObjectId | string;
+  __v: number;
+  createdAt: EpochTimeStamp | string;
+  updatedAt: EpochTimeStamp | string;
+  name: string;
+  slug: string;
+  category: string;
+  image: string;
+  price: number;
+  brand: string;
+  rating: number;
+  numReviews: number;
+  stockCount: number;
+  description: string;
+}
 
 const connection: ConnectionProps = {};
 
@@ -43,5 +60,14 @@ async function disconnect() {
   }
 }
 
-const db = { connect, disconnect };
+// Convert id (ObjectId) and timestamps to strings
+function formatDocValues(document: LeanDocument<IDocument>) {
+  let doc = document;
+  doc._id = doc._id.toString();
+  doc.createdAt = doc.createdAt.toString();
+  doc.updatedAt = doc.updatedAt.toString();
+  return doc;
+}
+
+const db = { connect, disconnect, formatDocValues };
 export default db;

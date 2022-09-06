@@ -1,11 +1,11 @@
-import type { NextPage } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
-import data from '../utils/data';
+import db, { IDocument } from '../utils/db';
+import Product from '../models/Product';
 
-const Home: NextPage = () => {
+export default function Home({ products }: { products: Array<IDocument> }) {
   return (
     <Layout>
       <div className='container p-6 mx-auto'>
@@ -13,9 +13,9 @@ const Home: NextPage = () => {
           Products
         </h1>
         <div className='flex flex-wrap items-center justify-center gap-8'>
-          {data.products.map((product) => (
+          {products.map((product) => (
             <div
-              key={product.id}
+              key={product._id}
               className='max-w-xs overflow-hidden border rounded shadow-md border-slate-300 lg:max-w-sm'
             >
               <Link href={`/product/${product.slug}`}>
@@ -43,6 +43,15 @@ const Home: NextPage = () => {
       </div>
     </Layout>
   );
-};
+}
 
-export default Home;
+export async function getServerSideProps() {
+  await db.connect();
+  const products = await Product.find({}).lean();
+  await db.disconnect();
+  return {
+    props: {
+      products: products.map(db.formatDocValues),
+    },
+  };
+}
