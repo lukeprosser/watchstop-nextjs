@@ -2,18 +2,32 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 import Layout from '../../components/Layout';
 import db from '../../utils/db';
 import Product from '../../models/Product';
 import { IProduct } from '../index';
+import { useContext } from 'react';
+import { Store } from '../../utils/Store';
 
 export default function ProductDetail({ product }: { product: IProduct }) {
+  const { dispatch } = useContext(Store);
+
   if (!product)
     return (
       <div>
         <h1>Product not found.</h1>
       </div>
     );
+
+  const addToCartHandler = async () => {
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.stockCount < 1) {
+      window.alert('Sorry, this product is no longer in stock.');
+      return;
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } });
+  };
 
   return (
     <Layout title={product.name} description={product.description}>
@@ -58,7 +72,10 @@ export default function ProductDetail({ product }: { product: IProduct }) {
                 {product.stockCount} in stock
               </p>
             </div>
-            <button className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'>
+            <button
+              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'
+              onClick={addToCartHandler}
+            >
               Add to cart
             </button>
           </div>
