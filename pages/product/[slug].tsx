@@ -11,7 +11,9 @@ import { useContext } from 'react';
 import { Store } from '../../utils/Store';
 
 export default function ProductDetail({ product }: { product: IProduct }) {
-  const { dispatch } = useContext(Store);
+  const value = useContext(Store);
+  if (!value) throw new Error('Store context must be defined.');
+  const { dispatch } = value;
 
   if (!product)
     return (

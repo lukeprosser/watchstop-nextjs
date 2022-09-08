@@ -1,25 +1,37 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, Dispatch } from 'react';
 import { setCookie, getCookie, hasCookie } from 'cookies-next';
+import { IProduct } from '../pages';
 
-const initialState = {
+interface IState {
+  cart: { cartItems: IProduct[] };
+}
+
+interface ContextType {
+  state: IState;
+  dispatch: Dispatch<{ type: string; payload: unknown }>;
+}
+
+const initialState: { cart: { cartItems: IProduct[] } } = {
   cart: {
-    cartItems: hasCookie('cartItems') ? JSON.parse(getCookie('cartItems')) : [],
+    cartItems: hasCookie('cartItems')
+      ? JSON.parse(getCookie('cartItems')!.toString())
+      : [],
   },
 };
 
-export const Store = createContext(initialState);
+export const Store = createContext<ContextType | null>(null);
 
-function reducer(state, action) {
+function reducer(state: IState, action: any) {
   switch (action.type) {
     case 'CART_ADD_ITEM':
       const newItem = action.payload;
-      console.log('state', state);
       const existingItem = state.cart.cartItems.find(
-        (item) => item._id === newItem._id
+        (item: IProduct) => item._id === newItem._id
       );
       const cartItems = existingItem
         ? state.cart.cartItems.map(
-            (item) => (item._id === existingItem._id ? existingItem : item) // Ensures consistent state shape
+            (item: IProduct) =>
+              item._id === existingItem._id ? existingItem : item // Ensures consistent state shape
           )
         : [...state.cart.cartItems, newItem];
       setCookie('cartItems', JSON.stringify(cartItems));
@@ -29,7 +41,7 @@ function reducer(state, action) {
   }
 }
 
-export function StoreProvider(props) {
+export function StoreProvider(props: any) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
