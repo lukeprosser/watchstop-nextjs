@@ -11,6 +11,9 @@ module.exports = {
     fontFamily: {
       sans: ['Raleway', 'sans-serif'],
     },
+    fontSize: {
+      xxs: '.6rem',
+    },
   },
   plugins: [],
 };

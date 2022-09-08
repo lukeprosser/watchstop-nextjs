@@ -42,12 +42,17 @@ export default function Header(): ReactElement {
           } w-full md:flex md:items-center md:w-auto`}
         >
           <ul className='pt-4 text-base text-slate-200 md:flex md:justify-between md:pt-0'>
-            <li>
+            <li className='relative'>
               <Link href='/cart'>
                 <a className='block py-2 md:p-4 hover:text-slate-50'>
                   Cart
                   {showCartItems && cart.cartItems.length > 0 && (
-                    <span> {cart.cartItems.length}</span>
+                    <span
+                      className='absolute right-0 w-4 h-4 text-center bg-red-600 rounded-full text-xxs top-4'
+                      style={{ lineHeight: '15px' }}
+                    >
+                      {cart.cartItems.length}
+                    </span>
                   )}
                 </a>
               </Link>
