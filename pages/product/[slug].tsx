@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import Layout from '../../components/Layout';
@@ -11,6 +12,7 @@ import { useContext } from 'react';
 import { Store } from '../../utils/Store';
 
 export default function ProductDetail({ product }: { product: IProduct }) {
+  const router = useRouter();
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
   const { dispatch } = value;
@@ -29,6 +31,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } });
+    router.push('/cart');
   };
 
   return (
@@ -50,6 +53,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
               width='1280'
               height='853'
               layout='responsive'
+              priority
             />
           </div>
           <div className='lg:mx-auto lg:max-w-lg'>

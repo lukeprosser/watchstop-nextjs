@@ -14,6 +14,7 @@ export interface IProduct {
   slug: string;
   category: string;
   image: string;
+  quantity: number;
   price: number;
   brand: string;
   rating: number;

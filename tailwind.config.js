@@ -5,14 +5,19 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    minHeight: {
-      screen: '80vh',
+    extend: {
+      minHeight: {
+        screen: '80vh',
+      },
+      maxWidth: {
+        xxs: '80px',
+      },
+      fontSize: {
+        xxs: '.6rem',
+      },
     },
     fontFamily: {
       sans: ['Raleway', 'sans-serif'],
-    },
-    fontSize: {
-      xxs: '.6rem',
     },
   },
   plugins: [],
