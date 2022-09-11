@@ -23,8 +23,8 @@ export default function Cart() {
             Cart is empty. <Link href='/'>View products</Link>
           </div>
         ) : (
-          <div className='grid grid-cols-1 gap-8 2xl:items-center md:grid-cols-3'>
-            <table className='col-span-2 table-auto'>
+          <div className='grid grid-cols-1 md:gap-8 md:grid-cols-3'>
+            <table className='col-span-2 mb-8 table-auto'>
               <thead className='border-b-2 border-slate-300'>
                 <tr>
                   <th className='py-2'>Image</th>
@@ -38,19 +38,21 @@ export default function Cart() {
                 {cartItems.map((item) => (
                   <tr
                     key={item._id}
-                    className='border-t border-slate-300 first:border-none'
+                    className='text-sm border-t border-slate-300 first:border-none'
                   >
                     <td className='px-2 py-3'>
                       <div className='m-auto max-w-xxs'>
                         <Link href={`/product/${item.slug}`}>
                           <a>
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              width='1280'
-                              height='853'
-                              layout='responsive'
-                            />
+                            <div className='image-wrapper'>
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                width='1280'
+                                height='853'
+                                layout='responsive'
+                              />
+                            </div>
                           </a>
                         </Link>
                       </div>
@@ -80,7 +82,29 @@ export default function Cart() {
                 ))}
               </tbody>
             </table>
-            <div>Cart options</div>
+            <div className='p-6 border rounded shadow-md bg-slate-200 md:max-h-56 min-w-fit border-slate-300'>
+              <h2 className='mb-4 font-medium tracking-wider lg:text-xl'>
+                Order Summary
+              </h2>
+              <ul className='mb-6 font-light'>
+                <li>
+                  {cartItems.reduce((prev, curr) => prev + curr.quantity, 0)}{' '}
+                  items in cart
+                </li>
+                <li>
+                  Subtotal: £
+                  {cartItems
+                    .reduce(
+                      (prev, curr) => prev + curr.quantity * curr.price,
+                      0
+                    )
+                    .toFixed(2)}
+                </li>
+              </ul>
+              <button className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'>
+                Checkout
+              </button>
+            </div>
           </div>
         )}
       </div>
