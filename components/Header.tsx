@@ -5,9 +5,12 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Store } from '../utils/Store';
 
 export default function Header(): ReactElement {
+  const value = useContext(Store);
+  if (!value) throw new Error('Store context must be defined.');
+  const { state } = value;
   const {
-    state: { cart },
-  } = useContext(Store);
+    cart: { cartItems },
+  } = state;
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [showCartItems, setShowCartItems] = useState(false);
 
@@ -46,12 +49,12 @@ export default function Header(): ReactElement {
               <Link href='/cart'>
                 <a className='block py-2 md:p-4 hover:text-slate-50'>
                   Cart
-                  {showCartItems && cart.cartItems.length > 0 && (
+                  {showCartItems && cartItems.length > 0 && (
                     <span
                       className='absolute right-0 w-4 h-4 text-center bg-red-600 rounded-full text-xxs top-4'
                       style={{ lineHeight: '15px' }}
                     >
-                      {cart.cartItems.length}
+                      {cartItems.length}
                     </span>
                   )}
                 </a>

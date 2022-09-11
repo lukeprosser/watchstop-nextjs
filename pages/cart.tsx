@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 
-export default function Cart() {
+function Cart() {
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
   const { state } = value;
@@ -111,3 +112,5 @@ export default function Cart() {
     </Layout>
   );
 }
+
+export default dynamic(() => Promise.resolve(Cart), { ssr: false });
