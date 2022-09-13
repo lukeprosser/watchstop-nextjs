@@ -40,10 +40,15 @@ function Cart() {
         </h1>
         {cartItems.length === 0 ? (
           <div>
-            Cart is empty. <Link href='/'>View products</Link>
+            Cart is empty.{' '}
+            <Link href='/'>
+              <a className='block px-4 py-3 mt-6 text-sm rounded w-fit bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'>
+                View products
+              </a>
+            </Link>
           </div>
         ) : (
-          <div className='grid grid-cols-1 md:gap-8 md:grid-cols-3'>
+          <div className='grid items-start grid-cols-1 md:gap-8 md:grid-cols-3'>
             <table className='col-span-2 mb-8 table-auto'>
               <thead className='border-b-2 border-slate-300'>
                 <tr>
