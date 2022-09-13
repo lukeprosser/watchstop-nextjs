@@ -54,7 +54,10 @@ export default function Header(): ReactElement {
                       className='absolute right-0 w-4 h-4 text-center bg-red-600 rounded-full text-xxs top-4'
                       style={{ lineHeight: '15px' }}
                     >
-                      {cartItems.length}
+                      {cartItems.reduce(
+                        (prev, curr) => prev + curr.quantity,
+                        0
+                      )}
                     </span>
                   )}
                 </a>

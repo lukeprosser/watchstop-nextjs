@@ -1,8 +1,12 @@
+import { useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import db from '../utils/db';
+import { Store } from '../utils/Store';
 import Product from '../models/Product';
 
 export interface IProduct {
@@ -24,6 +28,28 @@ export interface IProduct {
 }
 
 export default function Home({ products }: { products: Array<IProduct> }) {
+  const router = useRouter();
+  const value = useContext(Store);
+  if (!value) throw new Error('Store context must be defined.');
+  const { state, dispatch } = value;
+
+  const handleAddToCart = async (product: IProduct) => {
+    const existingItem = state.cart.cartItems.find(
+      (item) => item._id === product._id
+    );
+    const quantity = existingItem ? existingItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.stockCount < quantity) {
+      window.alert('Sorry, this product is no longer in stock.');
+      return;
+    }
+    dispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...product, quantity },
+    });
+    router.push('/cart');
+  };
+
   return (
     <Layout>
       <div className='container p-6 mx-auto'>
@@ -51,7 +77,10 @@ export default function Home({ products }: { products: Array<IProduct> }) {
               </Link>
               <div className='flex items-center justify-between p-2 mt-1'>
                 <span className='font-light'>£{product.price}</span>
-                <button className='p-1 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600'>
+                <button
+                  className='p-1 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600'
+                  onClick={() => handleAddToCart(product)}
+                >
                   <ShoppingBagIcon className='w-6 h-6' role='button' />
                 </button>
               </div>

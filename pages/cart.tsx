@@ -3,16 +3,31 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
+import { IProduct } from './index';
 
 function Cart() {
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
-  const { state } = value;
+  const { state, dispatch } = value;
   const {
     cart: { cartItems },
   } = state;
+
+  const handleQuantityUpdate = async (item: IProduct, quantity: string) => {
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.stockCount < quantity) {
+      window.alert('Sorry, this product is no longer in stock.');
+      return;
+    }
+    dispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...item, quantity: parseInt(quantity) },
+    });
+  };
+
   return (
     <Layout title='Shopping Cart'>
       <div className='container p-6 mx-auto'>
@@ -64,7 +79,12 @@ function Cart() {
                       </Link>
                     </td>
                     <td className='px-2 py-3 text-right'>
-                      <select value={item.quantity}>
+                      <select
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityUpdate(item, e.target.value)
+                        }
+                      >
                         {Array.from(Array(item.stockCount).keys()).map((k) => (
                           <option key={k + 1} value={k + 1}>
                             {k + 1}

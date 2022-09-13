@@ -15,7 +15,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
   const router = useRouter();
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
-  const { dispatch } = value;
+  const { state, dispatch } = value;
 
   if (!product)
     return (
@@ -24,13 +24,20 @@ export default function ProductDetail({ product }: { product: IProduct }) {
       </div>
     );
 
-  const addToCartHandler = async () => {
+  const handleAddToCart = async () => {
+    const existingItem = state.cart.cartItems.find(
+      (item) => item._id === product._id
+    );
+    const quantity = existingItem ? existingItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.stockCount < 1) {
+    if (data.stockCount < quantity) {
       window.alert('Sorry, this product is no longer in stock.');
       return;
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } });
+    dispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { ...product, quantity },
+    });
     router.push('/cart');
   };
 
@@ -80,7 +87,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
             </div>
             <button
               className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'
-              onClick={addToCartHandler}
+              onClick={handleAddToCart}
             >
               Add to cart
             </button>

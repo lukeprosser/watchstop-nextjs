@@ -30,8 +30,7 @@ function reducer(state: IState, action: any) {
       );
       const cartItems = existingItem
         ? state.cart.cartItems.map(
-            (item: IProduct) =>
-              item._id === existingItem._id ? existingItem : item // Ensures consistent state shape
+            (item: IProduct) => (item._id === existingItem._id ? newItem : item) // Prevent duplicate item
           )
         : [...state.cart.cartItems, newItem];
       setCookie('cartItems', JSON.stringify(cartItems));
