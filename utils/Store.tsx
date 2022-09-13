@@ -23,7 +23,7 @@ export const Store = createContext<ContextType | null>(null);
 
 function reducer(state: IState, action: any) {
   switch (action.type) {
-    case 'CART_ADD_ITEM':
+    case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existingItem = state.cart.cartItems.find(
         (item: IProduct) => item._id === newItem._id
@@ -35,6 +35,14 @@ function reducer(state: IState, action: any) {
         : [...state.cart.cartItems, newItem];
       setCookie('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
+    }
+    case 'CART_REMOVE_ITEM': {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item._id !== action.payload
+      );
+      setCookie('cartItems', JSON.stringify(cartItems));
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }
     default:
       return state;
   }

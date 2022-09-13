@@ -28,6 +28,10 @@ function Cart() {
     });
   };
 
+  const handleRemoveFromCart = async (id: string) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: id });
+  };
+
   return (
     <Layout title='Shopping Cart'>
       <div className='container p-6 mx-auto'>
@@ -97,6 +101,7 @@ function Cart() {
                       <TrashIcon
                         className='inline-block w-6 h-6 cursor-pointer'
                         role='button'
+                        onClick={() => handleRemoveFromCart(item._id)}
                       />
                     </td>
                   </tr>
