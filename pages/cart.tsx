@@ -132,9 +132,11 @@ function Cart() {
                     .toFixed(2)}
                 </li>
               </ul>
-              <button className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'>
-                Checkout
-              </button>
+              <Link href='/delivery'>
+                <a className='block w-full px-4 py-3 text-sm text-center rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'>
+                  Checkout
+                </a>
+              </Link>
             </div>
           </div>
         )}

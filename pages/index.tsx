@@ -78,6 +78,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
               <div className='flex items-center justify-between p-2 mt-1'>
                 <span className='font-light'>£{product.price}</span>
                 <button
+                  type='button'
                   className='p-1 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600'
                   onClick={() => handleAddToCart(product)}
                 >

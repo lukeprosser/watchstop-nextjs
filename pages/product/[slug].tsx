@@ -86,6 +86,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
               </p>
             </div>
             <button
+              type='button'
               className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'
               onClick={handleAddToCart}
             >
