@@ -2,8 +2,17 @@ import { createContext, useReducer, Dispatch } from 'react';
 import { setCookie, getCookie, hasCookie } from 'cookies-next';
 import { IProduct } from '../pages';
 
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+  admin: Boolean;
+  token: string;
+}
+
 interface IState {
   cart: { cartItems: IProduct[] };
+  userInfo: IUser;
 }
 
 interface ContextType {
@@ -11,18 +20,23 @@ interface ContextType {
   dispatch: Dispatch<{ type: string; payload: unknown }>;
 }
 
-const initialState: { cart: { cartItems: IProduct[] } } = {
+const initialState: IState = {
   cart: {
     cartItems: hasCookie('cartItems')
       ? JSON.parse(getCookie('cartItems')!.toString())
       : [],
   },
+  userInfo: hasCookie('userInfo')
+    ? JSON.parse(getCookie('userInfo')!.toString())
+    : null,
 };
 
 export const Store = createContext<ContextType | null>(null);
 
 function reducer(state: IState, action: any) {
   switch (action.type) {
+    case 'USER_LOGIN':
+      return { ...state, userInfo: action.payload };
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existingItem = state.cart.cartItems.find(

@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import axios from 'axios';
+import { setCookie } from 'cookies-next';
 import Layout from '../components/Layout';
+import { Store } from '../utils/Store';
 
 export default function Login() {
+  const router = useRouter();
+  const value = useContext(Store);
+  if (!value) throw new Error('Store context must be defined.');
+  const { state, dispatch } = value;
+  const { userInfo } = state;
+  // Get previous page if passed
+  const { redirect } = router.query;
+
+  useEffect(() => {
+    /*
+      - Redirect to home if user logged in
+      - Only run once when component is initially loaded
+      - Prevents further redirect to home page (e.g. to redirect back to delivery if checking out)
+    */
+    if (userInfo) router.push('/');
+  }, []);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted');
     try {
       const { data } = await axios.post('/api/users/login', {
         email,
         password,
       });
-      alert('Login successful');
+      dispatch({ type: 'USER_LOGIN', payload: data });
+      setCookie('userInfo', JSON.stringify(data));
+      router.push(typeof redirect === 'string' ? redirect : '/');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log('Error message: ', error.message);
