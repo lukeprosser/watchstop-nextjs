@@ -51,7 +51,7 @@ export default function Header(): ReactElement {
                   Cart
                   {showCartItems && cartItems.length > 0 && (
                     <span
-                      className='absolute right-0 w-4 h-4 text-center bg-red-600 rounded-full text-xxs top-4'
+                      className='absolute w-4 h-4 text-center bg-red-600 rounded-full md:right-0 text-xxs md:top-4'
                       style={{ lineHeight: '15px' }}
                     >
                       {cartItems.reduce(
