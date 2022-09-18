@@ -37,6 +37,8 @@ function reducer(state: IState, action: any) {
   switch (action.type) {
     case 'USER_LOGIN':
       return { ...state, userInfo: action.payload };
+    case 'USER_LOGOUT':
+      return { ...state, userInfo: null, cart: { cartItems: [] } };
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existingItem = state.cart.cartItems.find(
