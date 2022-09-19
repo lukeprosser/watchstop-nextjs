@@ -1,12 +1,27 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { setCookie } from 'cookies-next';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
+import styleHelpers from '../styles/helpers';
+
+interface IFormInput {
+  name: String;
+  email: String;
+  password: String;
+  passwordConfirm: String;
+}
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
+
   const router = useRouter();
   // Get previous page if passed
   const { redirect } = router.query;
@@ -25,14 +40,12 @@ export default function Register() {
     if (userInfo) router.push('/');
   }, []);
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleFormSubmit: SubmitHandler<IFormInput> = async ({
+    name,
+    email,
+    password,
+    passwordConfirm,
+  }) => {
     if (password !== passwordConfirm) {
       alert('Passwords do not match, please try again.');
       return;
@@ -60,7 +73,7 @@ export default function Register() {
     <Layout title='Register'>
       <div className='container p-6 mx-auto'>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(handleFormSubmit)}
           className='max-w-xl p-6 mx-auto border rounded shadow-md border-slate-200'
         >
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
@@ -74,12 +87,24 @@ export default function Register() {
               Name
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={styleHelpers.getInputStyles(errors, 'name')}
               id='name'
               type='text'
               placeholder='Name'
-              onChange={(e) => setName(e.target.value)}
+              {...register('name', {
+                required: true,
+                minLength: 2,
+              })}
             />
+            {errors.name ? (
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.name.type === 'minLength'
+                  ? 'Name must be at least two characters.'
+                  : 'Name is required.'}
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className='mb-4'>
             <label
@@ -89,12 +114,24 @@ export default function Register() {
               Email
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={styleHelpers.getInputStyles(errors, 'email')}
               id='email'
               type='text'
               placeholder='Email address'
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email', {
+                required: true,
+                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              })}
             />
+            {errors.email ? (
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.email.type === 'pattern'
+                  ? 'Email is not valid.'
+                  : 'Email is required.'}
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className='mb-4'>
             <label
@@ -104,12 +141,24 @@ export default function Register() {
               Password
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={styleHelpers.getInputStyles(errors, 'password')}
               id='password'
               type='password'
               placeholder='Password'
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password', {
+                required: true,
+                minLength: 8,
+              })}
             />
+            {errors.password ? (
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.password.type === 'minLength'
+                  ? 'Password must be at least eight characters.'
+                  : 'Password is required.'}
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div className='mb-8'>
             <label
@@ -119,12 +168,24 @@ export default function Register() {
               Confirm password
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={styleHelpers.getInputStyles(errors, 'passwordConfirm')}
               id='password-confirm'
               type='password'
               placeholder='Password'
-              onChange={(e) => setPasswordConfirm(e.target.value)}
+              {...register('passwordConfirm', {
+                required: true,
+                minLength: 8,
+              })}
             />
+            {errors.passwordConfirm ? (
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.passwordConfirm.type === 'minLength'
+                  ? 'Password must be at least eight characters.'
+                  : 'Password confirmation is required.'}
+              </span>
+            ) : (
+              ''
+            )}
           </div>
           <div>
             <button

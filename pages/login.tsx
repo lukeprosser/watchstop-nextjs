@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
+import styleHelpers from '../styles/helpers';
 
 interface IFormInput {
   email: String;
@@ -76,11 +77,7 @@ export default function Login() {
               Email
             </label>
             <input
-              className={`w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 ${
-                errors.email
-                  ? 'outline outline-red-500 focus:outline-red-500'
-                  : 'focus:outline-slate-300'
-              }`}
+              className={styleHelpers.getInputStyles(errors, 'email')}
               id='email'
               type='text'
               placeholder='Email address'
@@ -90,15 +87,11 @@ export default function Login() {
               })}
             />
             {errors.email ? (
-              errors.email.type === 'pattern' ? (
-                <span className='block mt-1 text-xs text-red-500'>
-                  Email is not valid..
-                </span>
-              ) : (
-                <span className='block mt-1 text-xs text-red-500'>
-                  Email is required.
-                </span>
-              )
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.email.type === 'pattern'
+                  ? 'Email is not valid.'
+                  : 'Email is required.'}
+              </span>
             ) : (
               ''
             )}
@@ -111,11 +104,7 @@ export default function Login() {
               Password
             </label>
             <input
-              className={`w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 ${
-                errors.password
-                  ? 'outline outline-red-500 focus:outline-red-500'
-                  : 'focus:outline-slate-300'
-              }`}
+              className={styleHelpers.getInputStyles(errors, 'password')}
               id='password'
               type='password'
               placeholder='Password'
@@ -125,15 +114,11 @@ export default function Login() {
               })}
             />
             {errors.password ? (
-              errors.password.type === 'minLength' ? (
-                <span className='block mt-1 text-xs text-red-500'>
-                  Password must be at least eight characters..
-                </span>
-              ) : (
-                <span className='block mt-1 text-xs text-red-500'>
-                  Password is required.
-                </span>
-              )
+              <span className='block mt-1 text-xs text-red-500'>
+                {errors.password.type === 'minLength'
+                  ? 'Password must be at least eight characters.'
+                  : 'Password is required.'}
+              </span>
             ) : (
               ''
             )}
