@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import styleHelpers from '../styles/helpers';
@@ -19,6 +20,8 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const router = useRouter();
   // Get previous page if passed
@@ -42,6 +45,7 @@ export default function Login() {
     email,
     password,
   }) => {
+    closeSnackbar();
     try {
       const { data } = await axios.post('/api/users/login', {
         email,
@@ -51,10 +55,15 @@ export default function Login() {
       setCookie('userInfo', JSON.stringify(data));
       router.push(typeof redirect === 'string' ? redirect : '/');
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log('Error message: ', error.message);
+      if (error instanceof AxiosError) {
+        enqueueSnackbar(
+          error.response ? error.response.data.message : error.message,
+          { variant: 'error' }
+        );
       } else {
-        console.log('Unexpected error: ', error);
+        enqueueSnackbar('An unexpected error occurred, please try again.', {
+          variant: 'error',
+        });
       }
     }
   };
@@ -70,14 +79,15 @@ export default function Login() {
             Login
           </h1>
           <div className='mb-4'>
-            <label
-              htmlFor='email'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='email' className={styleHelpers.label}>
               Email
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'email')}
+              className={`${styleHelpers.inputBase} ${
+                errors.email
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='email'
               type='text'
               placeholder='Email address'
@@ -87,7 +97,7 @@ export default function Login() {
               })}
             />
             {errors.email ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.email.type === 'pattern'
                   ? 'Email is not valid.'
                   : 'Email is required.'}
@@ -97,14 +107,15 @@ export default function Login() {
             )}
           </div>
           <div className='mb-8'>
-            <label
-              htmlFor='password'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='password' className={styleHelpers.label}>
               Password
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'password')}
+              className={`${styleHelpers.inputBase} ${
+                errors.password
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='password'
               type='password'
               placeholder='Password'
@@ -114,7 +125,7 @@ export default function Login() {
               })}
             />
             {errors.password ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.password.type === 'minLength'
                   ? 'Password must be at least eight characters.'
                   : 'Password is required.'}

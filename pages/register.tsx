@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import styleHelpers from '../styles/helpers';
@@ -21,6 +22,8 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const router = useRouter();
   // Get previous page if passed
@@ -46,8 +49,12 @@ export default function Register() {
     password,
     passwordConfirm,
   }) => {
+    closeSnackbar();
+
     if (password !== passwordConfirm) {
-      alert('Passwords do not match, please try again.');
+      enqueueSnackbar('Passwords do not match, please try again.', {
+        variant: 'error',
+      });
       return;
     }
 
@@ -61,10 +68,15 @@ export default function Register() {
       setCookie('userInfo', JSON.stringify(data));
       router.push(typeof redirect === 'string' ? redirect : '/');
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log('Error message: ', error.message);
+      if (error instanceof AxiosError) {
+        enqueueSnackbar(
+          error.response ? error.response.data.message : error.message,
+          { variant: 'error' }
+        );
       } else {
-        console.log('Unexpected error: ', error);
+        enqueueSnackbar('An unexpected error occurred, please try again.', {
+          variant: 'error',
+        });
       }
     }
   };
@@ -80,14 +92,15 @@ export default function Register() {
             Register
           </h1>
           <div className='mb-4'>
-            <label
-              htmlFor='name'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='name' className={styleHelpers.label}>
               Name
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'name')}
+              className={`${styleHelpers.inputBase} ${
+                errors.name
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='name'
               type='text'
               placeholder='Name'
@@ -97,7 +110,7 @@ export default function Register() {
               })}
             />
             {errors.name ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.name.type === 'minLength'
                   ? 'Name must be at least two characters.'
                   : 'Name is required.'}
@@ -107,14 +120,15 @@ export default function Register() {
             )}
           </div>
           <div className='mb-4'>
-            <label
-              htmlFor='email'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='email' className={styleHelpers.label}>
               Email
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'email')}
+              className={`${styleHelpers.inputBase} ${
+                errors.email
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='email'
               type='text'
               placeholder='Email address'
@@ -124,7 +138,7 @@ export default function Register() {
               })}
             />
             {errors.email ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.email.type === 'pattern'
                   ? 'Email is not valid.'
                   : 'Email is required.'}
@@ -134,14 +148,15 @@ export default function Register() {
             )}
           </div>
           <div className='mb-4'>
-            <label
-              htmlFor='password'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='password' className={styleHelpers.label}>
               Password
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'password')}
+              className={`${styleHelpers.inputBase} ${
+                errors.password
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='password'
               type='password'
               placeholder='Password'
@@ -151,7 +166,7 @@ export default function Register() {
               })}
             />
             {errors.password ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.password.type === 'minLength'
                   ? 'Password must be at least eight characters.'
                   : 'Password is required.'}
@@ -161,14 +176,15 @@ export default function Register() {
             )}
           </div>
           <div className='mb-8'>
-            <label
-              htmlFor='password-confirm'
-              className='block mb-2 font-medium tracking-wide text-slate-700'
-            >
+            <label htmlFor='password-confirm' className={styleHelpers.label}>
               Confirm password
             </label>
             <input
-              className={styleHelpers.getInputStyles(errors, 'passwordConfirm')}
+              className={`${styleHelpers.inputBase} ${
+                errors.passwordConfirm
+                  ? styleHelpers.inputOutlineError
+                  : styleHelpers.inputOutline
+              }`}
               id='password-confirm'
               type='password'
               placeholder='Password'
@@ -178,7 +194,7 @@ export default function Register() {
               })}
             />
             {errors.passwordConfirm ? (
-              <span className='block mt-1 text-xs text-red-500'>
+              <span className={styleHelpers.errorMessage}>
                 {errors.passwordConfirm.type === 'minLength'
                   ? 'Password must be at least eight characters.'
                   : 'Password confirmation is required.'}

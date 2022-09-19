@@ -22,8 +22,8 @@ handler.post(async (req, res) => {
       admin,
     });
   } else {
-    console.log('Wrong user or password.');
-    res.status(401).send({ message: 'User or password not recognised.' });
+    console.log('Wrong email or password.');
+    res.status(401).send({ message: 'Email or password not recognised.' });
   }
 });
 
