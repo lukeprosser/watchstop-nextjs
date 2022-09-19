@@ -3,10 +3,22 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { setCookie } from 'cookies-next';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 
+interface IFormInput {
+  email: String;
+  password: String;
+}
+
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
+
   const router = useRouter();
   // Get previous page if passed
   const { redirect } = router.query;
@@ -25,11 +37,10 @@ export default function Login() {
     if (userInfo) router.push('/');
   }, []);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleFormSubmit: SubmitHandler<IFormInput> = async ({
+    email,
+    password,
+  }) => {
     try {
       const { data } = await axios.post('/api/users/login', {
         email,
@@ -51,7 +62,7 @@ export default function Login() {
     <Layout title='Login'>
       <div className='container p-6 mx-auto'>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(handleFormSubmit)}
           className='max-w-xl p-6 mx-auto border rounded shadow-md border-slate-200'
         >
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
@@ -65,12 +76,32 @@ export default function Login() {
               Email
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={`w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 ${
+                errors.email
+                  ? 'outline outline-red-500 focus:outline-red-500'
+                  : 'focus:outline-slate-300'
+              }`}
               id='email'
               type='text'
               placeholder='Email address'
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email', {
+                required: true,
+                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+              })}
             />
+            {errors.email ? (
+              errors.email.type === 'pattern' ? (
+                <span className='block mt-1 text-xs text-red-500'>
+                  Email is not valid..
+                </span>
+              ) : (
+                <span className='block mt-1 text-xs text-red-500'>
+                  Email is required.
+                </span>
+              )
+            ) : (
+              ''
+            )}
           </div>
           <div className='mb-8'>
             <label
@@ -80,12 +111,32 @@ export default function Login() {
               Password
             </label>
             <input
-              className='w-full p-2 leading-tight border rounded shadow appearance-none text-slate-700 focus:outline-slate-400'
+              className={`w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 ${
+                errors.password
+                  ? 'outline outline-red-500 focus:outline-red-500'
+                  : 'focus:outline-slate-300'
+              }`}
               id='password'
               type='password'
               placeholder='Password'
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password', {
+                required: true,
+                minLength: 8,
+              })}
             />
+            {errors.password ? (
+              errors.password.type === 'minLength' ? (
+                <span className='block mt-1 text-xs text-red-500'>
+                  Password must be at least eight characters..
+                </span>
+              ) : (
+                <span className='block mt-1 text-xs text-red-500'>
+                  Password is required.
+                </span>
+              )
+            ) : (
+              ''
+            )}
           </div>
           <div>
             <button
