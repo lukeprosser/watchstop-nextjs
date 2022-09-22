@@ -6,12 +6,23 @@ interface IUser {
   _id: string;
   name: string;
   email: string;
-  admin: Boolean;
+  admin: boolean;
   token: string;
 }
 
+interface IDeliveryInfo {
+  fullName: string;
+  address: string;
+  city: string;
+  postcode: string;
+  country: string;
+}
+
 interface IState {
-  cart: { cartItems: IProduct[] };
+  cart: {
+    cartItems: IProduct[];
+    deliveryInfo?: IDeliveryInfo;
+  };
   userInfo: IUser;
 }
 
@@ -25,6 +36,9 @@ const initialState: IState = {
     cartItems: hasCookie('cartItems')
       ? JSON.parse(getCookie('cartItems')!.toString())
       : [],
+    deliveryInfo: hasCookie('deliveryInfo')
+      ? JSON.parse(getCookie('deliveryInfo')!.toString())
+      : {},
   },
   userInfo: hasCookie('userInfo')
     ? JSON.parse(getCookie('userInfo')!.toString())
@@ -59,6 +73,11 @@ function reducer(state: IState, action: any) {
       setCookie('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
+    case 'SAVE_DELIVERY_INFO':
+      return {
+        ...state,
+        cart: { ...state.cart, deliveryInfo: action.payload },
+      };
     default:
       return state;
   }

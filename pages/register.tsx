@@ -175,7 +175,7 @@ export default function Register() {
               ''
             )}
           </div>
-          <div className='mb-8'>
+          <div className='mb-4'>
             <label htmlFor='password-confirm' className={styleHelpers.label}>
               Confirm password
             </label>
@@ -203,7 +203,7 @@ export default function Register() {
               ''
             )}
           </div>
-          <div>
+          <div className='mt-8'>
             <button
               type='submit'
               className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
