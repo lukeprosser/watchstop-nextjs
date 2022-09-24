@@ -6,8 +6,8 @@ import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
+import FormField from '../components/FormField';
 import { Store } from '../utils/Store';
-import styleHelpers from '../styles/helpers';
 
 interface IFormInput {
   name: String;
@@ -91,118 +91,70 @@ export default function Register() {
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
             Register
           </h1>
-          <div className='mb-4'>
-            <label htmlFor='name' className={styleHelpers.label}>
-              Name
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.name
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='name'
-              type='text'
-              placeholder='Name'
-              {...register('name', {
-                required: true,
-                minLength: 2,
-              })}
-            />
-            {errors.name ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.name.type === 'minLength'
-                  ? 'Name must be at least two characters.'
-                  : 'Name is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='email' className={styleHelpers.label}>
-              Email
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.email
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='email'
-              type='text'
-              placeholder='Email address'
-              {...register('email', {
-                required: true,
-                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              })}
-            />
-            {errors.email ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.email.type === 'pattern'
-                  ? 'Email is not valid.'
-                  : 'Email is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='password' className={styleHelpers.label}>
-              Password
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.password
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='password'
-              type='password'
-              placeholder='Password'
-              {...register('password', {
-                required: true,
-                minLength: 8,
-              })}
-            />
-            {errors.password ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.password.type === 'minLength'
-                  ? 'Password must be at least eight characters.'
-                  : 'Password is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='password-confirm' className={styleHelpers.label}>
-              Confirm password
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.passwordConfirm
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='password-confirm'
-              type='password'
-              placeholder='Password'
-              {...register('passwordConfirm', {
-                required: true,
-                minLength: 8,
-              })}
-            />
-            {errors.passwordConfirm ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.passwordConfirm.type === 'minLength'
-                  ? 'Password must be at least eight characters.'
-                  : 'Password confirmation is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
+          <FormField
+            id='name'
+            label='Name'
+            type='text'
+            placeholder='Name'
+            errors={errors}
+            register={register('name', {
+              required: true,
+              minLength: 2,
+            })}
+            validationError={
+              errors?.name?.type === 'minLength'
+                ? 'Name must be at least two characters.'
+                : 'Name is required.'
+            }
+          />
+          <FormField
+            id='email'
+            label='Email'
+            type='email'
+            placeholder='Email address'
+            errors={errors}
+            register={register('email', {
+              required: true,
+              pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+            })}
+            validationError={
+              errors?.email?.type === 'pattern'
+                ? 'Email is not valid.'
+                : 'Email is required.'
+            }
+          />
+          <FormField
+            id='password'
+            label='Password'
+            type='password'
+            placeholder='Password'
+            errors={errors}
+            register={register('password', {
+              required: true,
+              minLength: 8,
+            })}
+            validationError={
+              errors?.password?.type === 'minLength'
+                ? 'Password must be at least eight characters.'
+                : 'Password is required.'
+            }
+          />
+          <FormField
+            id='passwordConfirm'
+            label='Confirm password'
+            type='password'
+            placeholder='Password'
+            errors={errors}
+            register={register('passwordConfirm', {
+              required: true,
+              minLength: 8,
+            })}
+            validationError={
+              errors?.passwordConfirm?.type === 'minLength'
+                ? 'Password must be at least eight characters.'
+                : 'Password confirmation is required.'
+            }
+          />
           <div className='mt-8'>
             <button
               type='submit'
