@@ -6,8 +6,8 @@ import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
+import FormField from '../components/FormField';
 import { Store } from '../utils/Store';
-import styleHelpers from '../styles/helpers';
 
 interface IFormInput {
   email: String;
@@ -78,62 +78,38 @@ export default function Login() {
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
             Login
           </h1>
-          <div className='mb-4'>
-            <label htmlFor='email' className={styleHelpers.label}>
-              Email
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.email
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='email'
-              type='text'
-              placeholder='Email address'
-              {...register('email', {
-                required: true,
-                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              })}
-            />
-            {errors.email ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.email.type === 'pattern'
-                  ? 'Email is not valid.'
-                  : 'Email is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='password' className={styleHelpers.label}>
-              Password
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.password
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='password'
-              type='password'
-              placeholder='Password'
-              {...register('password', {
-                required: true,
-                minLength: 8,
-              })}
-            />
-            {errors.password ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.password.type === 'minLength'
-                  ? 'Password must be at least eight characters.'
-                  : 'Password is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
+          <FormField
+            id='email'
+            label='Email'
+            type='email'
+            placeholder='Email address'
+            errors={errors}
+            register={register('email', {
+              required: true,
+              pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+            })}
+            validationError={
+              errors?.email?.type === 'pattern'
+                ? 'Email is not valid.'
+                : 'Email is required.'
+            }
+          />
+          <FormField
+            id='password'
+            label='Password'
+            type='password'
+            placeholder='Password'
+            errors={errors}
+            register={register('password', {
+              required: true,
+              minLength: 8,
+            })}
+            validationError={
+              errors?.password?.type === 'minLength'
+                ? 'Password must be at least eight characters.'
+                : 'Password is required.'
+            }
+          />
           <div className='mt-8'>
             <button
               type='submit'

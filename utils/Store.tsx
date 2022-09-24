@@ -21,7 +21,7 @@ interface IDeliveryInfo {
 interface IState {
   cart: {
     cartItems: IProduct[];
-    deliveryInfo?: IDeliveryInfo;
+    deliveryInfo?: IDeliveryInfo; // Optional
   };
   userInfo: IUser;
 }
