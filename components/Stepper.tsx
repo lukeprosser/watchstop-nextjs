@@ -1,0 +1,51 @@
+import React from 'react';
+import { CheckIcon } from '@heroicons/react/24/outline';
+
+const Previous = () => (
+  <div className='flex items-center w-6 h-6 mx-auto mb-2 text-lg text-white rounded-full md:w-8 md:h-8 bg-sky-500'>
+    <CheckIcon className='block w-4 h-4 mx-auto md:w-6 md:h-6' />
+  </div>
+);
+
+const Current = () => (
+  <div className='w-6 h-6 mx-auto mb-2 border-4 rounded-full md:w-8 md:h-8 border-sky-500'></div>
+);
+
+const Next = () => (
+  <div className='w-6 h-6 mx-auto mb-2 border-2 border-gray-300 rounded-full md:w-8 md:h-8'></div>
+);
+
+export default function Stepper({
+  steps = ['One', 'Two', 'Three'],
+  activeStep = 0,
+}) {
+  return (
+    <div className='w-full py-6'>
+      <div className='flex'>
+        {steps.map((step, idx) => (
+          <div key={step} className={`w-1/${steps.length}`}>
+            <div className='relative'>
+              {idx < activeStep ? (
+                <Previous />
+              ) : idx === activeStep ? (
+                <Current />
+              ) : (
+                <Next />
+              )}
+              {idx > 0 && idx < steps.length && (
+                <div
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 top-1/2 w-[calc(100%-2.5rem)] md:w-[calc(100%-4rem)] py-0.5 rounded ${
+                    idx < activeStep + 1 ? 'bg-sky-500' : 'bg-gray-200'
+                  }`}
+                ></div>
+              )}
+            </div>
+            <div className='text-xs font-light text-center md:text-sm lg:text-base'>
+              {step}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

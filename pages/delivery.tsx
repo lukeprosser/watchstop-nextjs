@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
+import Stepper from '../components/Stepper';
 import FormField from '../components/FormField';
 import { Store } from '../utils/Store';
 
@@ -66,9 +67,13 @@ export default function Delivery() {
   return (
     <Layout title='Delivery'>
       <div className='container p-6 mx-auto'>
+        <Stepper
+          steps={['Login', 'Delivery Address', 'Payment Method', 'Place Order']}
+          activeStep={1}
+        />
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
-          className='max-w-xl p-6 mx-auto border rounded shadow-md border-slate-200'
+          className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-slate-200'
         >
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
             Delivery Information
