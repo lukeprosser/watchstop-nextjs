@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  FieldErrorsImpl,
-  RegisterOptions,
-  UseFormRegisterReturn,
-} from 'react-hook-form';
+import { FieldErrorsImpl, UseFormRegisterReturn } from 'react-hook-form';
 
 export default function FormField({
   id,

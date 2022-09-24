@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
+import FormField from '../components/FormField';
 import { Store } from '../utils/Store';
-import styleHelpers from '../styles/helpers';
 
 interface IFormInput {
   fullName: string;
@@ -36,6 +36,7 @@ export default function Delivery() {
     if (!userInfo) router.push('/login?redirect=/delivery');
 
     if (deliveryInfo) {
+      // Fill form fields for persistance
       setValue('fullName', deliveryInfo.fullName);
       setValue('address', deliveryInfo.address);
       setValue('city', deliveryInfo.city);
@@ -72,146 +73,86 @@ export default function Delivery() {
           <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
             Delivery Information
           </h1>
-          <div className='mb-4'>
-            <label htmlFor='fullName' className={styleHelpers.label}>
-              Full name
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.fullName
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='fullName'
-              type='text'
-              placeholder='Full name'
-              {...register('fullName', {
-                required: true,
-                minLength: 2,
-              })}
-            />
-            {errors.fullName ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.fullName.type === 'minLength'
-                  ? 'Full name must be at least two characters.'
-                  : 'Full name is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='address' className={styleHelpers.label}>
-              Address
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.address
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='address'
-              type='text'
-              placeholder='Address'
-              {...register('address', {
-                required: true,
-                minLength: 5,
-              })}
-            />
-            {errors.address ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.address.type === 'minLength'
-                  ? 'Address must be at least twenty characters.'
-                  : 'Address is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='city' className={styleHelpers.label}>
-              City
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.city
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='city'
-              type='text'
-              placeholder='City'
-              {...register('city', {
-                required: true,
-                minLength: 2,
-              })}
-            />
-            {errors.city ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.city.type === 'minLength'
-                  ? 'City must be at least two characters.'
-                  : 'City is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='postcode' className={styleHelpers.label}>
-              Postcode
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.postcode
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='postcode'
-              type='text'
-              placeholder='Postcode'
-              {...register('postcode', {
-                required: true,
-                minLength: 5,
-              })}
-            />
-            {errors.postcode ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.postcode.type === 'minLength'
-                  ? 'Postcode must be at least five characters.'
-                  : 'Postcode is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
-          <div className='mb-4'>
-            <label htmlFor='country' className={styleHelpers.label}>
-              Country
-            </label>
-            <input
-              className={`${styleHelpers.inputBase} ${
-                errors.country
-                  ? styleHelpers.inputOutlineError
-                  : styleHelpers.inputOutline
-              }`}
-              id='country'
-              type='text'
-              placeholder='Country'
-              {...register('country', {
-                required: true,
-                minLength: 2,
-              })}
-            />
-            {errors.country ? (
-              <span className={styleHelpers.errorMessage}>
-                {errors.country.type === 'minLength'
-                  ? 'Country must be at least two characters.'
-                  : 'Country is required.'}
-              </span>
-            ) : (
-              ''
-            )}
-          </div>
+          <FormField
+            id='fullName'
+            label='Full name'
+            type='text'
+            placeholder='Full name'
+            errors={errors}
+            register={register('fullName', {
+              required: true,
+              minLength: 2,
+            })}
+            validationError={
+              errors?.fullName?.type === 'minLength'
+                ? 'Name must be at least two characters.'
+                : 'Name is required.'
+            }
+          />
+          <FormField
+            id='address'
+            label='Address'
+            type='text'
+            placeholder='Address'
+            errors={errors}
+            register={register('address', {
+              required: true,
+              minLength: 5,
+            })}
+            validationError={
+              errors?.address?.type === 'minLength'
+                ? 'Address must be at least five characters.'
+                : 'Address is required.'
+            }
+          />
+          <FormField
+            id='city'
+            label='City'
+            type='text'
+            placeholder='City'
+            errors={errors}
+            register={register('city', {
+              required: true,
+              minLength: 2,
+            })}
+            validationError={
+              errors?.city?.type === 'minLength'
+                ? 'City must be at least two characters.'
+                : 'City is required.'
+            }
+          />
+          <FormField
+            id='postcode'
+            label='Postcode'
+            type='text'
+            placeholder='Postcode'
+            errors={errors}
+            register={register('postcode', {
+              required: true,
+              minLength: 5,
+            })}
+            validationError={
+              errors?.postcode?.type === 'minLength'
+                ? 'Postcode must be at least five characters.'
+                : 'Postcode is required.'
+            }
+          />
+          <FormField
+            id='country'
+            label='Country'
+            type='text'
+            placeholder='Country'
+            errors={errors}
+            register={register('country', {
+              required: true,
+              minLength: 2,
+            })}
+            validationError={
+              errors?.country?.type === 'minLength'
+                ? 'Country must be at least two characters.'
+                : 'Country is required.'
+            }
+          />
           <div className='mt-8'>
             <button
               type='submit'
