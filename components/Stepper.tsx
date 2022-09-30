@@ -23,7 +23,8 @@ export default function Stepper({
     <div className='w-full py-6'>
       <div className='flex'>
         {steps.map((step, idx) => (
-          <div key={step} className={`w-1/${steps.length}`}>
+          // Width workaround - Tailwind can't process dynamically interpolated values at build time
+          <div key={step} style={{ width: `calc(100% / ${steps.length})` }}>
             <div className='relative'>
               {idx < activeStep ? (
                 <Previous />
