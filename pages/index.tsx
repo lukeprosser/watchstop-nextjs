@@ -53,7 +53,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
   return (
     <Layout>
       <div className='container p-6 mx-auto'>
-        <h1 className='mb-4 text-lg font-semibold tracking-wide lg:text-2xl'>
+        <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Products
         </h1>
         <div className='flex flex-wrap items-center justify-center gap-8'>

@@ -1,5 +1,10 @@
 import { createContext, useReducer, Dispatch } from 'react';
-import { setCookie, getCookie, hasCookie } from 'cookies-next';
+import {
+  setCookie,
+  getCookie,
+  hasCookie,
+  CookieValueTypes,
+} from 'cookies-next';
 import { IProduct } from '../pages';
 
 interface IUser {
@@ -21,7 +26,8 @@ interface IDeliveryInfo {
 interface IState {
   cart: {
     cartItems: IProduct[];
-    deliveryInfo?: IDeliveryInfo; // Optional
+    deliveryInfo?: IDeliveryInfo;
+    paymentMethod?: CookieValueTypes;
   };
   userInfo: IUser;
 }
@@ -39,6 +45,10 @@ const initialState: IState = {
     deliveryInfo: hasCookie('deliveryInfo')
       ? JSON.parse(getCookie('deliveryInfo')!.toString())
       : {},
+    paymentMethod:
+      typeof getCookie('paymentMethod') === 'string'
+        ? getCookie('paymentMethod')
+        : '',
   },
   userInfo: hasCookie('userInfo')
     ? JSON.parse(getCookie('userInfo')!.toString())

@@ -55,7 +55,7 @@ export default function Payment() {
     }
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     closeSnackbar();
     e.preventDefault();
 
@@ -64,7 +64,7 @@ export default function Payment() {
     } else {
       dispatch({ type: 'SAVE_PAYMENT_METHOD', payload: paymentMethod });
       setCookie('paymentMethod', paymentMethod);
-      router.push('/place-order');
+      router.push('/order');
     }
   };
 
@@ -79,14 +79,14 @@ export default function Payment() {
           onSubmit={handleSubmit}
           className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-slate-200'
         >
-          <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
+          <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Payment Method
           </h1>
           <fieldset>
             <div>
               <RadioButton
                 label='PayPal'
-                value='paypal'
+                value='PayPal'
                 selected={paymentMethod}
                 onChange={setPaymentMethod}
               />
@@ -94,7 +94,7 @@ export default function Payment() {
             <div>
               <RadioButton
                 label='Stripe'
-                value='stripe'
+                value='Stripe'
                 selected={paymentMethod}
                 onChange={setPaymentMethod}
               />

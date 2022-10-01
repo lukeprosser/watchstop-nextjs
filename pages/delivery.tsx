@@ -75,7 +75,7 @@ export default function Delivery() {
           onSubmit={handleSubmit(handleFormSubmit)}
           className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-slate-200'
         >
-          <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
+          <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Delivery Information
           </h1>
           <FormField

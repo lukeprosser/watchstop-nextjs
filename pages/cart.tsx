@@ -35,7 +35,7 @@ function Cart() {
   return (
     <Layout title='Shopping Cart'>
       <div className='container p-6 mx-auto'>
-        <h1 className='mb-4 text-lg font-semibold tracking-wide lg:text-2xl'>
+        <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Shopping Cart
         </h1>
         {cartItems.length === 0 ? (
@@ -113,7 +113,7 @@ function Cart() {
                 ))}
               </tbody>
             </table>
-            <div className='p-6 border rounded shadow-md bg-slate-200 md:max-h-56 min-w-fit border-slate-300'>
+            <div className='self-start p-6 border rounded shadow-md bg-slate-200 md:max-h-max min-w-fit border-slate-300'>
               <h2 className='mb-4 font-medium tracking-wider lg:text-xl'>
                 Order Summary
               </h2>
@@ -122,7 +122,7 @@ function Cart() {
                   {cartItems.reduce((prev, curr) => prev + curr.quantity, 0)}{' '}
                   items in cart
                 </li>
-                <li>
+                <li className='text-lg font-medium tracking-wide'>
                   Subtotal: £
                   {cartItems
                     .reduce(

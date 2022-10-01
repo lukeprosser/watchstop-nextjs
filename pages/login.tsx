@@ -75,7 +75,7 @@ export default function Login() {
           onSubmit={handleSubmit(handleFormSubmit)}
           className='max-w-xl p-6 mx-auto border rounded shadow-md border-slate-200'
         >
-          <h1 className='mb-8 text-lg font-semibold tracking-wide lg:text-2xl'>
+          <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Login
           </h1>
           <FormField
