@@ -62,7 +62,11 @@ function reducer(state: IState, action: any) {
     case 'USER_LOGIN':
       return { ...state, userInfo: action.payload };
     case 'USER_LOGOUT':
-      return { ...state, userInfo: null, cart: { cartItems: [] } };
+      return {
+        ...state,
+        userInfo: null,
+        cart: { cartItems: [], deliveryInfo: {}, paymentMethod: '' },
+      };
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existingItem = state.cart.cartItems.find(
@@ -83,6 +87,8 @@ function reducer(state: IState, action: any) {
       setCookie('cartItems', JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
+    case 'CART_CLEAR_ITEMS':
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
     case 'SAVE_DELIVERY_INFO':
       return {
         ...state,
