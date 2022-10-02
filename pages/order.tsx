@@ -1,8 +1,12 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import axios, { AxiosError } from 'axios';
+import { deleteCookie } from 'cookies-next';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import Stepper from '../components/Stepper';
 import { Store } from '../utils/Store';
@@ -12,12 +16,15 @@ const roundToTwoDec = (num: number) =>
 
 function Order() {
   const router = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
-  const { state } = value;
+  const { state, dispatch } = value;
   const {
+    userInfo,
     cart: { cartItems, deliveryInfo, paymentMethod },
   } = state;
+  const [loading, setLoading] = useState(false);
 
   const subtotal = roundToTwoDec(
     cartItems.reduce((prev, curr) => prev + curr.quantity * curr.price, 0)
@@ -27,10 +34,49 @@ function Order() {
   const total = roundToTwoDec(subtotal + delivery + tax);
 
   useEffect(() => {
-    if (!paymentMethod) {
-      router.push('/payment');
-    }
+    if (!paymentMethod) router.push('/payment');
+    if (cartItems.length === 0) router.push('/cart');
   }, []);
+
+  const handlePlaceOrder = async () => {
+    closeSnackbar();
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        '/api/orders',
+        {
+          orderItems: cartItems,
+          deliveryInfo,
+          paymentMethod,
+          subtotal,
+          delivery,
+          tax,
+          total,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'CART_CLEAR_ITEMS' });
+      deleteCookie('cartItems');
+      setLoading(false);
+      router.push(`/order/${data._id}`);
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof AxiosError) {
+        enqueueSnackbar(
+          error.response ? error.response.data.message : error.message,
+          { variant: 'error' }
+        );
+      } else {
+        enqueueSnackbar('An unexpected error occurred, please try again.', {
+          variant: 'error',
+        });
+      }
+    }
+  };
 
   return (
     <Layout title='Order'>
@@ -133,11 +179,19 @@ function Order() {
                 </tr>
               </tbody>
             </table>
-            <Link href='/delivery'>
-              <a className='block w-full px-4 py-3 text-sm text-center rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'>
-                Place Order
-              </a>
-            </Link>
+            <button
+              onClick={handlePlaceOrder}
+              className='w-full px-4 py-3 text-sm text-center rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+            >
+              {loading ? (
+                <div className='flex items-center justify-center'>
+                  <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                  Processing...
+                </div>
+              ) : (
+                'Place Order'
+              )}
+            </button>
           </div>
         </div>
       </div>

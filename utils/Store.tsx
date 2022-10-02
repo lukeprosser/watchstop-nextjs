@@ -34,7 +34,7 @@ interface IState {
 
 interface ContextType {
   state: IState;
-  dispatch: Dispatch<{ type: string; payload: unknown }>;
+  dispatch: Dispatch<{ type: string; payload?: unknown }>;
 }
 
 const initialState: IState = {
