@@ -32,6 +32,11 @@ interface IState {
   userInfo: IUser;
 }
 
+interface IAction {
+  type: string;
+  payload?: any;
+}
+
 interface ContextType {
   state: IState;
   dispatch: Dispatch<{ type: string; payload?: unknown }>;
@@ -57,7 +62,7 @@ const initialState: IState = {
 
 export const Store = createContext<ContextType | null>(null);
 
-function reducer(state: IState, action: any) {
+function reducer(state: IState, action: IAction) {
   switch (action.type) {
     case 'USER_LOGIN':
       return { ...state, userInfo: action.payload };
@@ -65,7 +70,11 @@ function reducer(state: IState, action: any) {
       return {
         ...state,
         userInfo: null,
-        cart: { cartItems: [], deliveryInfo: {}, paymentMethod: '' },
+        cart: {
+          cartItems: [],
+          deliveryInfo: {} as IDeliveryInfo,
+          paymentMethod: '',
+        },
       };
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
