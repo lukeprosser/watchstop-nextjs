@@ -1,13 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
 import FormField from '../components/FormField';
 import { Store } from '../utils/Store';
+import { getErrorMsg } from '../utils/error';
 
 interface IFormInput {
   email: String;
@@ -55,16 +56,7 @@ export default function Login() {
       setCookie('userInfo', JSON.stringify(data));
       router.push(typeof redirect === 'string' ? redirect : '/');
     } catch (error) {
-      if (error instanceof AxiosError) {
-        enqueueSnackbar(
-          error.response ? error.response.data.message : error.message,
-          { variant: 'error' }
-        );
-      } else {
-        enqueueSnackbar('An unexpected error occurred, please try again.', {
-          variant: 'error',
-        });
-      }
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
     }
   };
 

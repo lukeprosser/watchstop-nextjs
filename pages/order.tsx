@@ -4,15 +4,14 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { deleteCookie } from 'cookies-next';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import Stepper from '../components/Stepper';
 import { Store } from '../utils/Store';
-
-const roundToTwoDec = (num: number) =>
-  Math.round(num * 100 + Number.EPSILON) / 100;
+import { roundToTwoDec } from '../utils/helpers';
+import { getErrorMsg } from '../utils/error';
 
 function Order() {
   const router = useRouter();
@@ -65,16 +64,7 @@ function Order() {
       router.push(`/order/${data._id}`);
     } catch (error) {
       setLoading(false);
-      if (error instanceof AxiosError) {
-        enqueueSnackbar(
-          error.response ? error.response.data.message : error.message,
-          { variant: 'error' }
-        );
-      } else {
-        enqueueSnackbar('An unexpected error occurred, please try again.', {
-          variant: 'error',
-        });
-      }
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
     }
   };
 

@@ -15,7 +15,7 @@ interface IDeliveryInfo {
   country: string;
 }
 
-interface IOrder {
+export interface IOrder {
   user: mongoose.Schema.Types.ObjectId;
   orderItems: IProduct[];
   deliveryInfo: IDeliveryInfo;
