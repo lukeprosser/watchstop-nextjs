@@ -1,19 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
-import Order from '../../../models/Order';
 import { isAuthenticated } from '../../../utils/auth';
-import db from '../../../utils/db';
 
 const handler = nc<NextApiRequest, NextApiResponse>();
 
-// Middleware to check authorisation
 handler.use(isAuthenticated);
 
 handler.get(async (req, res) => {
-  await db.connect();
-  const order = await Order.findById(req.query.id);
-  await db.disconnect();
-  res.send(order);
+  res.send(process.env.PAYPAL_CLIENT_ID || 'sb'); // Fallback to sandbox
 });
 
 export default handler;

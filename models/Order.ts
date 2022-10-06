@@ -15,11 +15,18 @@ interface IDeliveryInfo {
   country: string;
 }
 
+interface IPaymentResult {
+  id: string;
+  status: string;
+  email: string;
+}
+
 export interface IOrder {
   user: mongoose.Schema.Types.ObjectId;
   orderItems: IProduct[];
   deliveryInfo: IDeliveryInfo;
   paymentMethod: string;
+  paymentResult: IPaymentResult;
   subtotal: number;
   delivery: number;
   tax: number;
@@ -49,6 +56,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
       country: { type: String, required: true },
     },
     paymentMethod: { type: String, required: true },
+    paymentResult: { id: String, status: String, email: String },
     subtotal: { type: Number, required: true },
     delivery: { type: Number, required: true },
     tax: { type: Number, required: true },

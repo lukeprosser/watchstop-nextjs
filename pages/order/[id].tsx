@@ -1,12 +1,17 @@
-import { useContext, useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
+import {
+  usePayPalScriptReducer,
+  SCRIPT_LOADING_STATE,
+  PayPalButtons,
+} from '@paypal/react-paypal-js';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
-import Stepper from '../../components/Stepper';
 import { Store } from '../../utils/Store';
 import { getErrorMsg } from '../../utils/error';
 import { IOrder } from '../../models/Order';
@@ -16,6 +21,7 @@ interface IState {
   loading: boolean;
   order: IOrder;
   error: string;
+  successPayment: boolean;
 }
 
 interface IAction {
@@ -35,6 +41,19 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loading: false, order: action.payload, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
+    case 'PAY_REQUEST':
+      return { ...state, loadingPayment: true };
+    case 'PAY_SUCCESS':
+      return { ...state, loadingPayment: false, successPayment: true };
+    case 'PAY_FAILURE':
+      return { ...state, loadingPayment: false, errorPayment: action.payload };
+    case 'PAY_RESET':
+      return {
+        ...state,
+        loadingPayment: false,
+        successPayment: false,
+        errorPayment: '',
+      };
     default:
       return state;
   }
@@ -42,17 +61,23 @@ function reducer(state: IState, action: IAction) {
 
 function OrderDetail({ params }: { params: IParams }) {
   const orderId = params.id;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const router = useRouter();
   const value = useContext(Store);
   if (!value) throw new Error('Store context must be defined.');
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-  });
+  const [{ loading, error, order, successPayment }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      order: {},
+      error: '',
+      successPayment: false,
+    }
+  );
   const {
     deliveryInfo,
     paymentMethod,
@@ -66,9 +91,11 @@ function OrderDetail({ params }: { params: IParams }) {
     delivered,
     deliveredAt,
   } = order;
+  const paymentDate = new Date(paidAt);
 
   useEffect(() => {
     if (!userInfo) router.push('/login');
+
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -82,18 +109,82 @@ function OrderDetail({ params }: { params: IParams }) {
         dispatch({ type: 'FETCH_FAILURE', payload: getErrorMsg(error) });
       }
     };
-    if (!order._id || (order._id && order._id !== orderId)) {
+
+    // If payment successful, fetch order again to hide PayPal button
+    if (!order._id || successPayment || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if (successPayment) {
+        dispatch({ type: 'PAY_RESET' });
+      }
+    } else {
+      const loadPaypalScript = async () => {
+        const { data: clientId } = await axios.get('/api/keys/paypal', {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+        paypalDispatch({
+          type: 'resetOptions',
+          value: {
+            'client-id': clientId,
+            currency: 'GBP',
+          },
+        });
+        paypalDispatch({
+          type: 'setLoadingStatus',
+          value: SCRIPT_LOADING_STATE.PENDING,
+        });
+      };
+      loadPaypalScript();
     }
-  }, [order]);
+  }, [order, successPayment]);
+
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: total },
+          },
+        ],
+      })
+      .then((orderID: string) => {
+        return orderID;
+      });
+  }
+
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        closeSnackbar();
+        dispatch({ type: 'PAY_REQUEST' });
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details,
+          {
+            headers: {
+              authorization: `Bearer ${userInfo.token}`,
+            },
+          }
+        );
+        dispatch({ type: 'PAY_SUCCESS', payload: data });
+        enqueueSnackbar('Order paid successfully.', { variant: 'success' });
+      } catch (error) {
+        closeSnackbar();
+        dispatch({ type: 'PAY_FAILURE', payload: getErrorMsg(error) });
+        enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+      }
+    });
+  }
+
+  function onError(error) {
+    closeSnackbar();
+    enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+  }
 
   return (
     <Layout title='Order Details'>
       <div className='container p-6 mx-auto'>
-        <Stepper
-          steps={['Login', 'Delivery Address', 'Payment Method', 'Place Order']}
-          activeStep={4}
-        />
         <h1 className='mt-6 mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Order Details
         </h1>
@@ -165,7 +256,7 @@ function OrderDetail({ params }: { params: IParams }) {
                 <li>{deliveryInfo?.postcode}</li>
                 <li>{deliveryInfo?.country}</li>
               </ul>
-              <p className='py-2 mt-4 tracking-wider uppercase border-t'>
+              <p className='py-2 mt-4 tracking-wider border-t'>
                 Status: {delivered ? `Delivered at ${deliveredAt}` : 'Pending'}
               </p>
             </div>
@@ -174,8 +265,11 @@ function OrderDetail({ params }: { params: IParams }) {
                 Payment Method
               </h2>
               <p className='text-sm font-light '>{paymentMethod}</p>
-              <p className='py-2 mt-4 tracking-wider uppercase border-t'>
-                Status: {paid ? `Paid at ${paidAt}` : 'Awaiting payment'}
+              <p className='py-2 mt-4 tracking-wider border-t'>
+                Status:{' '}
+                {paid
+                  ? `Paid on ${paymentDate.getDate()}/${paymentDate.getMonth()}/${paymentDate.getFullYear()}`
+                  : 'Awaiting payment'}
               </p>
             </div>
             <div className='self-start row-start-1 p-6 border rounded shadow-md bg-slate-200 md:max-h-max min-w-fit border-slate-300'>
@@ -202,6 +296,22 @@ function OrderDetail({ params }: { params: IParams }) {
                   </tr>
                 </tbody>
               </table>
+              {!paid && (
+                <div>
+                  {isPending ? (
+                    <div className='flex items-center justify-center'>
+                      <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                      Loading...
+                    </div>
+                  ) : (
+                    <PayPalButtons
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                      onError={onError}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
