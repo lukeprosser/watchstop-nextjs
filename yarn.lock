@@ -527,7 +527,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
-"@paypal/paypal-js@^5.0.6":
+"@paypal/paypal-js@^5.0.6", "@paypal/paypal-js@^5.1.1":
   "integrity" "sha512-MMQ8TA048gTB43pzEOMzod8WY8hfzy+ahd7w29LtMvXduqzp7/29WxrTlsy4k6ARG6WGJ/uGqpc4+la4UZEQgw=="
   "resolved" "https://registry.npmjs.org/@paypal/paypal-js/-/paypal-js-5.1.1.tgz"
   "version" "5.1.1"

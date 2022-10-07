@@ -1,10 +1,16 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import {
+  CreateOrderData,
+  CreateOrderActions,
+  OnApproveData,
+  OnApproveActions,
+} from '@paypal/paypal-js';
 import {
   usePayPalScriptReducer,
   SCRIPT_LOADING_STATE,
@@ -139,7 +145,7 @@ function OrderDetail({ params }: { params: IParams }) {
     }
   }, [order, successPayment]);
 
-  function createOrder(data, actions) {
+  function createOrder(data: CreateOrderData, actions: CreateOrderActions) {
     return actions.order
       .create({
         purchase_units: [
@@ -153,31 +159,36 @@ function OrderDetail({ params }: { params: IParams }) {
       });
   }
 
-  function onApprove(data, actions) {
-    return actions.order.capture().then(async function (details) {
-      try {
-        closeSnackbar();
-        dispatch({ type: 'PAY_REQUEST' });
-        const { data } = await axios.put(
-          `/api/orders/${order._id}/pay`,
-          details,
-          {
-            headers: {
-              authorization: `Bearer ${userInfo.token}`,
-            },
-          }
-        );
-        dispatch({ type: 'PAY_SUCCESS', payload: data });
-        enqueueSnackbar('Order paid successfully.', { variant: 'success' });
-      } catch (error) {
-        closeSnackbar();
-        dispatch({ type: 'PAY_FAILURE', payload: getErrorMsg(error) });
-        enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
-      }
-    });
+  function onApprove(data: OnApproveData, actions: OnApproveActions) {
+    if (actions.order) {
+      return actions.order.capture().then(async function (details) {
+        try {
+          closeSnackbar();
+          dispatch({ type: 'PAY_REQUEST' });
+          const { data } = await axios.put(
+            `/api/orders/${order._id}/pay`,
+            details,
+            {
+              headers: {
+                authorization: `Bearer ${userInfo.token}`,
+              },
+            }
+          );
+          dispatch({ type: 'PAY_SUCCESS', payload: data });
+          enqueueSnackbar('Order paid successfully.', { variant: 'success' });
+        } catch (error) {
+          closeSnackbar();
+          dispatch({ type: 'PAY_FAILURE', payload: getErrorMsg(error) });
+          enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+        }
+      });
+    } else {
+      // Handle potentially undefined onApprove actions
+      throw new Error('PayPal actions not defined.');
+    }
   }
 
-  function onError(error) {
+  function onError(error: Record<string, unknown>) {
     closeSnackbar();
     enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
   }
