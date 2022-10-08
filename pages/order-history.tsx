@@ -9,6 +9,7 @@ import { Store } from '../utils/Store';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
 import { IProduct, IDeliveryInfo, IPaymentResult } from '../models/Order';
+import { formatDate } from '../utils/helpers';
 
 interface IOrder {
   _id: string;
@@ -23,9 +24,9 @@ interface IOrder {
   tax: number;
   total: number;
   paid: boolean;
-  paidAt: Date;
+  paidAt: string;
   delivered: boolean;
-  deliveredAt: Date;
+  deliveredAt: string;
 }
 
 interface IState {
@@ -89,23 +90,23 @@ function OrderHistory() {
   return (
     <Layout title='Order History'>
       <div className='container p-6 mx-auto'>
-        <div className='grid-cols-4 gap-6 lg:gap-8 md:grid'>
-          <div className='col-span-1 p-4 mb-6 border-r-2 md:mb-0 border-slate-300'>
-            <ul>
-              <li>
+        <div className='grid-cols-6 md:grid'>
+          <div className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
+            <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
+              <li className='pt-2 pb-4'>
                 <Link href='/profile'>
-                  <a>Profile</a>
+                  <a className='hover:text-sky-600'>Profile</a>
                 </Link>
               </li>
-              <li>
+              <li className='py-4'>
                 <Link href='/order-history'>
-                  <a>Order History</a>
+                  <a className='hover:text-sky-600'>Order History</a>
                 </Link>
               </li>
             </ul>
           </div>
-          <div className='col-span-3 p-6 mb-6 md:mb-0'>
-            <h1 className='mt-6 mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
+          <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
+            <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
               Order History
             </h1>
             {loading ? (
@@ -116,45 +117,49 @@ function OrderHistory() {
             ) : error ? (
               <h3 className='text-lg text-red-600'>{error}</h3>
             ) : (
-              <table className='w-full table-auto'>
-                <thead className='border-b-2 border-slate-300'>
-                  <tr>
-                    <th className='py-2'>Order No.</th>
-                    <th className='py-2'>Date</th>
-                    <th className='py-2'>Total</th>
-                    <th className='py-2'>Paid</th>
-                    <th className='py-2'>Delivered</th>
-                    <th className='py-2'></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order: IOrder) => (
-                    <tr
-                      key={order._id}
-                      className='text-sm border-t border-slate-300 first:border-none'
-                    >
-                      <td className='px-2 py-3'>
-                        {order._id.substring(20, 24)}
-                      </td>
-                      <td className='px-2 py-3'>{order.createdAt}</td>
-                      <td className='px-2 py-3 text-right'>£{order.total}</td>
-                      <td className='px-2 py-3 text-right'>
-                        £{order.paid ? `Paid on ${order.paidAt}` : 'Pending'}
-                      </td>
-                      <td className='px-2 py-3 text-right'>
-                        {order.delivered
-                          ? `Delivered on ${order.deliveredAt}`
-                          : 'Pending'}
-                      </td>
-                      <td className='px-2 py-3 text-center'>
-                        <Link href={`/order/${order._id}`}>
-                          <a>Details</a>
-                        </Link>
-                      </td>
+              <div className='overflow-auto'>
+                <table className='w-full table-auto'>
+                  <thead className='text-left border-b-2 border-slate-300'>
+                    <tr>
+                      <th className='px-4 py-2'>Order No.</th>
+                      <th className='px-4 py-2'>Date</th>
+                      <th className='px-4 py-2'>Total</th>
+                      <th className='px-4 py-2'>Payment</th>
+                      <th className='px-4 py-2'>Delivery</th>
+                      <th className='px-4 py-2'></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {orders.map((order: IOrder) => (
+                      <tr
+                        key={order._id}
+                        className='text-sm border-t border-slate-300 first:border-none'
+                      >
+                        <td className='px-4 py-3'>{order._id}</td>
+                        <td className='px-4 py-3'>
+                          {formatDate(order.createdAt)}
+                        </td>
+                        <td className='px-4 py-3'>£{order.total}</td>
+                        <td className='px-4 py-3'>
+                          {order.paid ? formatDate(order.paidAt) : 'Pending'}
+                        </td>
+                        <td className='px-4 py-3'>
+                          {order.delivered
+                            ? formatDate(order.deliveredAt)
+                            : 'Pending'}
+                        </td>
+                        <td className='px-4 py-3'>
+                          <Link href={`/order/${order._id}`}>
+                            <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                              Details
+                            </a>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

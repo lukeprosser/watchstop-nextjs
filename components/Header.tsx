@@ -36,7 +36,7 @@ const AccountOptions = ({
   };
 
   return (
-    <div className='absolute z-10 w-24 p-4 border rounded shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12'>
+    <div className='absolute z-10 w-32 p-4 border rounded shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12'>
       <ul className='text-sm divide-y text-slate-900'>
         <li className='py-2 hover:text-slate-600'>
           <Link href='/profile'>
@@ -45,7 +45,7 @@ const AccountOptions = ({
         </li>
         <li className='py-2 hover:text-slate-600'>
           <Link href='/order-history'>
-            <a>Order History</a>
+            <a>Orders</a>
           </Link>
         </li>
         <li>

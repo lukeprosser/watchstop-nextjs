@@ -22,6 +22,7 @@ import { Store } from '../../utils/Store';
 import { getErrorMsg } from '../../utils/error';
 import { IOrder } from '../../models/Order';
 import { IProduct } from '../../pages/index';
+import { formatDate } from '../../utils/helpers';
 
 interface IState {
   loading: boolean;
@@ -97,7 +98,6 @@ function OrderDetail({ params }: { params: IParams }) {
     delivered,
     deliveredAt,
   } = order;
-  const paymentDate = new Date(paidAt);
 
   useEffect(() => {
     if (!userInfo) router.push('/login');
@@ -278,9 +278,7 @@ function OrderDetail({ params }: { params: IParams }) {
               <p className='text-sm font-light '>{paymentMethod}</p>
               <p className='py-2 mt-4 tracking-wider border-t'>
                 Status:{' '}
-                {paid
-                  ? `Paid on ${paymentDate.getDate()}/${paymentDate.getMonth()}/${paymentDate.getFullYear()}`
-                  : 'Awaiting payment'}
+                {paid ? `Paid on ${formatDate(paidAt)}` : 'Awaiting payment'}
               </p>
             </div>
             <div className='self-start row-start-1 p-6 border rounded shadow-md bg-slate-200 md:max-h-max min-w-fit border-slate-300'>
