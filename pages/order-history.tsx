@@ -94,8 +94,8 @@ function OrderHistory() {
           <div className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
             <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
               <li className='pt-2 pb-4'>
-                <Link href='/profile'>
-                  <a className='hover:text-sky-600'>Profile</a>
+                <Link href='/account'>
+                  <a className='hover:text-sky-600'>Account</a>
                 </Link>
               </li>
               <li className='py-4'>

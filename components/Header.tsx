@@ -39,8 +39,8 @@ const AccountOptions = ({
     <div className='absolute z-10 w-32 p-4 border rounded shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12'>
       <ul className='text-sm divide-y text-slate-900'>
         <li className='py-2 hover:text-slate-600'>
-          <Link href='/profile'>
-            <a>Profile</a>
+          <Link href='/account'>
+            <a>Account</a>
           </Link>
         </li>
         <li className='py-2 hover:text-slate-600'>
