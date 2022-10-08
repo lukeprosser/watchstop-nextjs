@@ -44,8 +44,8 @@ const AccountOptions = ({
           </Link>
         </li>
         <li className='py-2 hover:text-slate-600'>
-          <Link href='/profile'>
-            <a>Account</a>
+          <Link href='/order-history'>
+            <a>Order History</a>
           </Link>
         </li>
         <li>

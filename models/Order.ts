@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-interface IProduct {
+export interface IProduct {
   name: string;
   image: string;
   quantity: number;
   price: number;
 }
 
-interface IDeliveryInfo {
+export interface IDeliveryInfo {
   fullName: string;
   address: string;
   city: string;
@@ -15,7 +15,7 @@ interface IDeliveryInfo {
   country: string;
 }
 
-interface IPaymentResult {
+export interface IPaymentResult {
   id: string;
   status: string;
   email: string;
