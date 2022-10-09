@@ -38,6 +38,7 @@ function Account() {
   useEffect(() => {
     if (!userInfo) router.push('/login');
 
+    // Fill form fields if values exist in store context
     setValue('name', userInfo.name);
     setValue('email', userInfo.email);
   }, []);
@@ -145,13 +146,12 @@ function Account() {
                 placeholder='Password'
                 errors={errors}
                 register={register('password', {
-                  required: true,
-                  minLength: 8,
+                  validate: (value) => value === '' || value.length >= 8,
                 })}
                 validationError={
-                  errors?.password?.type === 'minLength'
+                  errors?.password
                     ? 'Password must be at least eight characters.'
-                    : 'Password is required.'
+                    : ''
                 }
               />
               <FormField
@@ -161,13 +161,12 @@ function Account() {
                 placeholder='Password'
                 errors={errors}
                 register={register('passwordConfirm', {
-                  required: true,
-                  minLength: 8,
+                  validate: (value) => value === '' || value.length >= 8,
                 })}
                 validationError={
-                  errors?.passwordConfirm?.type === 'minLength'
+                  errors?.passwordConfirm
                     ? 'Password must be at least eight characters.'
-                    : 'Password confirmation is required.'
+                    : ''
                 }
               />
               <div className='mt-8'>
