@@ -205,7 +205,9 @@ function OrderDetail({ params }: { params: IParams }) {
             Loading...
           </div>
         ) : error ? (
-          <h3 className='text-lg text-red-600'>{error}</h3>
+          <span className='text-lg font-light tracking-wider text-red-600'>
+            Error: {error}
+          </span>
         ) : (
           <div className='grid-cols-3 gap-6 lg:gap-8 md:grid'>
             <div className='col-span-2 col-start-1 row-start-1 p-4 mb-6 border rounded shadow-md md:mb-0 border-slate-200'>

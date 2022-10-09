@@ -115,7 +115,9 @@ function OrderHistory() {
                 Loading...
               </div>
             ) : error ? (
-              <h3 className='text-lg text-red-600'>{error}</h3>
+              <span className='text-lg font-light tracking-wider text-red-600'>
+                Error: {error}
+              </span>
             ) : (
               <div className='overflow-auto'>
                 <table className='w-full table-auto'>

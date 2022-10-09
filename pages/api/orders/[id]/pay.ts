@@ -27,10 +27,10 @@ handler.put(async (req, res) => {
     };
     const paidOrder = await order.save();
     await db.disconnect();
-    res.send({ message: 'Order paid successfully', order: paidOrder });
+    res.send({ message: 'Order paid successfully.', order: paidOrder });
   } else {
     await db.disconnect();
-    res.status(404).send({ message: 'Order not found' });
+    res.status(404).send({ message: 'Order not found.' });
   }
 });
 
