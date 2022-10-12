@@ -21,9 +21,11 @@ const Badge = ({ cartItems }: { cartItems: IProduct[] }) => {
 const AccountOptions = ({
   setShowAccountOptions,
   dispatch,
+  admin,
 }: {
   setShowAccountOptions: Function;
   dispatch: Function;
+  admin: boolean;
 }) => {
   const router = useRouter();
 
@@ -48,6 +50,13 @@ const AccountOptions = ({
             <a>Orders</a>
           </Link>
         </li>
+        {admin && (
+          <li className='py-2 hover:text-slate-600'>
+            <Link href='/admin/dashboard'>
+              <a>Dashboard</a>
+            </Link>
+          </li>
+        )}
         <li>
           <button className='py-2 hover:text-slate-600' onClick={handleLogout}>
             Logout
@@ -131,6 +140,7 @@ export default function Header(): ReactElement {
                 <AccountOptions
                   setShowAccountOptions={setShowAccountOptions}
                   dispatch={dispatch}
+                  admin={userInfo.admin}
                 />
               )}
             </li>
