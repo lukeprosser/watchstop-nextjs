@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -31,6 +31,24 @@ function reducer(state: IState, action: IAction) {
       return state;
   }
 }
+
+const Grid = ({ children }: { children: ReactNode }) => (
+  <section className='grid w-full grid-cols-2 gap-4 sm:grid-cols-4'>
+    {children}
+  </section>
+);
+
+const Card = ({ figure, title }: { figure: string; title: string }) => (
+  <div className='w-full p-4 text-center border rounded shadow-md border-slate-300'>
+    <p className='text-lg font-medium tracking-wider'>{figure}</p>
+    <h3 className='text-sm'>{title}</h3>
+    <Link href='/admin/products'>
+      <a className='block w-full px-2 py-1 mt-2 text-sm font-light rounded text-sky-600 hover:text-sky-500'>
+        View
+      </a>
+    </Link>
+  </div>
+);
 
 function AdminDashboard() {
   const router = useRouter();
@@ -85,36 +103,12 @@ function AdminDashboard() {
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
-            <section className='justify-between gap-4 md:flex'>
-              <div className='w-full p-4 mb-4 border rounded shadow-md md:w-1/4 border-slate-300'>
-                <span>{summary.ordersPrice}</span>
-                <h3>Sales</h3>
-                <Link href='/admin/products'>
-                  <a>View Sales</a>
-                </Link>
-              </div>
-              <div className='w-full p-4 mb-4 border rounded shadow-md md:w-1/4 border-slate-300'>
-                <span>{summary.ordersCount}</span>
-                <h3>Orders</h3>
-                <Link href='/admin/products'>
-                  <a>View Orders</a>
-                </Link>
-              </div>
-              <div className='w-full p-4 mb-4 border rounded shadow-md md:w-1/4 border-slate-300'>
-                <span>{summary.productsCount}</span>
-                <h3>Products</h3>
-                <Link href='/admin/products'>
-                  <a>View Products</a>
-                </Link>
-              </div>
-              <div className='w-full p-4 mb-4 border rounded shadow-md md:w-1/4 border-slate-300'>
-                <span>{summary.usersCount}</span>
-                <h3>Users</h3>
-                <Link href='/admin/products'>
-                  <a>View Users</a>
-                </Link>
-              </div>
-            </section>
+            <Grid>
+              <Card figure={`£${summary.ordersPrice}`} title='Sales' />
+              <Card figure={`£${summary.ordersCount}`} title='Orders' />
+              <Card figure={`£${summary.productsCount}`} title='Products' />
+              <Card figure={`£${summary.usersCount}`} title='Users' />
+            </Grid>
             {loading ? (
               <div className='flex items-center justify-center'>
                 <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
