@@ -38,11 +38,19 @@ const Grid = ({ children }: { children: ReactNode }) => (
   </section>
 );
 
-const Card = ({ figure, title }: { figure: string; title: string }) => (
+const Card = ({
+  figure,
+  title,
+  link,
+}: {
+  figure: string;
+  title: string;
+  link: string;
+}) => (
   <div className='w-full p-4 text-center border rounded shadow-md border-slate-300'>
     <p className='text-lg font-medium tracking-wider'>{figure}</p>
     <h3 className='text-sm'>{title}</h3>
-    <Link href='/admin/products'>
+    <Link href={`/admin/${link}`}>
       <a className='block w-full px-2 py-1 mt-2 text-sm font-light rounded text-sky-600 hover:text-sky-500'>
         View
       </a>
@@ -104,10 +112,26 @@ function AdminDashboard() {
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             <Grid>
-              <Card figure={`£${summary.ordersPrice}`} title='Sales' />
-              <Card figure={`£${summary.ordersCount}`} title='Orders' />
-              <Card figure={`£${summary.productsCount}`} title='Products' />
-              <Card figure={`£${summary.usersCount}`} title='Users' />
+              <Card
+                figure={`£${summary.ordersPrice}`}
+                title='Sales'
+                link='sales'
+              />
+              <Card
+                figure={`£${summary.ordersCount}`}
+                title='Orders'
+                link='orders'
+              />
+              <Card
+                figure={`£${summary.productsCount}`}
+                title='Products'
+                link='products'
+              />
+              <Card
+                figure={`£${summary.usersCount}`}
+                title='Users'
+                link='users'
+              />
             </Grid>
             {loading ? (
               <div className='flex items-center justify-center'>
