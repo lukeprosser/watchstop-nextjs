@@ -3,15 +3,37 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Store } from '../../utils/Store';
 import { getErrorMsg } from '../../utils/error';
 import Layout from '../../components/Layout';
 
+ChartJS.register(CategoryScale, LinearScale, BarElement);
+
+interface ISalesMetric {
+  _id: string;
+  total: number;
+}
+
+interface ISummary {
+  ordersPrice: number;
+  ordersCount: number;
+  salesData: ISalesMetric[];
+  productsCount: number;
+  usersCount: number;
+}
+
 interface IState {
   loading: boolean;
-  sumnmary: { salesData: [] };
-  error: string;
+  error?: string;
+  summary: ISummary;
 }
 
 interface IAction {
@@ -68,7 +90,13 @@ function AdminDashboard() {
 
   const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
     loading: true,
-    summary: { salesData: [] },
+    summary: {
+      ordersPrice: 0,
+      ordersCount: 0,
+      salesData: [],
+      productsCount: 0,
+      usersCount: 0,
+    },
     error: '',
   });
 
@@ -111,28 +139,6 @@ function AdminDashboard() {
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
-            <Grid>
-              <Card
-                figure={`£${summary.ordersPrice}`}
-                title='Sales'
-                link='sales'
-              />
-              <Card
-                figure={`£${summary.ordersCount}`}
-                title='Orders'
-                link='orders'
-              />
-              <Card
-                figure={`£${summary.productsCount}`}
-                title='Products'
-                link='products'
-              />
-              <Card
-                figure={`£${summary.usersCount}`}
-                title='Users'
-                link='users'
-              />
-            </Grid>
             {loading ? (
               <div className='flex items-center justify-center'>
                 <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
@@ -143,9 +149,54 @@ function AdminDashboard() {
                 Error: {error}
               </span>
             ) : (
-              <div>
-                <h2>Sales Chart</h2>
-              </div>
+              <>
+                <Grid>
+                  <Card
+                    figure={`£${summary.ordersPrice}`}
+                    title='Sales'
+                    link='sales'
+                  />
+                  <Card
+                    figure={`£${summary.ordersCount}`}
+                    title='Orders'
+                    link='orders'
+                  />
+                  <Card
+                    figure={`£${summary.productsCount}`}
+                    title='Products'
+                    link='products'
+                  />
+                  <Card
+                    figure={`£${summary.usersCount}`}
+                    title='Users'
+                    link='users'
+                  />
+                </Grid>
+                <div className='mt-8'>
+                  <h2 className='p-2 mb-4 font-medium tracking-wide'>
+                    Sales Per Month
+                  </h2>
+                  <Bar
+                    data={{
+                      labels: summary.salesData.map((d: ISalesMetric) => d._id),
+                      datasets: [
+                        {
+                          label: 'Sales',
+                          backgroundColor: '#7dd3fc',
+                          data: summary.salesData.map(
+                            (d: ISalesMetric) => d.total
+                          ),
+                        },
+                      ],
+                    }}
+                    options={{
+                      plugins: {
+                        legend: { display: true, position: 'right' },
+                      },
+                    }}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

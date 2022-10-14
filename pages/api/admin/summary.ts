@@ -30,7 +30,7 @@ handler.get(async (req, res) => {
   const ordersPriceGroup = await Order.aggregate([
     {
       $group: {
-        _id: null, // Match all (not specific)
+        _id: null, // _id required key but no need to reference
         sales: { $sum: '$total' }, // Sum each order cost in 'sales'
       },
     },
@@ -38,11 +38,19 @@ handler.get(async (req, res) => {
   const ordersPrice =
     ordersPriceGroup.length > 0 ? ordersPriceGroup[0].sales : 0;
   const ordersCount = await Order.countDocuments();
+  const salesData = await Order.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: '%m-%Y', date: '$createdAt' } }, // Set date as key
+        total: { $sum: '$total' }, // Sum each order cost in 'total'
+      },
+    },
+  ]);
   const productsCount = await Product.countDocuments();
   const usersCount = await User.countDocuments();
 
   await db.disconnect();
-  res.send({ ordersPrice, ordersCount, productsCount, usersCount });
+  res.send({ ordersPrice, ordersCount, salesData, productsCount, usersCount });
 });
 
 export default handler;
