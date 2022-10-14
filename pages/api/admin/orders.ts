@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import { Types } from 'mongoose';
 import Order from '../../../models/Order';
+import User from '../../../models/User';
 import { isAuthenticated, isAdministrator } from '../../../utils/auth';
 import db from '../../../utils/db';
 
@@ -25,10 +26,10 @@ handler.use(isAuthenticated, isAdministrator);
 
 handler.get(async (req, res) => {
   await db.connect();
-  // Fetch all orders as well as associated user email address
-  const orders = await Order.find({}).populate('user', 'email');
+  // Fetch all orders as well as associated user email address from User data
+  const orders = await Order.find({}).populate('user', 'email', User);
   await db.disconnect();
-  res.send({ orders });
+  res.send(orders);
 });
 
 export default handler;
