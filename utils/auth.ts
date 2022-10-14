@@ -58,4 +58,18 @@ const isAuthenticated = async (
   }
 };
 
-export { signToken, isAuthenticated };
+const isAdministrator = async (
+  req: IGetUserAuthInfoRequest,
+  res: NextApiResponse,
+  next: Function
+) => {
+  if (!process.env.JWT_SECRET) throw new Error('Authorisation error');
+  // user available after isAuthenticated is run
+  if (req.user.admin) {
+    next();
+  } else {
+    res.status(401).send({ message: 'User does not have permission.' });
+  }
+};
+
+export { signToken, isAuthenticated, isAdministrator };

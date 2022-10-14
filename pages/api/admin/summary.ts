@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 import Order from '../../../models/Order';
 import Product from '../../../models/Product';
 import User from '../../../models/User';
-import { isAuthenticated } from '../../../utils/auth';
+import { isAuthenticated, isAdministrator } from '../../../utils/auth';
 import db from '../../../utils/db';
 
 type IUser = {
@@ -23,7 +23,7 @@ const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>({
 });
 
 // Middleware to check authorisation
-handler.use(isAuthenticated);
+handler.use(isAuthenticated, isAdministrator);
 
 handler.get(async (req, res) => {
   await db.connect();
