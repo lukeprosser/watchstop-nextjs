@@ -147,7 +147,7 @@ function AdminProducts() {
                             </a>
                           </Link>
                           <Link href={`/admin/product/${product._id}`}>
-                            <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                            <a className='p-2 ml-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
                               Delete
                             </a>
                           </Link>
