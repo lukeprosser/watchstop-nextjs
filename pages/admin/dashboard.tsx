@@ -136,6 +136,11 @@ function AdminDashboard() {
                   <a className='hover:text-sky-600'>Orders</a>
                 </Link>
               </li>
+              <li className='py-4'>
+                <Link href='/admin/products'>
+                  <a className='hover:text-sky-600'>Products</a>
+                </Link>
+              </li>
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>

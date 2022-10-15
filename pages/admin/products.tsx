@@ -7,31 +7,21 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
 import { Store } from '../../utils/Store';
 import { getErrorMsg } from '../../utils/error';
-import { formatDate } from '../../utils/helpers';
-import { IProduct, IDeliveryInfo, IPaymentResult } from '../../models/Order';
 
-interface IOrder {
+interface IProduct {
   _id: string;
-  createdAt: string;
-  user: { _id: string; email: string };
-  orderItems: IProduct[];
-  deliveryInfo: IDeliveryInfo;
-  paymentMethod: string;
-  paymentResult: IPaymentResult;
-  subtotal: number;
-  delivery: number;
-  tax: number;
-  total: number;
-  paid: boolean;
-  paidAt: string;
-  delivered: boolean;
-  deliveredAt: string;
+  name: string;
+  brand: string;
+  category: string;
+  rating: number;
+  price: number;
+  stockCount: number;
 }
 
 interface IState {
   loading: boolean;
   error?: string;
-  orders: IOrder[];
+  products: IProduct[];
 }
 
 interface IAction {
@@ -44,7 +34,7 @@ function reducer(state: IState, action: IAction) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, orders: action.payload, error: '' };
+      return { ...state, loading: false, products: action.payload, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
     default:
@@ -52,7 +42,7 @@ function reducer(state: IState, action: IAction) {
   }
 }
 
-function AdminOrders() {
+function AdminProducts() {
   const router = useRouter();
 
   const value = useContext(Store);
@@ -60,9 +50,9 @@ function AdminOrders() {
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
-    orders: [],
+    products: [],
     error: '',
   });
 
@@ -72,7 +62,7 @@ function AdminOrders() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/orders`, {
+        const { data } = await axios.get(`/api/admin/products`, {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
@@ -87,7 +77,7 @@ function AdminOrders() {
   }, []);
 
   return (
-    <Layout title='Order History'>
+    <Layout title='Products'>
       <div className='container p-6 mx-auto'>
         <div className='grid-cols-6 md:grid'>
           <aside className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
@@ -111,7 +101,7 @@ function AdminOrders() {
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
-              Orders
+              Products
             </h1>
             {loading ? (
               <div className='flex items-center justify-center'>
@@ -127,41 +117,38 @@ function AdminOrders() {
                 <table className='w-full table-auto'>
                   <thead className='text-left border-b-2 border-slate-300'>
                     <tr>
-                      <th className='px-4 py-2'>Order No.</th>
-                      <th className='px-4 py-2'>Customer</th>
-                      <th className='px-4 py-2'>Date</th>
-                      <th className='px-4 py-2'>Total</th>
-                      <th className='px-4 py-2'>Payment</th>
-                      <th className='px-4 py-2'>Delivery</th>
+                      <th className='px-4 py-2'>ID</th>
+                      <th className='px-4 py-2'>Name</th>
+                      <th className='px-4 py-2'>Brand</th>
+                      <th className='px-4 py-2'>Category</th>
+                      <th className='px-4 py-2'>Rating</th>
+                      <th className='px-4 py-2'>Price</th>
+                      <th className='px-4 py-2'>Stock</th>
                       <th className='px-4 py-2'></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order: IOrder) => (
+                    {products.map((product: IProduct) => (
                       <tr
-                        key={order._id}
+                        key={product._id}
                         className='text-sm border-t border-slate-300 first:border-none'
                       >
-                        <td className='px-4 py-3'>{order._id}</td>
+                        <td className='px-4 py-3'>{product._id}</td>
+                        <td className='px-4 py-3'>{product.name}</td>
+                        <td className='px-4 py-3'>{product.brand}</td>
+                        <td className='px-4 py-3'>{product.category}</td>
+                        <td className='px-4 py-3'>{product.rating}</td>
+                        <td className='px-4 py-3'>£{product.price}</td>
+                        <td className='px-4 py-3'>{product.stockCount}</td>
                         <td className='px-4 py-3'>
-                          {order.user ? order.user.email : 'Deleted user'}
-                        </td>
-                        <td className='px-4 py-3'>
-                          {formatDate(order.createdAt)}
-                        </td>
-                        <td className='px-4 py-3'>£{order.total}</td>
-                        <td className='px-4 py-3'>
-                          {order.paid ? formatDate(order.paidAt) : 'Pending'}
-                        </td>
-                        <td className='px-4 py-3'>
-                          {order.delivered
-                            ? formatDate(order.deliveredAt)
-                            : 'Pending'}
-                        </td>
-                        <td className='px-4 py-3'>
-                          <Link href={`/order/${order._id}`}>
+                          <Link href={`/admin/product/${product._id}`}>
                             <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
-                              Details
+                              Edit
+                            </a>
+                          </Link>
+                          <Link href={`/admin/product/${product._id}`}>
+                            <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                              Delete
                             </a>
                           </Link>
                         </td>
@@ -178,4 +165,4 @@ function AdminOrders() {
   );
 }
 
-export default dynamic(() => Promise.resolve(AdminOrders), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminProducts), { ssr: false });
