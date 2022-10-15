@@ -29,6 +29,8 @@ interface IState {
   order: IOrder;
   error: string;
   successPayment: boolean;
+  loadingDeliver: boolean;
+  successDeliver: boolean;
 }
 
 interface IAction {
@@ -61,6 +63,19 @@ function reducer(state: IState, action: IAction) {
         successPayment: false,
         errorPayment: '',
       };
+    case 'DELIVER_REQUEST':
+      return { ...state, loadingDeliver: true };
+    case 'DELIVER_SUCCESS':
+      return { ...state, loadingDeliver: false, successDeliver: true };
+    case 'DELIVER_FAILURE':
+      return { ...state, loadingDeliver: false, errorDeliver: action.payload };
+    case 'DELIVER_RESET':
+      return {
+        ...state,
+        loadingDeliver: false,
+        successDeliver: false,
+        errorDeliver: '',
+      };
     default:
       return state;
   }
@@ -76,15 +91,17 @@ function OrderDetail({ params }: { params: IParams }) {
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error, order, successPayment }, dispatch] = useReducer(
-    reducer,
-    {
-      loading: true,
-      order: {},
-      error: '',
-      successPayment: false,
-    }
-  );
+  const [
+    { loading, error, order, successPayment, loadingDeliver, successDeliver },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    order: {},
+    error: '',
+    successPayment: false,
+    loadingDeliver: false,
+    successDeliver: false,
+  });
   const {
     deliveryInfo,
     paymentMethod,
@@ -116,11 +133,18 @@ function OrderDetail({ params }: { params: IParams }) {
       }
     };
 
-    // If payment successful, fetch order again to hide PayPal button
-    if (!order._id || successPayment || (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      successPayment || // If payment successful, fetch order again to hide PayPal button
+      successDeliver || // If deliver successful, fetch order again to hide deliver button
+      (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
       if (successPayment) {
         dispatch({ type: 'PAY_RESET' });
+      }
+      if (successDeliver) {
+        dispatch({ type: 'DELIVER_RESET' });
       }
     } else {
       const loadPaypalScript = async () => {
@@ -143,7 +167,7 @@ function OrderDetail({ params }: { params: IParams }) {
       };
       loadPaypalScript();
     }
-  }, [order, successPayment]);
+  }, [order, successPayment, successDeliver]);
 
   function createOrder(data: CreateOrderData, actions: CreateOrderActions) {
     return actions.order
@@ -191,6 +215,28 @@ function OrderDetail({ params }: { params: IParams }) {
   function onError(error: Record<string, unknown>) {
     closeSnackbar();
     enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+  }
+
+  async function handleDeliverOrder() {
+    try {
+      dispatch({ type: 'DELIVER_REQUEST' });
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/deliver`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+      dispatch({ type: 'DELIVER_SUCCESS', payload: data });
+      enqueueSnackbar('Order status updated successfully.', {
+        variant: 'success',
+      });
+    } catch (error) {
+      dispatch({ type: 'DELIVER_FAILURE', payload: getErrorMsg(error) });
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+    }
   }
 
   return (
@@ -270,7 +316,10 @@ function OrderDetail({ params }: { params: IParams }) {
                 <li>{deliveryInfo?.country}</li>
               </ul>
               <p className='py-2 mt-4 tracking-wider border-t'>
-                Status: {delivered ? `Delivered at ${deliveredAt}` : 'Pending'}
+                Status:{' '}
+                {delivered
+                  ? `Delivered on ${formatDate(deliveredAt)}`
+                  : 'Pending'}
               </p>
             </div>
             <div className='col-span-2 p-6 mb-6 border rounded shadow-md md:mb-0 border-slate-200'>
@@ -322,6 +371,21 @@ function OrderDetail({ params }: { params: IParams }) {
                     />
                   )}
                 </div>
+              )}
+              {userInfo.admin && order.paid && !order.delivered && (
+                <button
+                  className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+                  onClick={handleDeliverOrder}
+                >
+                  {loadingDeliver ? (
+                    <div className='flex items-center justify-center'>
+                      <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                      Processing...
+                    </div>
+                  ) : (
+                    'Deliver Order'
+                  )}
+                </button>
               )}
             </div>
           </div>
