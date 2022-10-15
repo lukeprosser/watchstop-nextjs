@@ -94,17 +94,17 @@ function AdminOrders() {
             <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
               <li className='pt-2 pb-4'>
                 <Link href='/admin/dashboard'>
-                  <a className='hover:text-sky-600'>Dashboard</a>
+                  <a className='hover:text-sky-500'>Dashboard</a>
                 </Link>
               </li>
               <li className='py-4'>
                 <Link href='/admin/orders'>
-                  <a className='hover:text-sky-600'>Orders</a>
+                  <a className='text-sky-600 hover:text-sky-500'>Orders</a>
                 </Link>
               </li>
               <li className='py-4'>
                 <Link href='/admin/products'>
-                  <a className='hover:text-sky-600'>Products</a>
+                  <a className='hover:text-sky-500'>Products</a>
                 </Link>
               </li>
             </ul>
