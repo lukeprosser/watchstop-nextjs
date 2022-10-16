@@ -26,15 +26,26 @@ export default function FormField({
       >
         {label}
       </label>
-      <input
-        className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
-          errors[id] ? 'outline-red-500' : 'outline-slate-300'
-        }`}
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        {...register}
-      />
+      {type === 'textarea' ? (
+        <textarea
+          className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
+            errors[id] ? 'outline-red-500' : 'outline-slate-300'
+          }`}
+          id={id}
+          placeholder={placeholder}
+          {...register}
+        />
+      ) : (
+        <input
+          className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
+            errors[id] ? 'outline-red-500' : 'outline-slate-300'
+          }`}
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          {...register}
+        />
+      )}
       {errors[id] ? (
         <span className='block mt-1 text-xs text-red-500'>
           {validationError}
