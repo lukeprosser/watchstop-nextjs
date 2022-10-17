@@ -248,6 +248,7 @@ function ProductEdit({ params }: { params: IParams }) {
                   label='Price'
                   type='number'
                   placeholder='Price'
+                  step='.01'
                   errors={errors}
                   register={register('price', {
                     required: true,

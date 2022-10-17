@@ -6,6 +6,7 @@ export default function FormField({
   label,
   type,
   placeholder,
+  step,
   errors,
   register,
   validationError,
@@ -14,6 +15,7 @@ export default function FormField({
   label: string;
   type: string;
   placeholder: string;
+  step?: string;
   errors: FieldErrorsImpl;
   register: UseFormRegisterReturn;
   validationError: string;
@@ -33,6 +35,7 @@ export default function FormField({
           }`}
           id={id}
           placeholder={placeholder}
+          rows={6}
           {...register}
         />
       ) : (
@@ -44,6 +47,7 @@ export default function FormField({
           type={type}
           placeholder={placeholder}
           {...register}
+          step={step}
         />
       )}
       {errors[id] ? (
