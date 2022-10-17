@@ -14,6 +14,7 @@ import FormField from '../../../components/FormField';
 interface IState {
   loading: boolean;
   error?: string;
+  loadingUpdate: boolean;
 }
 
 interface IAction {
@@ -44,6 +45,12 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loading: false, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
+    case 'UPDATE_REQUEST':
+      return { ...state, loadingUpdate: true, errorUpdate: '' };
+    case 'UPDATE_SUCCESS':
+      return { ...state, loadingUpdate: false, errorUpdate: '' };
+    case 'UPDATE_FAILURE':
+      return { ...state, loadingUpdate: false, errorUpdate: action.payload };
     default:
       return state;
   }
@@ -68,9 +75,10 @@ function ProductEdit({ params }: { params: IParams }) {
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
+    loadingUpdate: false,
   });
 
   useEffect(() => {
@@ -101,13 +109,30 @@ function ProductEdit({ params }: { params: IParams }) {
     fetchData();
   }, []);
 
-  const handleFormSubmit: SubmitHandler<IFormInput> = async ({ name }) => {
+  const handleFormSubmit: SubmitHandler<IFormInput> = async ({
+    name,
+    slug,
+    brand,
+    category,
+    image,
+    price,
+    stockCount,
+    description,
+  }) => {
     closeSnackbar();
     try {
-      const { data } = await axios.put(
+      dispatch({ type: 'UPDATE_REQUEST' });
+      await axios.put(
         `/api/admin/products/${productId}`,
         {
           name,
+          slug,
+          brand,
+          category,
+          image,
+          price,
+          stockCount,
+          description,
         },
         {
           headers: {
@@ -115,8 +140,11 @@ function ProductEdit({ params }: { params: IParams }) {
           },
         }
       );
+      dispatch({ type: 'UPDATE_SUCCESS' });
       enqueueSnackbar('Product updated successfully.', { variant: 'success' });
+      router.push('/admin/products');
     } catch (error) {
+      dispatch({ type: 'UPDATE_FAILURE' });
       enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
     }
   };
@@ -289,7 +317,14 @@ function ProductEdit({ params }: { params: IParams }) {
                     type='submit'
                     className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
                   >
-                    Update
+                    {loadingUpdate ? (
+                      <div className='flex items-center justify-center'>
+                        <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                        Processing...
+                      </div>
+                    ) : (
+                      'Update'
+                    )}
                   </button>
                 </div>
               </form>
