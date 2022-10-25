@@ -16,6 +16,8 @@
     "@paypal/react-paypal-js": "^7.8.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.5.9",
+    "@types/multer": "^1.4.7",
+    "@types/streamifier": "^0.1.0",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "chart.js": "^3.9.1",
@@ -23,13 +25,15 @@
     "cookies-next": "^2.1.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.4",
+    "multer": "^1.4.5-lts.1",
     "next": "12.2.5",
     "next-connect": "^0.13.0",
     "notistack": "^2.0.5",
     "react": "18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.35.0"
+    "react-hook-form": "^7.35.0",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "18.7.3",
