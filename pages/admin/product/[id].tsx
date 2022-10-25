@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -15,6 +15,7 @@ interface IState {
   loading: boolean;
   error?: string;
   loadingUpdate: boolean;
+  loadingUpload: boolean;
 }
 
 interface IAction {
@@ -37,6 +38,13 @@ interface IFormInput {
   description: string;
 }
 
+interface ContextType {
+  handleFileUpload: Function;
+  loading: boolean;
+}
+
+export const UploadContext = createContext<ContextType | null>(null);
+
 function reducer(state: IState, action: IAction) {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -51,6 +59,12 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loadingUpdate: false, errorUpdate: '' };
     case 'UPDATE_FAILURE':
       return { ...state, loadingUpdate: false, errorUpdate: action.payload };
+    case 'UPLOAD_REQUEST':
+      return { ...state, loadingUpload: true, errorUpload: '' };
+    case 'UPLOAD_SUCCESS':
+      return { ...state, loadingUpload: false, errorUpload: '' };
+    case 'UPLOAD_FAILURE':
+      return { ...state, loadingUpload: false, errorUpload: action.payload };
     default:
       return state;
   }
@@ -70,16 +84,18 @@ function ProductEdit({ params }: { params: IParams }) {
 
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
-  const { state } = value;
+  const storeValue = useContext(Store);
+  if (!storeValue) throw new Error('Store context must be defined.');
+  const { state } = storeValue;
   const { userInfo } = state;
 
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: '',
-    loadingUpdate: false,
-  });
+  const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: '',
+      loadingUpdate: false,
+      loadingUpload: false,
+    });
 
   useEffect(() => {
     if (!userInfo) router.push('/login');
@@ -107,7 +123,27 @@ function ProductEdit({ params }: { params: IParams }) {
       }
     };
     fetchData();
-  }, []);
+  }, [router, setValue, productId, userInfo]);
+
+  const handleImageUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      dispatch({ type: 'UPLOAD_REQUEST' });
+      const { data } = await axios.post('/api/admin/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: 'UPLOAD_SUCCESS' });
+      setValue('image', data.secure_url);
+      enqueueSnackbar('Image uploaded successfully.', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'UPLOAD_FAILURE', payload: getErrorMsg(error) });
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+    }
+  };
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     name,
@@ -149,6 +185,11 @@ function ProductEdit({ params }: { params: IParams }) {
     }
   };
 
+  const uploadValue = {
+    handleFileUpload: handleImageUpload,
+    loading: loadingUpload,
+  };
+
   return (
     <Layout title='Edit Product'>
       <div className='container p-6 mx-auto'>
@@ -187,147 +228,149 @@ function ProductEdit({ params }: { params: IParams }) {
                 Error: {error}
               </span>
             ) : (
-              <form
-                onSubmit={handleSubmit(handleFormSubmit)}
-                className='max-w-xl'
-              >
-                <FormField
-                  id='name'
-                  label='Name'
-                  type='text'
-                  placeholder='Name'
-                  errors={errors}
-                  register={register('name', {
-                    required: true,
-                    minLength: 2,
-                  })}
-                  validationError={
-                    errors?.name?.type === 'minLength'
-                      ? 'Name must be at least two characters.'
-                      : 'Name is required.'
-                  }
-                />
-                <FormField
-                  id='slug'
-                  label='Slug'
-                  type='text'
-                  placeholder='Slug'
-                  errors={errors}
-                  register={register('slug', {
-                    required: true,
-                    minLength: 2,
-                  })}
-                  validationError={
-                    errors?.slug?.type === 'minLength'
-                      ? 'Slug must be at least two characters.'
-                      : 'Slug is required.'
-                  }
-                />
-                <FormField
-                  id='brand'
-                  label='Brand'
-                  type='text'
-                  placeholder='Brand'
-                  errors={errors}
-                  register={register('brand', {
-                    required: true,
-                    minLength: 2,
-                  })}
-                  validationError={
-                    errors?.brand?.type === 'minLength'
-                      ? 'Brand must be at least two characters.'
-                      : 'Brand is required.'
-                  }
-                />
-                <FormField
-                  id='category'
-                  label='Category'
-                  type='text'
-                  placeholder='Category'
-                  errors={errors}
-                  register={register('category', {
-                    required: true,
-                    minLength: 2,
-                  })}
-                  validationError={
-                    errors?.category?.type === 'minLength'
-                      ? 'Category must be at least two characters.'
-                      : 'Category is required.'
-                  }
-                />
-                <FormField
-                  id='image'
-                  label='Image'
-                  type='text'
-                  placeholder='Image'
-                  errors={errors}
-                  register={register('image', {
-                    required: true,
-                    minLength: 2,
-                  })}
-                  validationError={
-                    errors?.image?.type === 'minLength'
-                      ? 'Image must be at least two characters.'
-                      : 'Image is required.'
-                  }
-                />
-                <FormField
-                  id='price'
-                  label='Price'
-                  type='number'
-                  placeholder='Price'
-                  step='.01'
-                  errors={errors}
-                  register={register('price', {
-                    required: true,
-                  })}
-                  validationError={errors?.price ? 'Price is required.' : ''}
-                />
-                <FormField
-                  id='stockCount'
-                  label='Stock'
-                  type='number'
-                  placeholder='Stock'
-                  errors={errors}
-                  register={register('stockCount', {
-                    required: true,
-                  })}
-                  validationError={
-                    errors?.stockCount ? 'Stock is required.' : ''
-                  }
-                />
-                <FormField
-                  id='description'
-                  label='Description'
-                  type='textarea'
-                  placeholder='Description'
-                  errors={errors}
-                  register={register('description', {
-                    required: true,
-                    minLength: 10,
-                  })}
-                  validationError={
-                    errors?.description?.type === 'minLength'
-                      ? 'Description must be at least ten characters.'
-                      : 'Description is required.'
-                  }
-                />
-                <div className='mt-8'>
-                  <button
-                    type='submit'
-                    className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
-                  >
-                    {loadingUpdate ? (
-                      <div className='flex items-center justify-center'>
-                        <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                        Processing...
-                      </div>
-                    ) : (
-                      'Update'
-                    )}
-                  </button>
-                </div>
-              </form>
+              <UploadContext.Provider value={uploadValue}>
+                <form
+                  onSubmit={handleSubmit(handleFormSubmit)}
+                  className='max-w-xl'
+                >
+                  <FormField
+                    id='name'
+                    label='Name'
+                    type='text'
+                    placeholder='Name'
+                    errors={errors}
+                    register={register('name', {
+                      required: true,
+                      minLength: 2,
+                    })}
+                    validationError={
+                      errors?.name?.type === 'minLength'
+                        ? 'Name must be at least two characters.'
+                        : 'Name is required.'
+                    }
+                  />
+                  <FormField
+                    id='slug'
+                    label='Slug'
+                    type='text'
+                    placeholder='Slug'
+                    errors={errors}
+                    register={register('slug', {
+                      required: true,
+                      minLength: 2,
+                    })}
+                    validationError={
+                      errors?.slug?.type === 'minLength'
+                        ? 'Slug must be at least two characters.'
+                        : 'Slug is required.'
+                    }
+                  />
+                  <FormField
+                    id='brand'
+                    label='Brand'
+                    type='text'
+                    placeholder='Brand'
+                    errors={errors}
+                    register={register('brand', {
+                      required: true,
+                      minLength: 2,
+                    })}
+                    validationError={
+                      errors?.brand?.type === 'minLength'
+                        ? 'Brand must be at least two characters.'
+                        : 'Brand is required.'
+                    }
+                  />
+                  <FormField
+                    id='category'
+                    label='Category'
+                    type='text'
+                    placeholder='Category'
+                    errors={errors}
+                    register={register('category', {
+                      required: true,
+                      minLength: 2,
+                    })}
+                    validationError={
+                      errors?.category?.type === 'minLength'
+                        ? 'Category must be at least two characters.'
+                        : 'Category is required.'
+                    }
+                  />
+                  <FormField
+                    id='image'
+                    label='Image'
+                    type='text'
+                    placeholder='Image'
+                    errors={errors}
+                    register={register('image', {
+                      required: true,
+                      minLength: 2,
+                    })}
+                    validationError={
+                      errors?.image?.type === 'minLength'
+                        ? 'Image must be at least two characters.'
+                        : 'Image is required.'
+                    }
+                  />
+                  <FormField
+                    id='price'
+                    label='Price'
+                    type='number'
+                    placeholder='Price'
+                    step='.01'
+                    errors={errors}
+                    register={register('price', {
+                      required: true,
+                    })}
+                    validationError={errors?.price ? 'Price is required.' : ''}
+                  />
+                  <FormField
+                    id='stockCount'
+                    label='Stock'
+                    type='number'
+                    placeholder='Stock'
+                    errors={errors}
+                    register={register('stockCount', {
+                      required: true,
+                    })}
+                    validationError={
+                      errors?.stockCount ? 'Stock is required.' : ''
+                    }
+                  />
+                  <FormField
+                    id='description'
+                    label='Description'
+                    type='textarea'
+                    placeholder='Description'
+                    errors={errors}
+                    register={register('description', {
+                      required: true,
+                      minLength: 10,
+                    })}
+                    validationError={
+                      errors?.description?.type === 'minLength'
+                        ? 'Description must be at least ten characters.'
+                        : 'Description is required.'
+                    }
+                  />
+                  <div className='mt-8'>
+                    <button
+                      type='submit'
+                      className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+                    >
+                      {loadingUpdate ? (
+                        <div className='flex items-center justify-center'>
+                          <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                          Processing...
+                        </div>
+                      ) : (
+                        'Update'
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </UploadContext.Provider>
             )}
           </div>
         </div>

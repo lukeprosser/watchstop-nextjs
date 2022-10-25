@@ -1,5 +1,55 @@
 import React from 'react';
 import { FieldErrorsImpl, UseFormRegisterReturn } from 'react-hook-form';
+import FileUploader from './FileUploader';
+
+const Input = ({
+  id,
+  placeholder,
+  type,
+  step,
+  errors,
+  register,
+}: {
+  id: string;
+  placeholder: string;
+  type: string;
+  step?: string;
+  errors: FieldErrorsImpl;
+  register: UseFormRegisterReturn;
+}) => (
+  <input
+    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
+      errors[id] ? 'outline-red-500' : 'outline-slate-300'
+    }`}
+    id={id}
+    type={type}
+    placeholder={placeholder}
+    {...register}
+    step={step}
+  />
+);
+
+const TextArea = ({
+  id,
+  placeholder,
+  errors,
+  register,
+}: {
+  id: string;
+  placeholder: string;
+  errors: FieldErrorsImpl;
+  register: UseFormRegisterReturn;
+}) => (
+  <textarea
+    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
+      errors[id] ? 'outline-red-500' : 'outline-slate-300'
+    }`}
+    id={id}
+    placeholder={placeholder}
+    rows={6}
+    {...register}
+  />
+);
 
 export default function FormField({
   id,
@@ -29,25 +79,32 @@ export default function FormField({
         {label}
       </label>
       {type === 'textarea' ? (
-        <textarea
-          className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
-            errors[id] ? 'outline-red-500' : 'outline-slate-300'
-          }`}
+        <TextArea
           id={id}
           placeholder={placeholder}
-          rows={6}
-          {...register}
+          errors={errors}
+          register={register}
         />
+      ) : id === 'image' ? (
+        <div className='flex justify-between gap-2 items-center'>
+          <Input
+            id={id}
+            placeholder={placeholder}
+            type={type}
+            step={step}
+            errors={errors}
+            register={register}
+          />
+          <FileUploader />
+        </div>
       ) : (
-        <input
-          className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
-            errors[id] ? 'outline-red-500' : 'outline-slate-300'
-          }`}
+        <Input
           id={id}
-          type={type}
           placeholder={placeholder}
-          {...register}
+          type={type}
           step={step}
+          errors={errors}
+          register={register}
         />
       )}
       {errors[id] ? (
