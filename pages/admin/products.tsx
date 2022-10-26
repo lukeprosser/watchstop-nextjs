@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useReducer, ReactNode } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
 import { Store } from '../../utils/Store';
@@ -22,6 +23,7 @@ interface IState {
   loading: boolean;
   error?: string;
   products: IProduct[];
+  loadingCreate: boolean;
 }
 
 interface IAction {
@@ -37,12 +39,19 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loading: false, products: action.payload, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
+    case 'CREATE_REQUEST':
+      return { ...state, loadingCreate: true };
+    case 'CREATE_SUCCESS':
+      return { ...state, loadingCreate: false };
+    case 'CREATE_FAILURE':
+      return { ...state, loadingCreate: false };
     default:
       return state;
   }
 }
 
 function AdminProducts() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
 
   const value = useContext(Store);
@@ -50,11 +59,15 @@ function AdminProducts() {
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
-    loading: true,
-    products: [],
-    error: '',
-  });
+  const [{ loading, error, products, loadingCreate }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      products: [],
+      error: '',
+      loadingCreate: false,
+    }
+  );
 
   useEffect(() => {
     if (!userInfo) router.push('/login');
@@ -74,7 +87,30 @@ function AdminProducts() {
     };
 
     fetchData();
-  }, []);
+  }, [router, userInfo]);
+
+  const handleProductCreate = async () => {
+    closeSnackbar();
+
+    if (!window.confirm('Are you sure you want to create a product?')) return;
+
+    try {
+      dispatch({ type: 'CREATE_REQUEST' });
+      const { data } = await axios.post(
+        '/api/admin/products',
+        {},
+        {
+          headers: { authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      dispatch({ type: 'CREATE_SUCCESS' });
+      enqueueSnackbar('Product created successfully.', { variant: 'success' });
+      router.push(`/admin/product/${data.product._id}`);
+    } catch (error) {
+      dispatch({ type: 'CREATE_FAIL' });
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+    }
+  };
 
   return (
     <Layout title='Products'>
@@ -100,9 +136,25 @@ function AdminProducts() {
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
-            <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
-              Products
-            </h1>
+            <div className='flex justify-between mb-6 items-center'>
+              <h1 className='text-xl font-semibold tracking-wide lg:text-2xl'>
+                Products
+              </h1>
+              <button
+                type='button'
+                className='w-max px-3 py-2 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600'
+                onClick={handleProductCreate}
+              >
+                {loadingCreate ? (
+                  <div className='flex items-center justify-center'>
+                    <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
+                    Processing...
+                  </div>
+                ) : (
+                  'Create'
+                )}
+              </button>
+            </div>
             {loading ? (
               <div className='flex items-center justify-center'>
                 <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
