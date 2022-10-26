@@ -1,9 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
 import { v2 as cloudinary } from 'cloudinary';
+import { Express } from 'express'; // Workaround for Multer file type (https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18569)
 import multer from 'multer';
 import streamifier from 'streamifier';
 import { isAuthenticated, isAdministrator } from '../../../utils/auth';
+
+interface IMulterRequest extends NextApiRequest {
+  file: Express.Multer.File;
+}
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -18,7 +23,7 @@ export const config = {
   },
 };
 
-const handler = nc<NextApiRequest, NextApiResponse>({
+const handler = nc<IMulterRequest, NextApiResponse>({
   onError: async (err, req, res) => {
     res.status(500).send({ message: err.toString() });
   },
@@ -26,28 +31,31 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
 const upload = multer();
 
-// Upload file Buffer from memory (https://support.cloudinary.com/hc/en-us/community/posts/360007581379-Correct-way-of-uploading-from-buffer-)
-handler
-  .use(isAuthenticated, isAdministrator, upload.single('file'))
-  .post(async (req, res) => {
-    const streamUpload = (req) => {
-      return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream((error, result) => {
+// Define middleware, including file upload
+handler.use(isAuthenticated, isAdministrator);
+handler.use(upload.single('file'));
+
+handler.post(async (req, res) => {
+  // Upload file Buffer from memory (https://support.cloudinary.com/hc/en-us/community/posts/360007581379-Correct-way-of-uploading-from-buffer-)
+  const uploadFromBuffer = (req: IMulterRequest) => {
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'watchstop',
+        },
+        (error, result) => {
           if (result) {
             resolve(result);
           } else {
             reject(error);
           }
-        });
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-      });
-    };
-    const result = await streamUpload(req);
-    res.send(result);
-  });
-
-handler.post(async (req, res) => {
-  console.log(req.body);
+        }
+      );
+      streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+    });
+  };
+  const result = await uploadFromBuffer(req);
+  res.send(result);
 });
 
 export default handler;
