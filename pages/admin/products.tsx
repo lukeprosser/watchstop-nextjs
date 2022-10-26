@@ -24,6 +24,9 @@ interface IState {
   error?: string;
   products: IProduct[];
   loadingCreate: boolean;
+  loadingDelete: boolean;
+  deleteId: string;
+  successDelete: boolean;
 }
 
 interface IAction {
@@ -45,6 +48,14 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loadingCreate: false };
     case 'CREATE_FAILURE':
       return { ...state, loadingCreate: false };
+    case 'DELETE_REQUEST':
+      return { ...state, loadingDelete: true, deleteId: action.payload };
+    case 'DELETE_SUCCESS':
+      return { ...state, loadingDelete: false, successDelete: true };
+    case 'DELETE_FAILURE':
+      return { ...state, loadingDelete: false };
+    case 'DELETE_RESET':
+      return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
   }
@@ -59,15 +70,26 @@ function AdminProducts() {
   const { state } = value;
   const { userInfo } = state;
 
-  const [{ loading, error, products, loadingCreate }, dispatch] = useReducer(
-    reducer,
+  const [
     {
-      loading: true,
-      products: [],
-      error: '',
-      loadingCreate: false,
-    }
-  );
+      loading,
+      error,
+      products,
+      loadingCreate,
+      loadingDelete,
+      deleteId,
+      successDelete,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    products: [],
+    error: '',
+    loadingCreate: false,
+    loadingDelete: false,
+    deleteId: '',
+    successDelete: false,
+  });
 
   useEffect(() => {
     if (!userInfo) router.push('/login');
@@ -86,8 +108,13 @@ function AdminProducts() {
       }
     };
 
-    fetchData();
-  }, [router, userInfo]);
+    // After successful deletion, fetch product data again (but only run once)
+    if (successDelete) {
+      dispatch({ type: 'DELETE_RESET' });
+    } else {
+      fetchData();
+    }
+  }, [router, userInfo, successDelete]);
 
   const handleProductCreate = async () => {
     closeSnackbar();
@@ -107,7 +134,26 @@ function AdminProducts() {
       enqueueSnackbar('Product created successfully.', { variant: 'success' });
       router.push(`/admin/product/${data.product._id}`);
     } catch (error) {
-      dispatch({ type: 'CREATE_FAIL' });
+      dispatch({ type: 'CREATE_FAILURE' });
+      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+    }
+  };
+
+  const handleProductDelete = async (id: string) => {
+    closeSnackbar();
+
+    if (!window.confirm('Are you sure you want to delete this product?'))
+      return;
+
+    try {
+      dispatch({ type: 'DELETE_REQUEST', payload: id });
+      await axios.delete(`/api/admin/products/${id}`, {
+        headers: { authorization: `Bearer ${userInfo.token}` },
+      });
+      dispatch({ type: 'DELETE_SUCCESS' });
+      enqueueSnackbar('Product deleted successfully.', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'DELETE_FAILURE' });
       enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
     }
   };
@@ -193,16 +239,25 @@ function AdminProducts() {
                         <td className='px-4 py-3'>£{product.price}</td>
                         <td className='px-4 py-3'>{product.stockCount}</td>
                         <td className='px-4 py-3'>
-                          <Link href={`/admin/product/${product._id}`}>
-                            <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
-                              Edit
-                            </a>
-                          </Link>
-                          <Link href={`/admin/product/${product._id}`}>
-                            <a className='p-2 ml-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
-                              Delete
-                            </a>
-                          </Link>
+                          <div className='flex gap-2'>
+                            <Link href={`/admin/product/${product._id}`}>
+                              <a className='w-1/2 p-2 text-xs text-center rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                                Edit
+                              </a>
+                            </Link>
+                            <button
+                              className='w-1/2 p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'
+                              onClick={() => handleProductDelete(product._id)}
+                            >
+                              {loadingDelete && deleteId === product._id ? (
+                                <div className='flex items-center justify-center'>
+                                  <ArrowPathIcon className='inline w-4 h-4 mr-2 animate-spin' />
+                                </div>
+                              ) : (
+                                'Delete'
+                              )}
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
