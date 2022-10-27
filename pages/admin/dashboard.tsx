@@ -118,7 +118,7 @@ function AdminDashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [router, userInfo]);
 
   return (
     <Layout title='Order History'>
@@ -139,6 +139,11 @@ function AdminDashboard() {
               <li className='py-4'>
                 <Link href='/admin/products'>
                   <a className='hover:text-sky-500'>Products</a>
+                </Link>
+              </li>
+              <li className='py-4'>
+                <Link href='/admin/users'>
+                  <a className='hover:text-sky-500'>Users</a>
                 </Link>
               </li>
             </ul>

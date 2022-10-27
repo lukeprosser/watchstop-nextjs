@@ -9,20 +9,17 @@ import Layout from '../../components/Layout';
 import { Store } from '../../utils/Store';
 import { getErrorMsg } from '../../utils/error';
 
-interface IProduct {
+interface IUser {
   _id: string;
   name: string;
-  brand: string;
-  category: string;
-  rating: number;
-  price: number;
-  stockCount: number;
+  email: string;
+  admin: boolean;
 }
 
 interface IState {
   loading: boolean;
   error?: string;
-  products: IProduct[];
+  users: IUser[];
   loadingCreate: boolean;
   loadingDelete: boolean;
   deleteId: string;
@@ -39,7 +36,7 @@ function reducer(state: IState, action: IAction) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, products: action.payload, error: '' };
+      return { ...state, loading: false, users: action.payload, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
     case 'CREATE_REQUEST':
@@ -61,7 +58,7 @@ function reducer(state: IState, action: IAction) {
   }
 }
 
-function AdminProducts() {
+function AdminUsers() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
 
@@ -74,7 +71,7 @@ function AdminProducts() {
     {
       loading,
       error,
-      products,
+      users,
       loadingCreate,
       loadingDelete,
       deleteId,
@@ -83,7 +80,7 @@ function AdminProducts() {
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
-    products: [],
+    users: [],
     error: '',
     loadingCreate: false,
     loadingDelete: false,
@@ -97,7 +94,7 @@ function AdminProducts() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/admin/products`, {
+        const { data } = await axios.get(`/api/admin/users`, {
           headers: {
             authorization: `Bearer ${userInfo.token}`,
           },
@@ -108,7 +105,7 @@ function AdminProducts() {
       }
     };
 
-    // After successful deletion, fetch product data again (but only run once)
+    // After successful deletion, fetch user data again (but only run once)
     if (successDelete) {
       dispatch({ type: 'DELETE_RESET' });
     } else {
@@ -116,42 +113,41 @@ function AdminProducts() {
     }
   }, [router, userInfo, successDelete]);
 
-  const handleProductCreate = async () => {
+  const handleUserCreate = async () => {
     closeSnackbar();
 
-    if (!window.confirm('Are you sure you want to create a product?')) return;
+    if (!window.confirm('Are you sure you want to create a user?')) return;
 
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       const { data } = await axios.post(
-        '/api/admin/products',
+        '/api/admin/users',
         {},
         {
           headers: { authorization: `Bearer ${userInfo.token}` },
         }
       );
       dispatch({ type: 'CREATE_SUCCESS' });
-      enqueueSnackbar('Product created successfully.', { variant: 'success' });
-      router.push(`/admin/product/${data.product._id}`);
+      enqueueSnackbar('User created successfully.', { variant: 'success' });
+      router.push(`/admin/user/${data.user._id}`);
     } catch (error) {
       dispatch({ type: 'CREATE_FAILURE' });
       enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
     }
   };
 
-  const handleProductDelete = async (id: string) => {
+  const handleUserDelete = async (id: string) => {
     closeSnackbar();
 
-    if (!window.confirm('Are you sure you want to delete this product?'))
-      return;
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
 
     try {
       dispatch({ type: 'DELETE_REQUEST', payload: id });
-      await axios.delete(`/api/admin/products/${id}`, {
+      await axios.delete(`/api/admin/users/${id}`, {
         headers: { authorization: `Bearer ${userInfo.token}` },
       });
       dispatch({ type: 'DELETE_SUCCESS' });
-      enqueueSnackbar('Product deleted successfully.', { variant: 'success' });
+      enqueueSnackbar('User deleted successfully.', { variant: 'success' });
     } catch (error) {
       dispatch({ type: 'DELETE_FAILURE' });
       enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
@@ -159,7 +155,7 @@ function AdminProducts() {
   };
 
   return (
-    <Layout title='Products'>
+    <Layout title='Users'>
       <div className='container p-6 mx-auto'>
         <div className='grid-cols-6 md:grid'>
           <aside className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
@@ -176,12 +172,12 @@ function AdminProducts() {
               </li>
               <li className='py-4'>
                 <Link href='/admin/products'>
-                  <a className='text-sky-600 hover:text-sky-500'>Products</a>
+                  <a className='text-sky-600 hover:text-sky-500'>Users</a>
                 </Link>
               </li>
               <li className='py-4'>
                 <Link href='/admin/users'>
-                  <a className='hover:text-sky-500'>Users</a>
+                  <a className='text-sky-600 hover:text-sky-500'>Userss</a>
                 </Link>
               </li>
             </ul>
@@ -189,12 +185,12 @@ function AdminProducts() {
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             <div className='flex justify-between mb-6 items-center'>
               <h1 className='text-xl font-semibold tracking-wide lg:text-2xl'>
-                Products
+                Users
               </h1>
               <button
                 type='button'
                 className='w-max px-3 py-2 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600'
-                onClick={handleProductCreate}
+                onClick={handleUserCreate}
               >
                 {loadingCreate ? (
                   <div className='flex items-center justify-center'>
@@ -222,39 +218,33 @@ function AdminProducts() {
                     <tr>
                       <th className='px-4 py-2'>ID</th>
                       <th className='px-4 py-2'>Name</th>
-                      <th className='px-4 py-2'>Brand</th>
-                      <th className='px-4 py-2'>Category</th>
-                      <th className='px-4 py-2'>Rating</th>
-                      <th className='px-4 py-2'>Price</th>
-                      <th className='px-4 py-2'>Stock</th>
+                      <th className='px-4 py-2'>Email</th>
+                      <th className='px-4 py-2'>Admin</th>
                       <th className='px-4 py-2'></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map((product: IProduct) => (
+                    {users.map((user: IUser) => (
                       <tr
-                        key={product._id}
+                        key={user._id}
                         className='text-sm border-t border-slate-300 first:border-none'
                       >
-                        <td className='px-4 py-3'>{product._id}</td>
-                        <td className='px-4 py-3'>{product.name}</td>
-                        <td className='px-4 py-3'>{product.brand}</td>
-                        <td className='px-4 py-3'>{product.category}</td>
-                        <td className='px-4 py-3'>{product.rating}</td>
-                        <td className='px-4 py-3'>£{product.price}</td>
-                        <td className='px-4 py-3'>{product.stockCount}</td>
+                        <td className='px-4 py-3'>{user._id}</td>
+                        <td className='px-4 py-3'>{user.name}</td>
+                        <td className='px-4 py-3'>{user.email}</td>
+                        <td className='px-4 py-3'>{user.admin}</td>
                         <td className='px-4 py-3'>
                           <div className='flex gap-2'>
-                            <Link href={`/admin/product/${product._id}`}>
+                            <Link href={`/admin/user/${user._id}`}>
                               <a className='w-1/2 p-2 text-xs text-center rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
                                 Edit
                               </a>
                             </Link>
                             <button
                               className='w-1/2 p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'
-                              onClick={() => handleProductDelete(product._id)}
+                              onClick={() => handleUserDelete(user._id)}
                             >
-                              {loadingDelete && deleteId === product._id ? (
+                              {loadingDelete && deleteId === user._id ? (
                                 <div className='flex items-center justify-center'>
                                   <ArrowPathIcon className='inline w-4 h-4 mr-2 animate-spin' />
                                 </div>
@@ -277,4 +267,4 @@ function AdminProducts() {
   );
 }
 
-export default dynamic(() => Promise.resolve(AdminProducts), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminUsers), { ssr: false });

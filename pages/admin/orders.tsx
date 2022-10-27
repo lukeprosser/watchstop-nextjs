@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, ReactNode } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -84,7 +84,7 @@ function AdminOrders() {
     };
 
     fetchData();
-  }, []);
+  }, [router, userInfo]);
 
   return (
     <Layout title='Order History'>
@@ -105,6 +105,11 @@ function AdminOrders() {
               <li className='py-4'>
                 <Link href='/admin/products'>
                   <a className='hover:text-sky-500'>Products</a>
+                </Link>
+              </li>
+              <li className='py-4'>
+                <Link href='/admin/users'>
+                  <a className='hover:text-sky-500'>Users</a>
                 </Link>
               </li>
             </ul>
