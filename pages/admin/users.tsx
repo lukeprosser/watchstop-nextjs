@@ -20,7 +20,6 @@ interface IState {
   loading: boolean;
   error?: string;
   users: IUser[];
-  loadingCreate: boolean;
   loadingDelete: boolean;
   deleteId: string;
   successDelete: boolean;
@@ -39,12 +38,6 @@ function reducer(state: IState, action: IAction) {
       return { ...state, loading: false, users: action.payload, error: '' };
     case 'FETCH_FAILURE':
       return { ...state, loading: false, error: action.payload };
-    case 'CREATE_REQUEST':
-      return { ...state, loadingCreate: true };
-    case 'CREATE_SUCCESS':
-      return { ...state, loadingCreate: false };
-    case 'CREATE_FAILURE':
-      return { ...state, loadingCreate: false };
     case 'DELETE_REQUEST':
       return { ...state, loadingDelete: true, deleteId: action.payload };
     case 'DELETE_SUCCESS':
@@ -68,21 +61,12 @@ function AdminUsers() {
   const { userInfo } = state;
 
   const [
-    {
-      loading,
-      error,
-      users,
-      loadingCreate,
-      loadingDelete,
-      deleteId,
-      successDelete,
-    },
+    { loading, error, users, loadingDelete, deleteId, successDelete },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
     users: [],
     error: '',
-    loadingCreate: false,
     loadingDelete: false,
     deleteId: '',
     successDelete: false,
@@ -112,29 +96,6 @@ function AdminUsers() {
       fetchData();
     }
   }, [router, userInfo, successDelete]);
-
-  const handleUserCreate = async () => {
-    closeSnackbar();
-
-    if (!window.confirm('Are you sure you want to create a user?')) return;
-
-    try {
-      dispatch({ type: 'CREATE_REQUEST' });
-      const { data } = await axios.post(
-        '/api/admin/users',
-        {},
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: 'CREATE_SUCCESS' });
-      enqueueSnackbar('User created successfully.', { variant: 'success' });
-      router.push(`/admin/user/${data.user._id}`);
-    } catch (error) {
-      dispatch({ type: 'CREATE_FAILURE' });
-      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
-    }
-  };
 
   const handleUserDelete = async (id: string) => {
     closeSnackbar();
@@ -172,36 +133,20 @@ function AdminUsers() {
               </li>
               <li className='py-4'>
                 <Link href='/admin/products'>
-                  <a className='text-sky-600 hover:text-sky-500'>Users</a>
+                  <a className='hover:text-sky-500'>Products</a>
                 </Link>
               </li>
               <li className='py-4'>
                 <Link href='/admin/users'>
-                  <a className='text-sky-600 hover:text-sky-500'>Userss</a>
+                  <a className='text-sky-600 hover:text-sky-500'>Users</a>
                 </Link>
               </li>
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
-            <div className='flex justify-between mb-6 items-center'>
-              <h1 className='text-xl font-semibold tracking-wide lg:text-2xl'>
-                Users
-              </h1>
-              <button
-                type='button'
-                className='w-max px-3 py-2 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600'
-                onClick={handleUserCreate}
-              >
-                {loadingCreate ? (
-                  <div className='flex items-center justify-center'>
-                    <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                    Processing...
-                  </div>
-                ) : (
-                  'Create'
-                )}
-              </button>
-            </div>
+            <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
+              Users
+            </h1>
             {loading ? (
               <div className='flex items-center justify-center'>
                 <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
@@ -232,7 +177,9 @@ function AdminUsers() {
                         <td className='px-4 py-3'>{user._id}</td>
                         <td className='px-4 py-3'>{user.name}</td>
                         <td className='px-4 py-3'>{user.email}</td>
-                        <td className='px-4 py-3'>{user.admin}</td>
+                        <td className='px-4 py-3'>
+                          {user.admin ? 'Yes' : 'No'}
+                        </td>
                         <td className='px-4 py-3'>
                           <div className='flex gap-2'>
                             <Link href={`/admin/user/${user._id}`}>
