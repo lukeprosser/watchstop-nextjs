@@ -211,6 +211,11 @@ function ProductEdit({ params }: { params: IParams }) {
                   <a className='text-sky-600 hover:text-sky-500'>Products</a>
                 </Link>
               </li>
+              <li className='py-4'>
+                <Link href='/admin/users'>
+                  <a className='hover:text-sky-500'>Users</a>
+                </Link>
+              </li>
             </ul>
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
