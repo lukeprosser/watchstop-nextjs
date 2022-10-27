@@ -8,6 +8,13 @@ const handler = nc<NextApiRequest, NextApiResponse>();
 
 handler.use(isAuthenticated, isAdministrator);
 
+handler.get(async (req, res) => {
+  await db.connect();
+  const user = await User.findById(req.query.id);
+  await db.disconnect();
+  res.send(user);
+});
+
 handler.delete(async (req, res) => {
   await db.connect();
   const user = await User.findById(req.query.id);

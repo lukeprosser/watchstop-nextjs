@@ -187,6 +187,12 @@ function UserEdit({ params }: { params: IParams }) {
                       : 'Name is required.'
                   }
                 />
+                <label
+                  htmlFor={'admin'}
+                  className='block mb-2 font-medium tracking-wide text-slate-700'
+                >
+                  Admin
+                </label>
                 <input
                   type='checkbox'
                   name='admin'
