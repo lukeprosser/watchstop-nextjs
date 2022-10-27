@@ -60,7 +60,7 @@ function UserEdit({ params }: { params: IParams }) {
     setValue,
   } = useForm<IFormInput>();
 
-  const [admin, setAdmin] = useState(false);
+  const [admin, setAdmin] = useState(false); // Checkbox not part of react-hook-form
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -187,18 +187,18 @@ function UserEdit({ params }: { params: IParams }) {
                       : 'Name is required.'
                   }
                 />
-                <label
-                  htmlFor={'admin'}
-                  className='block mb-2 font-medium tracking-wide text-slate-700'
-                >
-                  Admin
-                </label>
                 <input
                   type='checkbox'
                   name='admin'
                   checked={admin}
                   onChange={(e) => setAdmin(e.target.checked)}
                 />
+                <label
+                  htmlFor={'admin'}
+                  className='ml-2 font-medium tracking-wide text-slate-700'
+                >
+                  Admin
+                </label>
                 <div className='mt-8'>
                   <button
                     type='submit'
