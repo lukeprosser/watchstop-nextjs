@@ -41,7 +41,7 @@ function Account() {
     // Fill form fields if values exist in store context
     setValue('name', userInfo.name);
     setValue('email', userInfo.email);
-  }, []);
+  }, [router, setValue, userInfo]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     name,

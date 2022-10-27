@@ -40,7 +40,7 @@ export default function Login() {
       - Prevents further redirect to home page (e.g. to redirect back to delivery if checking out)
     */
     if (userInfo) router.push('/');
-  }, []);
+  }, [router, userInfo]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     email,
@@ -112,7 +112,7 @@ export default function Login() {
           </div>
           <div className='mt-4 text-sm'>
             <p>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href={`/register?redirect=${redirect || '/'}`}>
                 <a className='font-medium text-sky-600 hover:text-sky-500'>
                   Sign up

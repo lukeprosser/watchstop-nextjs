@@ -53,7 +53,7 @@ export default function Payment() {
       const paymentMethod = getCookie('paymentMethod');
       setPaymentMethod(typeof paymentMethod === 'string' ? paymentMethod : '');
     }
-  }, []);
+  }, [router, deliveryInfo?.address]);
 
   const handleSubmit = (e: React.FormEvent) => {
     closeSnackbar();

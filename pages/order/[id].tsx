@@ -167,7 +167,15 @@ function OrderDetail({ params }: { params: IParams }) {
       };
       loadPaypalScript();
     }
-  }, [order, successPayment, successDeliver]);
+  }, [
+    router,
+    userInfo,
+    orderId,
+    order,
+    paypalDispatch,
+    successPayment,
+    successDeliver,
+  ]);
 
   function createOrder(data: CreateOrderData, actions: CreateOrderActions) {
     return actions.order

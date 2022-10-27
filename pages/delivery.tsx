@@ -44,7 +44,7 @@ export default function Delivery() {
       setValue('postcode', deliveryInfo.postcode);
       setValue('country', deliveryInfo.country);
     }
-  }, []);
+  }, [router, setValue, userInfo, deliveryInfo]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = ({
     fullName,

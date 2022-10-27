@@ -35,7 +35,7 @@ function Order() {
   useEffect(() => {
     if (!paymentMethod) router.push('/payment');
     if (cartItems.length === 0) router.push('/cart');
-  }, []);
+  }, [router, cartItems.length, paymentMethod]);
 
   const handlePlaceOrder = async () => {
     closeSnackbar();

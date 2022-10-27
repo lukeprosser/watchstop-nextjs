@@ -42,7 +42,7 @@ export default function Register() {
       - Prevents further redirect to home page (e.g. to redirect back to delivery if checking out)
     */
     if (userInfo) router.push('/');
-  }, []);
+  }, [router, userInfo]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     name,

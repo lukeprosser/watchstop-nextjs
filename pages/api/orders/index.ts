@@ -14,7 +14,7 @@ interface IGetUserAuthInfoRequest extends NextApiRequest {
 }
 
 const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>({
-  onError: async (err, req, res, next) => {
+  onError: async (err, req, res) => {
     await db.disconnect();
     res.status(500).send({ message: err.toString() });
   },
@@ -24,16 +24,15 @@ const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>({
 handler.use(isAuthenticated);
 
 handler.post(async (req, res) => {
-  // await db.connect();
-  // // Create new order with user ID
-  // const newOrder = new Order({ ...req.body, user: req.user._id });
-  // // Save new order to database
-  // const order = await newOrder.save();
+  await db.connect();
+  // Create new order with user ID
+  const newOrder = new Order({ ...req.body, user: req.user._id });
+  // Save new order to database
+  const order = await newOrder.save();
 
-  // await db.disconnect();
+  await db.disconnect();
 
-  // res.status(201).send(order);
-  throw new Error('CANNOT CREATE ORDER!');
+  res.status(201).send(order);
 });
 
 export default handler;

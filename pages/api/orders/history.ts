@@ -14,7 +14,7 @@ interface IGetUserAuthInfoRequest extends NextApiRequest {
 }
 
 const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>({
-  onError: async (err, req, res, next) => {
+  onError: async (err, req, res) => {
     await db.disconnect();
     res.status(500).send({ message: err.toString() });
   },
