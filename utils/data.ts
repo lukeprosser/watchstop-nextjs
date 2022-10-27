@@ -20,7 +20,8 @@ const data = {
       name: 'Pegasus',
       slug: 'pegasus',
       category: 'Classic',
-      image: '/images/products/pegasus.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801658/watchstop/pegasus.jpg',
       price: 79.99,
       brand: 'Galactic',
       rating: 4.5,
@@ -33,7 +34,8 @@ const data = {
       name: 'Grus',
       slug: 'grus',
       category: 'Casual',
-      image: '/images/products/grus.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801657/watchstop/grus.jpg',
       price: 59.99,
       brand: 'Lunar',
       rating: 4,
@@ -46,7 +48,8 @@ const data = {
       name: 'Scorpius',
       slug: 'scorpius',
       category: 'Minimal',
-      image: '/images/products/scorpius.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801658/watchstop/scorpius.jpg',
       price: 69.99,
       brand: 'Solar',
       rating: 5,
@@ -59,7 +62,8 @@ const data = {
       name: 'Vega',
       slug: 'vega',
       category: 'Modern',
-      image: '/images/products/vega.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801658/watchstop/vega.jpg',
       price: 72.99,
       brand: 'Andromeda',
       rating: 4,
@@ -72,7 +76,8 @@ const data = {
       name: 'Leo',
       slug: 'leo',
       category: 'Minimal',
-      image: '/images/products/leo.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801657/watchstop/leo.jpg',
       price: 89.99,
       brand: 'Flare',
       rating: 4.5,
@@ -85,7 +90,8 @@ const data = {
       name: 'Corvus',
       slug: 'corvus',
       category: 'Classic',
-      image: '/images/products/corvus.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801657/watchstop/corvus.jpg',
       price: 99.99,
       brand: 'Eclipse',
       rating: 3.5,
@@ -98,7 +104,8 @@ const data = {
       name: 'Orion',
       slug: 'orion',
       category: 'Classic',
-      image: '/images/products/orion.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801657/watchstop/orion.jpg',
       price: 79.99,
       brand: 'Orbit',
       rating: 4,
@@ -111,7 +118,8 @@ const data = {
       name: 'Lyra',
       slug: 'lyra',
       category: 'Modern',
-      image: '/images/products/lyra.jpg',
+      image:
+        'https://res.cloudinary.com/lukeprosser/image/upload/v1666801657/watchstop/lyra.jpg',
       price: 49.99,
       brand: 'Solar',
       rating: 3.5,
