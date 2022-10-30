@@ -14,10 +14,11 @@ export default function Layout({
   description,
   children,
 }: LayoutProps): ReactElement {
+  const titleText = title ? ` - ${title}` : '';
   return (
     <>
       <Head>
-        <title>WatchStop{title ? ` - ${title}` : ''}</title>
+        <title>WatchStop{titleText}</title>
         <meta
           name='description'
           content={description ? description : 'WatchStop'}

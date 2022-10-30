@@ -100,7 +100,9 @@ function OrderHistory() {
               </li>
               <li className='py-4'>
                 <Link href='/order-history'>
-                  <a className='hover:text-sky-600'>Order History</a>
+                  <a className='text-sky-600 hover:text-sky-500'>
+                    Order History
+                  </a>
                 </Link>
               </li>
             </ul>

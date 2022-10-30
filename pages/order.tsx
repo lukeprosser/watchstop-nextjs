@@ -34,8 +34,11 @@ function Order() {
 
   useEffect(() => {
     if (!paymentMethod) router.push('/payment');
+  }, [router, paymentMethod]);
+
+  useEffect(() => {
     if (cartItems.length === 0) router.push('/cart');
-  }, [router, cartItems.length, paymentMethod]);
+  });
 
   const handlePlaceOrder = async () => {
     closeSnackbar();

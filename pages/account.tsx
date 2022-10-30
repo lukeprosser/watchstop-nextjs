@@ -36,11 +36,13 @@ function Account() {
   const { userInfo } = state;
 
   useEffect(() => {
-    if (!userInfo) router.push('/login');
-
-    // Fill form fields if values exist in store context
-    setValue('name', userInfo.name);
-    setValue('email', userInfo.email);
+    if (userInfo) {
+      // Fill form fields if values exist in store context
+      setValue('name', userInfo.name);
+      setValue('email', userInfo.email);
+    } else {
+      router.push('/login');
+    }
   }, [router, setValue, userInfo]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
@@ -88,7 +90,7 @@ function Account() {
             <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
               <li className='pt-2 pb-4'>
                 <Link href='/account'>
-                  <a className='hover:text-sky-600'>Account</a>
+                  <a className='text-sky-600 hover:text-sky-500'>Account</a>
                 </Link>
               </li>
               <li className='py-4'>

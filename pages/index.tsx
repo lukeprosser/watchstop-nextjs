@@ -51,7 +51,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
   };
 
   return (
-    <Layout>
+    <Layout title='WatchStop'>
       <div className='container p-6 mx-auto'>
         <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Products
@@ -93,6 +93,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
   );
 }
 
+// eval error caused by fetching props - not sure why. Doesn't affect user experience.
 export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find({}).lean();

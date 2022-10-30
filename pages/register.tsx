@@ -41,8 +41,10 @@ export default function Register() {
       - Only run once when component is initially loaded
       - Prevents further redirect to home page (e.g. to redirect back to delivery if checking out)
     */
-    if (userInfo) router.push('/');
-  }, [router, userInfo]);
+    if (userInfo && !redirect) {
+      router.push('/');
+    }
+  }, [router, userInfo, redirect]);
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     name,
