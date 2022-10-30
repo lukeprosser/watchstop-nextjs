@@ -51,7 +51,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
   };
 
   return (
-    <Layout title='WatchStop'>
+    <Layout title='Home'>
       <div className='container p-6 mx-auto'>
         <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Products
