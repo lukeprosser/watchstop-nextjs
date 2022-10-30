@@ -40,7 +40,8 @@ export default function Login() {
       - Prevents further redirect to home page (e.g. to redirect back to delivery if checking out)
     */
     if (userInfo) router.push('/');
-  }, [router, userInfo]);
+    // Excluding userInfo from array to only check on first render - causes error in getServerSideProps check on home page
+  }, [router]); // eslint-disable-line
 
   const handleFormSubmit: SubmitHandler<IFormInput> = async ({
     email,

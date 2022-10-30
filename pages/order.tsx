@@ -33,12 +33,15 @@ function Order() {
   const total = roundToTwoDec(subtotal + delivery + tax);
 
   useEffect(() => {
-    if (!paymentMethod) router.push('/payment');
-  }, [router, paymentMethod]);
-
-  useEffect(() => {
-    if (cartItems.length === 0) router.push('/cart');
-  });
+    if (!paymentMethod) {
+      router.push('/payment');
+    } else if (!deliveryInfo) {
+      router.push('/delivery');
+    } else if (cartItems.length === 0 || !userInfo) {
+      router.push('/');
+    }
+    // Excluding cartItems from array to only check on first render
+  }, [router, paymentMethod, deliveryInfo, userInfo]); // eslint-disable-line
 
   const handlePlaceOrder = async () => {
     closeSnackbar();
