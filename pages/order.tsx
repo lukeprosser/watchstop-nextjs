@@ -163,7 +163,7 @@ function Order() {
                 </tr>
                 <tr>
                   <td>VAT:</td>
-                  <td>£{tax}</td>
+                  <td>£{tax.toFixed(2)}</td>
                 </tr>
                 <tr>
                   <td>Delivery::</td>
