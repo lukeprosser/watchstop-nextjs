@@ -40,8 +40,8 @@ function Order() {
     } else if (cartItems.length === 0 || !userInfo) {
       router.push('/');
     }
-    // Excluding cartItems from array to only check on first render
-  }, [router, paymentMethod, deliveryInfo, userInfo]); // eslint-disable-line
+    // Only check on initial mount during checkout
+  }, []); // eslint-disable-line
 
   const handlePlaceOrder = async () => {
     closeSnackbar();
