@@ -45,6 +45,7 @@ handler.get(async (req, res) => {
         total: { $sum: '$total' }, // Sum each order cost in 'total'
       },
     },
+    { $sort: { _id: 1 } },
   ]);
   const productsCount = await Product.countDocuments();
   const usersCount = await User.countDocuments();

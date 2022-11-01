@@ -13,6 +13,7 @@ import { Bar } from 'react-chartjs-2';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
+import { roundToTwoDec } from '../../utils/helpers';
 import Layout from '../../components/Layout';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
@@ -161,22 +162,22 @@ function AdminDashboard() {
               <>
                 <Grid>
                   <Card
-                    figure={`£${summary.ordersPrice}`}
+                    figure={`£${roundToTwoDec(summary.ordersPrice)}`}
                     title='Sales'
-                    link='sales'
+                    link='orders'
                   />
                   <Card
-                    figure={`£${summary.ordersCount}`}
+                    figure={`${summary.ordersCount}`}
                     title='Orders'
                     link='orders'
                   />
                   <Card
-                    figure={`£${summary.productsCount}`}
+                    figure={`${summary.productsCount}`}
                     title='Products'
                     link='products'
                   />
                   <Card
-                    figure={`£${summary.usersCount}`}
+                    figure={`${summary.usersCount}`}
                     title='Users'
                     link='users'
                   />

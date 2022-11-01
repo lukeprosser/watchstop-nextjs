@@ -40,6 +40,13 @@ const AccountOptions = ({
   return (
     <div className='absolute z-10 w-32 p-4 border rounded shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12'>
       <ul className='text-sm divide-y text-slate-900'>
+        {admin && (
+          <li className='py-2 hover:text-slate-600'>
+            <Link href='/admin/dashboard'>
+              <a>Dashboard</a>
+            </Link>
+          </li>
+        )}
         <li className='py-2 hover:text-slate-600'>
           <Link href='/account'>
             <a>Account</a>
@@ -50,13 +57,6 @@ const AccountOptions = ({
             <a>Orders</a>
           </Link>
         </li>
-        {admin && (
-          <li className='py-2 hover:text-slate-600'>
-            <Link href='/admin/dashboard'>
-              <a>Dashboard</a>
-            </Link>
-          </li>
-        )}
         <li>
           <button className='py-2 hover:text-slate-600' onClick={handleLogout}>
             Logout
