@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -18,7 +18,7 @@ import {
 } from '@paypal/react-paypal-js';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
-import { Store } from '../../utils/Store';
+import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { IOrder } from '../../models/Order';
 import { IProduct } from '../../pages/index';
@@ -86,8 +86,8 @@ function OrderDetail({ params }: { params: IParams }) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const router = useRouter();
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+
+  const value = useStore();
   const { state } = value;
   const { userInfo } = state;
 

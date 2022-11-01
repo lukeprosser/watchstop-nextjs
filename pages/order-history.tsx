@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
 import { IProduct, IDeliveryInfo, IPaymentResult } from '../models/Order';
@@ -56,8 +56,7 @@ function reducer(state: IState, action: IAction) {
 function OrderHistory() {
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state } = value;
   const { userInfo } = state;
 

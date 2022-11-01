@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -6,7 +5,7 @@ import axios from 'axios';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import db from '../utils/db';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import Product from '../models/Product';
 
 export interface IProduct {
@@ -29,8 +28,8 @@ export interface IProduct {
 
 export default function Home({ products }: { products: Array<IProduct> }) {
   const router = useRouter();
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+
+  const value = useStore();
   const { state, dispatch } = value;
 
   const handleAddToCart = async (product: IProduct) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import { setCookie } from 'cookies-next';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
 import FormField from '../components/FormField';
@@ -30,8 +30,7 @@ function Account() {
 
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state, dispatch } = value;
   const { userInfo } = state;
 

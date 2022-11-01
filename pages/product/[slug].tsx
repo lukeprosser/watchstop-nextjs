@@ -8,13 +8,12 @@ import Layout from '../../components/Layout';
 import db from '../../utils/db';
 import Product from '../../models/Product';
 import { IProduct } from '../index';
-import { useContext } from 'react';
-import { Store } from '../../utils/Store';
+import useStore from '../../hooks/useStore';
 
 export default function ProductDetail({ product }: { product: IProduct }) {
   const router = useRouter();
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+
+  const value = useStore();
   const { state, dispatch } = value;
 
   if (!product)

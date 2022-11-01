@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { ReactElement, useState, useContext } from 'react';
+import { ReactElement, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { deleteCookie } from 'cookies-next';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import { IProduct } from '../pages';
 
 const Badge = ({ cartItems }: { cartItems: IProduct[] }) => {
@@ -68,8 +68,7 @@ const AccountOptions = ({
 };
 
 export default function Header(): ReactElement {
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state, dispatch } = value;
   const {
     cart: { cartItems },

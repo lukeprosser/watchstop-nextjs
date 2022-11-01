@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
-import { Store } from '../../utils/Store';
+import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 
 interface IProduct {
@@ -65,8 +65,7 @@ function AdminProducts() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state } = value;
   const { userInfo } = state;
 

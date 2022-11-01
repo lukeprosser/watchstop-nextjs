@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Store } from '../../../utils/Store';
+import useStore from '../../../hooks/useStore';
 import { getErrorMsg } from '../../../utils/error';
 import Layout from '../../../components/Layout';
 import FormField from '../../../components/FormField';
@@ -66,8 +66,7 @@ function UserEdit({ params }: { params: IParams }) {
 
   const router = useRouter();
 
-  const storeValue = useContext(Store);
-  if (!storeValue) throw new Error('Store context must be defined.');
+  const storeValue = useStore();
   const { state } = storeValue;
   const { userInfo } = state;
 

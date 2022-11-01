@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Layout from '../components/Layout';
 import Stepper from '../components/Stepper';
 import FormField from '../components/FormField';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 
 interface IFormInput {
   fullName: string;
@@ -25,8 +25,7 @@ export default function Delivery() {
 
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state, dispatch } = value;
   const {
     userInfo,

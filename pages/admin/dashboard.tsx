@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, ReactNode } from 'react';
+import React, { useEffect, useReducer, ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Store } from '../../utils/Store';
+import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import Layout from '../../components/Layout';
 
@@ -83,8 +83,7 @@ const Card = ({
 function AdminDashboard() {
   const router = useRouter();
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state } = value;
   const { userInfo } = state;
 

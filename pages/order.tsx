@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -9,15 +9,15 @@ import { deleteCookie } from 'cookies-next';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import Stepper from '../components/Stepper';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import { roundToTwoDec } from '../utils/helpers';
 import { getErrorMsg } from '../utils/error';
 
 function Order() {
   const router = useRouter();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+
+  const value = useStore();
   const { state, dispatch } = value;
   const {
     userInfo,

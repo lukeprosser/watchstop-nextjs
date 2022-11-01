@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import Layout from '../components/Layout';
 import FormField from '../components/FormField';
-import { Store } from '../utils/Store';
+import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 
 interface IFormInput {
@@ -28,8 +28,7 @@ export default function Login() {
   // Get previous page if passed
   const { redirect } = router.query;
 
-  const value = useContext(Store);
-  if (!value) throw new Error('Store context must be defined.');
+  const value = useStore();
   const { state, dispatch } = value;
   const { userInfo } = state;
 
