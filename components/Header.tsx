@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { deleteCookie } from 'cookies-next';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useStore from '../hooks/useStore';
+import useClickOutside from '../hooks/useClickOutside';
 import { IProduct } from '../pages';
 
 const Badge = ({ cartItems }: { cartItems: IProduct[] }) => {
@@ -79,6 +80,8 @@ export default function Header(): ReactElement {
   const [cartItemsExist, setCartItemsExist] = useState(false);
   const [userInfoExists, setUserInfoExists] = useState(false);
 
+  const accountMenuRef = useClickOutside(() => setShowAccountOptions(false));
+
   // Workaround to prevent hydration error
   useEffect(() => {
     setCartItemsExist(true);
@@ -104,7 +107,6 @@ export default function Header(): ReactElement {
             onClick={() => setShowMobileNav(!showMobileNav)}
           />
         )}
-
         <nav
           className={`${
             showMobileNav ? '' : 'hidden'
@@ -121,7 +123,7 @@ export default function Header(): ReactElement {
                 </a>
               </Link>
             </li>
-            <li className='relative'>
+            <li ref={accountMenuRef} className='relative'>
               {userInfoExists && userInfo ? (
                 <button
                   type='button'
