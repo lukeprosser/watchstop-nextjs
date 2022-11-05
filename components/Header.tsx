@@ -39,7 +39,7 @@ const AccountOptions = ({
   };
 
   return (
-    <div className='absolute z-10 w-32 p-4 border rounded shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12'>
+    <div className='cursor-pointer top-10 absolute z-10 w-32 p-4 border rounded drop-shadow-lg md:right-0 bg-slate-100 border-slate-700 md:py-2 md:text-right md:top-12 before:absolute before:bg-slate-100 before:content-[""] before:rotate-45 before:rounded-tl before:-top-2 before:left-3 before:w-4 before:h-4 before:border-t-inherit before:border-l-inherit before:md:left-[90px]'>
       <ul className='text-sm divide-y text-slate-900'>
         {admin && (
           <li className='py-2 hover:text-slate-600'>
