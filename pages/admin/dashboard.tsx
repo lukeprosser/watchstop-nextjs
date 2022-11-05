@@ -10,11 +10,11 @@ import {
   BarElement,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { roundToTwoDec } from '../../utils/helpers';
 import Layout from '../../components/Layout';
+import Spinner from '../../components/Spinner';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -150,10 +150,7 @@ function AdminDashboard() {
           </aside>
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             {loading ? (
-              <div className='flex items-center justify-center'>
-                <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                Loading...
-              </div>
+              <Spinner size='5' message='Loading...' />
             ) : error ? (
               <span className='text-lg font-light tracking-wider text-red-600'>
                 Error: {error}

@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { UploadContext } from '../pages/admin/product/[id]';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import Spinner from './Spinner';
 
 export default function FileUploader() {
   const value = useContext(UploadContext);
@@ -25,14 +25,7 @@ export default function FileUploader() {
         className='w-full px-3 py-2 text-xs rounded bg-slate-300 text-slate-900 hover:bg-sky-500 hover:text-slate-50'
         onClick={handleClick}
       >
-        {loading ? (
-          <div className='flex items-center justify-center'>
-            <ArrowPathIcon className='inline w-4 h-4 mr-2 animate-spin' />
-            Processing...
-          </div>
-        ) : (
-          'Upload'
-        )}
+        {loading ? <Spinner size='4' message='Uploading...' /> : 'Upload'}
       </button>
       <input
         type='file'

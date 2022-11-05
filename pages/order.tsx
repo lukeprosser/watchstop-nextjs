@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { deleteCookie } from 'cookies-next';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import Stepper from '../components/Stepper';
+import Spinner from '../components/Spinner';
 import useStore from '../hooks/useStore';
 import { roundToTwoDec } from '../utils/helpers';
 import { getErrorMsg } from '../utils/error';
@@ -180,10 +180,7 @@ function Order() {
               className='w-full px-4 py-3 text-sm text-center rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
             >
               {loading ? (
-                <div className='flex items-center justify-center'>
-                  <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                  Processing...
-                </div>
+                <Spinner size='5' message='Processing...' />
               ) : (
                 'Place Order'
               )}

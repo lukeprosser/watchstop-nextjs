@@ -5,11 +5,11 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import useStore from '../../../hooks/useStore';
 import { getErrorMsg } from '../../../utils/error';
 import Layout from '../../../components/Layout';
 import FormField from '../../../components/FormField';
+import Spinner from '../../../components/Spinner';
 
 interface IState {
   loading: boolean;
@@ -223,10 +223,7 @@ function ProductEdit({ params }: { params: IParams }) {
             </h1>
             <h2 className='mb-8 tracking-wide'>ID: {productId}</h2>
             {loading ? (
-              <div className='flex items-center justify-center'>
-                <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                Loading...
-              </div>
+              <Spinner size='5' message='Loading...' />
             ) : error ? (
               <span className='text-lg font-light tracking-wider text-red-600'>
                 Error: {error}
@@ -364,10 +361,7 @@ function ProductEdit({ params }: { params: IParams }) {
                       className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
                     >
                       {loadingUpdate ? (
-                        <div className='flex items-center justify-center'>
-                          <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                          Processing...
-                        </div>
+                        <Spinner size='5' message='Processing...' />
                       ) : (
                         'Update'
                       )}

@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import Layout from '../../components/Layout';
+import Spinner from '../../components/Spinner';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 
@@ -196,20 +196,14 @@ function AdminProducts() {
                 onClick={handleProductCreate}
               >
                 {loadingCreate ? (
-                  <div className='flex items-center justify-center'>
-                    <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                    Processing...
-                  </div>
+                  <Spinner size='5' message='Processing...' />
                 ) : (
                   'Create'
                 )}
               </button>
             </div>
             {loading ? (
-              <div className='flex items-center justify-center'>
-                <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                Loading...
-              </div>
+              <Spinner size='5' message='Loading...' />
             ) : error ? (
               <span className='text-lg font-light tracking-wider text-red-600'>
                 Error: {error}
@@ -254,9 +248,7 @@ function AdminProducts() {
                               onClick={() => handleProductDelete(product._id)}
                             >
                               {loadingDelete && deleteId === product._id ? (
-                                <div className='flex items-center justify-center'>
-                                  <ArrowPathIcon className='inline w-4 h-4 mr-2 animate-spin' />
-                                </div>
+                                <Spinner size='5' message='' />
                               ) : (
                                 'Delete'
                               )}

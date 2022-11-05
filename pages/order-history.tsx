@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import mongoose from 'mongoose';
 import axios from 'axios';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
+import Spinner from '../components/Spinner';
 import { IProduct, IDeliveryInfo, IPaymentResult } from '../models/Order';
 import { formatDate } from '../utils/helpers';
 
@@ -111,10 +111,7 @@ function OrderHistory() {
               Order History
             </h1>
             {loading ? (
-              <div className='flex items-center justify-center'>
-                <ArrowPathIcon className='inline w-5 h-5 mr-2 animate-spin' />
-                Loading...
-              </div>
+              <Spinner size='5' message='Loading...' />
             ) : error ? (
               <span className='text-lg font-light tracking-wider text-red-600'>
                 Error: {error}
