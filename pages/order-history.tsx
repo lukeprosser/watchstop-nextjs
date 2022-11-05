@@ -7,6 +7,8 @@ import axios from 'axios';
 import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
+import Sidebar from '../components/Sidebar';
+import { userSidebarItems } from '../constants';
 import Spinner from '../components/Spinner';
 import { IProduct, IDeliveryInfo, IPaymentResult } from '../models/Order';
 import { formatDate } from '../utils/helpers';
@@ -90,22 +92,7 @@ function OrderHistory() {
     <Layout title='Order History'>
       <div className='container p-6 mx-auto'>
         <div className='grid-cols-6 md:grid'>
-          <div className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
-            <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
-              <li className='pt-2 pb-4'>
-                <Link href='/account'>
-                  <a className='hover:text-sky-600'>Account</a>
-                </Link>
-              </li>
-              <li className='py-4'>
-                <Link href='/order-history'>
-                  <a className='text-sky-600 hover:text-sky-500'>
-                    Order History
-                  </a>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Sidebar items={userSidebarItems} activeItem='order-history' />
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
               Order History

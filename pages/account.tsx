@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
@@ -9,6 +8,8 @@ import { setCookie } from 'cookies-next';
 import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
+import Sidebar from '../components/Sidebar';
+import { userSidebarItems } from '../constants';
 import FormField from '../components/FormField';
 
 interface IFormInput {
@@ -85,20 +86,7 @@ function Account() {
     <Layout title='Account'>
       <div className='container p-6 mx-auto'>
         <div className='grid-cols-6 md:grid'>
-          <div className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
-            <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
-              <li className='pt-2 pb-4'>
-                <Link href='/account'>
-                  <a className='text-sky-600 hover:text-sky-500'>Account</a>
-                </Link>
-              </li>
-              <li className='py-4'>
-                <Link href='/order-history'>
-                  <a className='hover:text-sky-600'>Order History</a>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Sidebar items={userSidebarItems} activeItem='account' />
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
               Account

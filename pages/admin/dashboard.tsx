@@ -14,6 +14,8 @@ import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { roundToTwoDec } from '../../utils/helpers';
 import Layout from '../../components/Layout';
+import Sidebar from '../../components/Sidebar';
+import { adminSidebarItems } from '../../constants';
 import Spinner from '../../components/Spinner';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
@@ -124,30 +126,7 @@ function AdminDashboard() {
     <Layout title='Order History'>
       <div className='container p-6 mx-auto'>
         <div className='grid-cols-6 md:grid'>
-          <aside className='col-span-1 py-4 mb-4 border-b-2 md:pr-6 md:border-b-0 md:border-r-2 md:mb-0 border-slate-300'>
-            <ul className='text-sm font-light tracking-wide divide-y lg:text-base'>
-              <li className='pt-2 pb-4'>
-                <Link href='/admin/dashboard'>
-                  <a className='text-sky-600 hover:text-sky-500'>Dashboard</a>
-                </Link>
-              </li>
-              <li className='py-4'>
-                <Link href='/admin/orders'>
-                  <a className='hover:text-sky-500'>Orders</a>
-                </Link>
-              </li>
-              <li className='py-4'>
-                <Link href='/admin/products'>
-                  <a className='hover:text-sky-500'>Products</a>
-                </Link>
-              </li>
-              <li className='py-4'>
-                <Link href='/admin/users'>
-                  <a className='hover:text-sky-500'>Users</a>
-                </Link>
-              </li>
-            </ul>
-          </aside>
+          <Sidebar items={adminSidebarItems} activeItem='dashboard' />
           <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
             {loading ? (
               <Spinner size='5' message='Loading...' />
