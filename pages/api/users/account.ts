@@ -1,18 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import nc from 'next-connect';
-import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { isAuthenticated, signToken } from '../../../utils/auth';
 import User from '../../../models/User';
+import { IGetUserAuthInfoRequest } from '../../../constants';
 import db from '../../../utils/db';
-
-type IUser = {
-  _id: Types.ObjectId;
-};
-
-interface IGetUserAuthInfoRequest extends NextApiRequest {
-  user: IUser;
-}
 
 const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>();
 

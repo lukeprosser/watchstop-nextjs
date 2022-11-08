@@ -11,21 +11,13 @@ import Sidebar from '../../../components/Sidebar';
 import { adminSidebarItems } from '../../../constants';
 import FormField from '../../../components/FormField';
 import Spinner from '../../../components/Spinner';
+import { IAction, IParams } from '../../../constants';
 
 interface IState {
   loading: boolean;
   error?: string;
   loadingUpdate: boolean;
   loadingUpload: boolean;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
-}
-
-interface IParams {
-  id: string;
 }
 
 interface IFormInput {

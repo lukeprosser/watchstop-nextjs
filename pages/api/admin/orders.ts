@@ -1,18 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiResponse } from 'next';
 import nc from 'next-connect';
-import { Types } from 'mongoose';
 import Order from '../../../models/Order';
 import User from '../../../models/User';
+import { IGetUserAuthInfoRequest } from '../../../constants';
 import { isAuthenticated, isAdministrator } from '../../../utils/auth';
 import db from '../../../utils/db';
-
-type IUser = {
-  _id: Types.ObjectId;
-};
-
-interface IGetUserAuthInfoRequest extends NextApiRequest {
-  user: IUser;
-}
 
 const handler = nc<IGetUserAuthInfoRequest, NextApiResponse>({
   onError: async (err, req, res) => {

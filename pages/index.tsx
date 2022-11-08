@@ -7,24 +7,7 @@ import Layout from '../components/Layout';
 import db from '../utils/db';
 import useStore from '../hooks/useStore';
 import Product from '../models/Product';
-
-export interface IProduct {
-  _id: string;
-  __v: number;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
-  slug: string;
-  category: string;
-  image: string;
-  quantity: number;
-  price: number;
-  brand: string;
-  rating: number;
-  numReviews: number;
-  stockCount: number;
-  description: string;
-}
+import { IProduct } from '../constants';
 
 export default function Home({ products }: { products: Array<IProduct> }) {
   const router = useRouter();

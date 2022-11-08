@@ -6,7 +6,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import Layout from '../components/Layout';
 import useStore from '../hooks/useStore';
-import { IProduct } from './index';
+import { IProduct } from '../constants';
 
 function Cart() {
   const value = useStore();

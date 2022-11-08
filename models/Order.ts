@@ -1,29 +1,9 @@
 import mongoose from 'mongoose';
-
-export interface IProduct {
-  name: string;
-  image: string;
-  quantity: number;
-  price: number;
-}
-
-export interface IDeliveryInfo {
-  fullName: string;
-  address: string;
-  city: string;
-  postcode: string;
-  country: string;
-}
-
-export interface IPaymentResult {
-  id: string;
-  status: string;
-  email: string;
-}
+import { IProductOrder, IDeliveryInfo, IPaymentResult } from '../constants';
 
 export interface IOrder {
   user: mongoose.Schema.Types.ObjectId;
-  orderItems: IProduct[];
+  orderItems: IProductOrder[];
   deliveryInfo: IDeliveryInfo;
   paymentMethod: string;
   paymentResult: IPaymentResult;

@@ -7,7 +7,7 @@ import axios from 'axios';
 import Layout from '../../components/Layout';
 import db from '../../utils/db';
 import Product from '../../models/Product';
-import { IProduct } from '../index';
+import { IProduct } from '../../constants';
 import useStore from '../../hooks/useStore';
 
 export default function ProductDetail({ product }: { product: IProduct }) {

@@ -10,16 +10,7 @@ import { adminSidebarItems } from '../../constants';
 import Spinner from '../../components/Spinner';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
-
-interface IProduct {
-  _id: string;
-  name: string;
-  brand: string;
-  category: string;
-  rating: number;
-  price: number;
-  stockCount: number;
-}
+import { IAction, IProduct } from '../../constants';
 
 interface IState {
   loading: boolean;
@@ -29,11 +20,6 @@ interface IState {
   loadingDelete: boolean;
   deleteId: string;
   successDelete: boolean;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
 }
 
 function reducer(state: IState, action: IAction) {

@@ -5,7 +5,7 @@ import { deleteCookie } from 'cookies-next';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import useStore from '../hooks/useStore';
 import useClickOutside from '../hooks/useClickOutside';
-import { IProduct } from '../pages';
+import { IProduct } from '../constants';
 
 const Badge = ({ cartItems }: { cartItems: IProduct[] }) => {
   return (

@@ -5,15 +5,7 @@ import {
   hasCookie,
   CookieValueTypes,
 } from 'cookies-next';
-import { IProduct } from '../pages';
-
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  admin: boolean;
-  token: string;
-}
+import { IAction, IUser, IProduct } from '../constants';
 
 interface IDeliveryInfo {
   fullName: string;
@@ -30,11 +22,6 @@ interface IState {
     paymentMethod?: CookieValueTypes;
   };
   userInfo: IUser;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
 }
 
 interface ContextType {

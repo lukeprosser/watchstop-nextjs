@@ -17,6 +17,7 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { adminSidebarItems } from '../../constants';
 import Spinner from '../../components/Spinner';
+import { IAction } from '../../constants';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -37,11 +38,6 @@ interface IState {
   loading: boolean;
   error?: string;
   summary: ISummary;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
 }
 
 function reducer(state: IState, action: IAction) {

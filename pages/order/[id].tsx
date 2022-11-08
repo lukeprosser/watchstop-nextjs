@@ -21,7 +21,7 @@ import Spinner from '../../components/Spinner';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { IOrder } from '../../models/Order';
-import { IProduct } from '../../pages/index';
+import { IAction, IParams, IProductOrder } from '../../constants';
 import { formatDate } from '../../utils/helpers';
 
 interface IState {
@@ -31,15 +31,6 @@ interface IState {
   successPayment: boolean;
   loadingDeliver: boolean;
   successDeliver: boolean;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
-}
-
-interface IParams {
-  id: string;
 }
 
 function reducer(state: IState, action: IAction) {
@@ -275,7 +266,7 @@ function OrderDetail({ params }: { params: IParams }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {orderItems.map((item: IProduct) => (
+                  {orderItems.map((item: IProductOrder) => (
                     <tr
                       key={item._id}
                       className='text-sm border-t border-slate-300 first:border-none'

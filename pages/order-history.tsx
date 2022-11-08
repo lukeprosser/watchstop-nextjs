@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import mongoose from 'mongoose';
 import axios from 'axios';
 import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
@@ -10,36 +9,13 @@ import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
 import { userSidebarItems } from '../constants';
 import Spinner from '../components/Spinner';
-import { IProduct, IDeliveryInfo, IPaymentResult } from '../models/Order';
+import { IAction, IOrder } from '../constants';
 import { formatDate } from '../utils/helpers';
-
-interface IOrder {
-  _id: string;
-  createdAt: string;
-  user: mongoose.Schema.Types.ObjectId;
-  orderItems: IProduct[];
-  deliveryInfo: IDeliveryInfo;
-  paymentMethod: string;
-  paymentResult: IPaymentResult;
-  subtotal: number;
-  delivery: number;
-  tax: number;
-  total: number;
-  paid: boolean;
-  paidAt: string;
-  delivered: boolean;
-  deliveredAt: string;
-}
 
 interface IState {
   loading: boolean;
   orders: IOrder[];
   error: string;
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
 }
 
 function reducer(state: IState, action: IAction) {

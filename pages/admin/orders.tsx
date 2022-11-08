@@ -10,35 +10,12 @@ import Spinner from '../../components/Spinner';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { formatDate } from '../../utils/helpers';
-import { IProduct, IDeliveryInfo, IPaymentResult } from '../../models/Order';
-
-interface IOrder {
-  _id: string;
-  createdAt: string;
-  user: { _id: string; email: string };
-  orderItems: IProduct[];
-  deliveryInfo: IDeliveryInfo;
-  paymentMethod: string;
-  paymentResult: IPaymentResult;
-  subtotal: number;
-  delivery: number;
-  tax: number;
-  total: number;
-  paid: boolean;
-  paidAt: string;
-  delivered: boolean;
-  deliveredAt: string;
-}
+import { IAction, IOrder } from '../../constants';
 
 interface IState {
   loading: boolean;
   error?: string;
   orders: IOrder[];
-}
-
-interface IAction {
-  type: string;
-  payload?: any;
 }
 
 function reducer(state: IState, action: IAction) {
