@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { setCookie } from 'cookies-next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
@@ -70,7 +70,14 @@ export default function Register() {
       setCookie('userInfo', JSON.stringify(data));
       router.push(typeof redirect === 'string' ? redirect : '/');
     } catch (error) {
-      enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+      if (
+        error instanceof AxiosError &&
+        error?.response?.data.match('duplicate')
+      ) {
+        enqueueSnackbar('User already exists.', { variant: 'error' });
+      } else {
+        enqueueSnackbar(getErrorMsg(error), { variant: 'error' });
+      }
     }
   };
 
