@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import { responses } from '../../../../../constants';
 import User from '../../../../../models/User';
 import { isAuthenticated, isAdministrator } from '../../../../../utils/auth';
 import db from '../../../../../utils/db';
@@ -25,7 +26,7 @@ handler.put(async (req, res) => {
 
     await user.save();
     await db.disconnect();
-    res.send({ message: 'User updated successfully.' });
+    res.send({ message: responses.userUpdated });
   } else {
     await db.disconnect();
     res.status(404).send({ message: 'User not found.' });

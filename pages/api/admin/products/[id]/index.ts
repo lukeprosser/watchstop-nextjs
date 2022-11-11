@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import { responses } from '../../../../../constants';
 import Product from '../../../../../models/Product';
 import { isAuthenticated, isAdministrator } from '../../../../../utils/auth';
 import db from '../../../../../utils/db';
@@ -31,7 +32,7 @@ handler.put(async (req, res) => {
 
     await product.save();
     await db.disconnect();
-    res.send({ message: 'Product updated successfully.' });
+    res.send({ message: responses.productUpdated });
   } else {
     await db.disconnect();
     res.status(404).send({ message: 'Product not found.' });

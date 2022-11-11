@@ -9,6 +9,7 @@ import Layout from '../components/Layout';
 import FormField from '../components/FormField';
 import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
+import { responses } from '../constants';
 
 interface IFormInput {
   name: String;
@@ -54,7 +55,7 @@ export default function Register() {
     closeSnackbar();
 
     if (password !== passwordConfirm) {
-      enqueueSnackbar('Passwords do not match, please try again.', {
+      enqueueSnackbar(responses.passwordConfirm, {
         variant: 'error',
       });
       return;

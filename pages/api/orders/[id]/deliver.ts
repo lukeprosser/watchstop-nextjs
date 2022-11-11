@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc from 'next-connect';
+import { responses } from '../../../../constants';
 import Order from '../../../../models/Order';
 import { isAdministrator, isAuthenticated } from '../../../../utils/auth';
 import db from '../../../../utils/db';
@@ -23,7 +24,7 @@ handler.put(async (req, res) => {
     const deliveredOrder = await order.save();
     await db.disconnect();
     res.send({
-      message: 'Order status updated successfully.',
+      message: responses.orderStatusUpdated,
       order: deliveredOrder,
     });
   } else {

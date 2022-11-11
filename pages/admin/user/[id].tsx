@@ -8,7 +8,7 @@ import useStore from '../../../hooks/useStore';
 import { getErrorMsg } from '../../../utils/error';
 import Layout from '../../../components/Layout';
 import Sidebar from '../../../components/Sidebar';
-import { adminSidebarItems } from '../../../constants';
+import { adminSidebarItems, responses } from '../../../constants';
 import FormField from '../../../components/FormField';
 import Spinner from '../../../components/Spinner';
 import { IAction, IParams } from '../../../constants';
@@ -108,7 +108,7 @@ function UserEdit({ params }: { params: IParams }) {
         }
       );
       dispatch({ type: 'UPDATE_SUCCESS' });
-      enqueueSnackbar('User updated successfully.', { variant: 'success' });
+      enqueueSnackbar(responses.userUpdated, { variant: 'success' });
       router.push('/admin/users');
     } catch (error) {
       dispatch({ type: 'UPDATE_FAILURE' });

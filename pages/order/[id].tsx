@@ -21,7 +21,7 @@ import Spinner from '../../components/Spinner';
 import useStore from '../../hooks/useStore';
 import { getErrorMsg } from '../../utils/error';
 import { IOrder } from '../../models/Order';
-import { IAction, IParams, IProductOrder } from '../../constants';
+import { IAction, IParams, IProductOrder, responses } from '../../constants';
 import { formatDate } from '../../utils/helpers';
 
 interface IState {
@@ -229,7 +229,7 @@ function OrderDetail({ params }: { params: IParams }) {
         }
       );
       dispatch({ type: 'DELIVER_SUCCESS', payload: data });
-      enqueueSnackbar('Order status updated successfully.', {
+      enqueueSnackbar(responses.orderStatusUpdated, {
         variant: 'success',
       });
     } catch (error) {

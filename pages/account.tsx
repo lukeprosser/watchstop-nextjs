@@ -9,7 +9,7 @@ import useStore from '../hooks/useStore';
 import { getErrorMsg } from '../utils/error';
 import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
-import { userSidebarItems } from '../constants';
+import { responses, userSidebarItems } from '../constants';
 import FormField from '../components/FormField';
 
 interface IFormInput {
@@ -54,7 +54,7 @@ function Account() {
     closeSnackbar();
 
     if (password !== passwordConfirm) {
-      enqueueSnackbar('Passwords do not match, please try again.', {
+      enqueueSnackbar(responses.passwordConfirm, {
         variant: 'error',
       });
       return;

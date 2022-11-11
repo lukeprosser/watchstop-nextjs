@@ -123,5 +123,9 @@ export const userSidebarItems = [
 ];
 
 export const responses = {
+  passwordConfirm: 'Passwords do not match, please try again.',
   outOfStock: 'Sorry, this product is no longer in stock.',
+  userUpdated: 'User updated successfully.',
+  productUpdated: 'Product updated successfully.',
+  orderStatusUpdated: 'Order status updated successfully.',
 };
