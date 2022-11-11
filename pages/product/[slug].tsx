@@ -1,20 +1,38 @@
+import { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import Layout from '../../components/Layout';
 import db from '../../utils/db';
 import Product from '../../models/Product';
-import { IProduct } from '../../constants';
+import { IProduct, responses } from '../../constants';
 import useStore from '../../hooks/useStore';
+import { isInStock } from '../../utils/helpers';
 
 export default function ProductDetail({ product }: { product: IProduct }) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
 
   const value = useStore();
   const { state, dispatch } = value;
+
+  const [inStock, setInStock] = useState(false);
+
+  const existingItem = state.cart.cartItems.find(
+    (item) => item._id === product._id
+  );
+  const quantity = existingItem ? existingItem.quantity + 1 : 1;
+
+  useEffect(() => {
+    const checkStock = async () => {
+      const stock = await isInStock(product._id, quantity);
+      setInStock(stock);
+    };
+    checkStock();
+  }, [product._id, quantity]);
 
   if (!product)
     return (
@@ -24,13 +42,12 @@ export default function ProductDetail({ product }: { product: IProduct }) {
     );
 
   const handleAddToCart = async () => {
-    const existingItem = state.cart.cartItems.find(
-      (item) => item._id === product._id
-    );
-    const quantity = existingItem ? existingItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.stockCount < quantity) {
-      window.alert('Sorry, this product is no longer in stock.');
+    closeSnackbar();
+    const inStock = await isInStock(product._id, quantity);
+    if (!inStock) {
+      enqueueSnackbar(responses.outOfStock, {
+        variant: 'error',
+      });
       return;
     }
     dispatch({
@@ -81,13 +98,14 @@ export default function ProductDetail({ product }: { product: IProduct }) {
                 £{product.price}
               </p>
               <p className='text-slate-500 lg:text-lg'>
-                {product.stockCount} in stock
+                {!inStock ? 'Out of stock' : `${product.stockCount} in stock`}
               </p>
             </div>
             <button
               type='button'
-              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base'
+              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed'
               onClick={handleAddToCart}
+              disabled={!inStock}
             >
               Add to cart
             </button>

@@ -1,28 +1,45 @@
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { useSnackbar } from 'notistack';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Layout from '../components/Layout';
 import db from '../utils/db';
 import useStore from '../hooks/useStore';
 import Product from '../models/Product';
-import { IProduct } from '../constants';
+import { IProduct, responses } from '../constants';
+import { isInStock } from '../utils/helpers';
 
-export default function Home({ products }: { products: Array<IProduct> }) {
+const ProductCard = ({ product }: { product: IProduct }) => {
   const router = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const value = useStore();
   const { state, dispatch } = value;
 
+  const [inStock, setInStock] = useState(false);
+
+  const existingItem = state.cart.cartItems.find(
+    (item) => item._id === product._id
+  );
+  const quantity = existingItem ? existingItem.quantity + 1 : 1;
+
+  useEffect(() => {
+    const checkStock = async () => {
+      const stock = await isInStock(product._id, quantity);
+      setInStock(stock);
+    };
+    checkStock();
+  }, [product._id, quantity]);
+
   const handleAddToCart = async (product: IProduct) => {
-    const existingItem = state.cart.cartItems.find(
-      (item) => item._id === product._id
-    );
-    const quantity = existingItem ? existingItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.stockCount < quantity) {
-      window.alert('Sorry, this product is no longer in stock.');
+    closeSnackbar();
+    const inStock = await isInStock(product._id, quantity);
+    if (!inStock) {
+      enqueueSnackbar(responses.outOfStock, {
+        variant: 'error',
+      });
       return;
     }
     dispatch({
@@ -33,6 +50,41 @@ export default function Home({ products }: { products: Array<IProduct> }) {
   };
 
   return (
+    <div
+      key={product._id}
+      className='max-w-xs overflow-hidden border rounded shadow-md border-slate-300 lg:max-w-sm'
+    >
+      <Link href={`/product/${product.slug}`}>
+        <a>
+          <Image
+            src={product.image}
+            alt={product.name}
+            width='1280'
+            height='853'
+          />
+          <h3 className='p-2 font-medium tracking-wide'>{product.name}</h3>
+        </a>
+      </Link>
+      <div className='flex items-center justify-between p-2 mt-1'>
+        <span className='font-light'>£{product.price}</span>
+        <button
+          type='button'
+          className='p-2 text-sm rounded-full bg-slate-900 text-slate-50 hover:bg-red-600 disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed'
+          onClick={() => handleAddToCart(product)}
+          disabled={!inStock}
+        >
+          <ShoppingBagIcon
+            className={`w-5 h-5 ${!inStock && 'cursor-not-allowed'}`}
+            role='button'
+          />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default function Home({ products }: { products: Array<IProduct> }) {
+  return (
     <Layout title='Home'>
       <div className='container p-6 mx-auto'>
         <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
@@ -40,34 +92,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
         </h1>
         <div className='flex flex-wrap items-center justify-center gap-8'>
           {products.map((product) => (
-            <div
-              key={product._id}
-              className='max-w-xs overflow-hidden border rounded shadow-md border-slate-300 lg:max-w-sm'
-            >
-              <Link href={`/product/${product.slug}`}>
-                <a>
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width='1280'
-                    height='853'
-                  />
-                  <h3 className='p-2 font-medium tracking-wide'>
-                    {product.name}
-                  </h3>
-                </a>
-              </Link>
-              <div className='flex items-center justify-between p-2 mt-1'>
-                <span className='font-light'>£{product.price}</span>
-                <button
-                  type='button'
-                  className='p-1 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600'
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <ShoppingBagIcon className='w-6 h-6' role='button' />
-                </button>
-              </div>
-            </div>
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </div>

@@ -5,7 +5,7 @@ import {
   hasCookie,
   CookieValueTypes,
 } from 'cookies-next';
-import { IAction, IUser, IProduct } from '../constants';
+import { IAction, IUser, IProductOrder } from '../constants';
 
 interface IDeliveryInfo {
   fullName: string;
@@ -17,7 +17,7 @@ interface IDeliveryInfo {
 
 interface IState {
   cart: {
-    cartItems: IProduct[];
+    cartItems: IProductOrder[];
     deliveryInfo?: IDeliveryInfo;
     paymentMethod?: CookieValueTypes;
   };
@@ -66,11 +66,12 @@ function reducer(state: IState, action: IAction) {
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existingItem = state.cart.cartItems.find(
-        (item: IProduct) => item._id === newItem._id
+        (item: IProductOrder) => item._id === newItem._id
       );
       const cartItems = existingItem
         ? state.cart.cartItems.map(
-            (item: IProduct) => (item._id === existingItem._id ? newItem : item) // Prevent duplicate item
+            (item: IProductOrder) =>
+              item._id === existingItem._id ? newItem : item // Prevent duplicate item
           )
         : [...state.cart.cartItems, newItem];
       setCookie('cartItems', JSON.stringify(cartItems));

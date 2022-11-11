@@ -49,6 +49,7 @@ export interface IProductOrder {
   name: string;
   slug: string;
   image: string;
+  stockCount: number;
   quantity: number;
   price: number;
 }
@@ -120,3 +121,7 @@ export const userSidebarItems = [
     name: 'Order History',
   },
 ];
+
+export const responses = {
+  outOfStock: 'Sorry, this product is no longer in stock.',
+};

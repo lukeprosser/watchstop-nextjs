@@ -2,23 +2,32 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSnackbar } from 'notistack';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import Layout from '../components/Layout';
 import useStore from '../hooks/useStore';
-import { IProduct } from '../constants';
+import { IProductOrder, responses } from '../constants';
+import { isInStock } from '../utils/helpers';
 
 function Cart() {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const value = useStore();
   const { state, dispatch } = value;
   const {
     cart: { cartItems },
   } = state;
 
-  const handleQuantityUpdate = async (item: IProduct, quantity: string) => {
-    const { data } = await axios.get(`/api/products/${item._id}`);
-    if (data.stockCount < quantity) {
-      window.alert('Sorry, this product is no longer in stock.');
+  const handleQuantityUpdate = async (
+    item: IProductOrder,
+    quantity: string
+  ) => {
+    closeSnackbar();
+    const inStock = await isInStock(item._id, parseInt(quantity));
+    if (!inStock) {
+      enqueueSnackbar(responses.outOfStock, {
+        variant: 'error',
+      });
       return;
     }
     dispatch({
