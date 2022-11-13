@@ -21,7 +21,7 @@ export default function Sidebar({
             <Link href={item.url}>
               <a
                 className={`${
-                  item.key === activeItem && 'text-skin-accent'
+                  item.key === activeItem && 'text-skin-accent font-normal'
                 } hover:text-skin-accent-hover`}
               >
                 {item.name}

@@ -46,7 +46,7 @@ const AccountOptions = ({
         showAccountOptions ? `scale-100` : `scale-0`
       } transition origin-[10%_top] md:origin-[75%_top] ease-in-out duration-100 bg-skin-fill-inverted cursor-pointer top-10 absolute z-10 w-32 p-4 border rounded drop-shadow-lg md:right-0 border-skin-base md:py-2 md:text-right md:top-12 before:absolute before:bg-skin-fill-inverted before:content-[""] before:rotate-45 before:rounded-tl before:-top-2 before:left-3 before:w-4 before:h-4 before:border-t-inherit before:border-l-inherit before:md:left-[90px]`}
     >
-      <ul className='text-sm divide-y text-skin-base'>
+      <ul className='text-sm divide-y text-skin-base font-light'>
         {admin && (
           <li className='py-2 hover:text-skin-muted'>
             <Link href='/admin/dashboard'>
@@ -121,7 +121,7 @@ export default function Header(): ReactElement {
             showMobileNav ? '' : 'hidden'
           } w-full md:flex md:items-center md:w-auto`}
         >
-          <ul className='pt-4 text-base font-semibold tracking-wider text-skin-inverted-muted md:flex md:justify-between md:pt-0'>
+          <ul className='pt-4 text-base tracking-wider text-skin-inverted-muted md:flex md:justify-between md:pt-0'>
             <li className='relative'>
               <Link href='/cart'>
                 <a className='block py-2 md:p-4 hover:text-skin-inverted'>

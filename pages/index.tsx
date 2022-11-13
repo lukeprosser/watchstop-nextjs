@@ -62,10 +62,13 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             width='1280'
             height='853'
           />
-          <h3 className='p-2 font-medium tracking-wide'>{product.name}</h3>
+          <div className='p-2 flex justify-between items-center'>
+            <h3 className=' font-medium tracking-wide'>{product.name}</h3>
+            <p className='font-thin'>{product.category}</p>
+          </div>
         </a>
       </Link>
-      <div className='flex items-center justify-between p-2 mt-1'>
+      <div className='flex items-center justify-between p-2'>
         <span className='font-light'>£{product.price}</span>
         <button
           type='button'
@@ -74,7 +77,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           disabled={!inStock}
         >
           <ShoppingBagIcon
-            className={`w-5 h-5 ${!inStock && 'cursor-not-allowed'}`}
+            className={`w-4 h-4 ${!inStock && 'cursor-not-allowed'}`}
             role='button'
           />
         </button>

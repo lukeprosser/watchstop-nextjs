@@ -72,7 +72,7 @@ const Card = ({
     <p className='text-lg font-medium tracking-wider'>{figure}</p>
     <h3 className='text-sm'>{title}</h3>
     <Link href={`/admin/${link}`}>
-      <a className='block w-full px-2 py-1 mt-2 text-sm font-light rounded text-skin-accent hover:text-skin-accent-hover'>
+      <a className='block w-full px-2 py-1 mt-2 text-sm font-normal rounded text-skin-accent hover:text-skin-accent-hover'>
         View
       </a>
     </Link>
@@ -120,7 +120,7 @@ function AdminDashboard() {
 
   // Workaround to pass colors to charts dynamically
   const style = getComputedStyle(document.body);
-  const fillAccent = style.getPropertyValue('--color-fill-accent');
+  const fillAccent = style.getPropertyValue('--color-fill-accent-muted');
 
   return (
     <Layout title='Order History'>
