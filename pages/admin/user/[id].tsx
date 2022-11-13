@@ -129,7 +129,7 @@ function UserEdit({ params }: { params: IParams }) {
             {loading ? (
               <Spinner size='5' message='Loading...' />
             ) : error ? (
-              <span className='text-lg font-light tracking-wider text-red-600'>
+              <span className='text-lg font-light tracking-wider text-skin-error'>
                 Error: {error}
               </span>
             ) : (
@@ -161,14 +161,14 @@ function UserEdit({ params }: { params: IParams }) {
                 />
                 <label
                   htmlFor={'admin'}
-                  className='ml-2 font-medium tracking-wide text-slate-700'
+                  className='ml-2 font-medium tracking-wide text-skin-muted'
                 >
                   Admin
                 </label>
                 <div className='mt-8'>
                   <button
                     type='submit'
-                    className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+                    className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
                   >
                     {loadingUpdate ? (
                       <Spinner size='5' message='Processing...' />

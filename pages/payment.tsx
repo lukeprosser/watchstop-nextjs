@@ -76,7 +76,7 @@ export default function Payment() {
         />
         <form
           onSubmit={handleSubmit}
-          className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-slate-200'
+          className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-skin-muted'
         >
           <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Payment Method
@@ -102,13 +102,13 @@ export default function Payment() {
           <div className='justify-around gap-6 mt-8 text-center md:flex md:flex-row-reverse'>
             <button
               type='submit'
-              className='flex items-center justify-center flex-1 w-full px-4 py-3 mb-4 text-sm rounded md:mb-0 bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+              className='flex items-center justify-center flex-1 w-full px-4 py-3 mb-4 text-sm rounded md:mb-0 bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
             >
               Continue
               <ChevronRightIcon className='w-4 h-4 ml-1' />
             </button>
             <Link href='/delivery'>
-              <a className='flex items-center justify-center flex-1 px-4 py-3 text-sm rounded bg-slate-400 text-slate-50 hover:bg-sky-600 lg:text-base'>
+              <a className='flex items-center justify-center flex-1 px-4 py-3 text-sm rounded bg-skin-button-inverted text-skin-inverted-disabled hover:bg-skin-button-inverted-hover lg:text-base'>
                 <ChevronLeftIcon className='w-4 h-4 mr-1' />
                 Previous
               </a>

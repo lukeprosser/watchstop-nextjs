@@ -68,11 +68,11 @@ const Card = ({
   title: string;
   link: string;
 }) => (
-  <div className='w-full p-4 text-center border rounded shadow-md border-slate-300'>
+  <div className='w-full p-4 text-center border rounded shadow-md border-skin-muted'>
     <p className='text-lg font-medium tracking-wider'>{figure}</p>
     <h3 className='text-sm'>{title}</h3>
     <Link href={`/admin/${link}`}>
-      <a className='block w-full px-2 py-1 mt-2 text-sm font-light rounded text-sky-600 hover:text-sky-500'>
+      <a className='block w-full px-2 py-1 mt-2 text-sm font-light rounded text-skin-accent hover:text-skin-accent-hover'>
         View
       </a>
     </Link>
@@ -118,6 +118,10 @@ function AdminDashboard() {
     fetchData();
   }, [router, userInfo]);
 
+  // Workaround to pass colors to charts dynamically
+  const style = getComputedStyle(document.body);
+  const fillAccent = style.getPropertyValue('--color-fill-accent');
+
   return (
     <Layout title='Order History'>
       <div className='container p-6 mx-auto'>
@@ -127,7 +131,7 @@ function AdminDashboard() {
             {loading ? (
               <Spinner size='5' message='Loading...' />
             ) : error ? (
-              <span className='text-lg font-light tracking-wider text-red-600'>
+              <span className='text-lg font-light tracking-wider text-skin-error'>
                 Error: {error}
               </span>
             ) : (
@@ -164,7 +168,7 @@ function AdminDashboard() {
                       datasets: [
                         {
                           label: 'Sales',
-                          backgroundColor: '#7dd3fc',
+                          backgroundColor: fillAccent,
                           data: summary.salesData.map(
                             (d: ISalesMetric) => d.total
                           ),

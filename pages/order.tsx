@@ -85,12 +85,12 @@ function Order() {
           Order Confirmation
         </h1>
         <div className='grid-cols-3 gap-6 lg:gap-8 md:grid'>
-          <div className='col-span-2 col-start-1 row-start-1 p-4 mb-6 border rounded shadow-md md:mb-0 border-slate-200'>
+          <div className='col-span-2 col-start-1 row-start-1 p-4 mb-6 border rounded shadow-md md:mb-0 border-skin-muted'>
             <h2 className='p-2 mb-2 font-medium tracking-wider lg:text-xl'>
               Your Items
             </h2>
             <table className='w-full table-auto'>
-              <thead className='border-b-2 border-slate-300'>
+              <thead className='border-b-2 border-skin-muted'>
                 <tr>
                   <th className='py-2'>Image</th>
                   <th className='py-2'>Name</th>
@@ -102,7 +102,7 @@ function Order() {
                 {cartItems.map((item) => (
                   <tr
                     key={item._id}
-                    className='text-sm border-t border-slate-300 first:border-none'
+                    className='text-sm border-t border-skin-muted first:border-none'
                   >
                     <td className='px-2 py-3'>
                       <div className='m-auto max-w-xxs'>
@@ -133,7 +133,7 @@ function Order() {
               </tbody>
             </table>
           </div>
-          <div className='col-span-2 p-6 mb-6 border rounded shadow-md md:mb-0 border-slate-200'>
+          <div className='col-span-2 p-6 mb-6 border rounded shadow-md md:mb-0 border-skin-muted'>
             <h2 className='mb-2 font-medium tracking-wider lg:text-xl'>
               Delivery Information
             </h2>
@@ -145,13 +145,13 @@ function Order() {
               <li>{deliveryInfo?.country}</li>
             </ul>
           </div>
-          <div className='col-span-2 p-6 mb-6 border rounded shadow-md md:mb-0 border-slate-200'>
+          <div className='col-span-2 p-6 mb-6 border rounded shadow-md md:mb-0 border-skin-muted'>
             <h2 className='mb-2 font-medium tracking-wider lg:text-xl'>
               Payment Method
             </h2>
             <p className='text-sm font-light '>{paymentMethod}</p>
           </div>
-          <div className='self-start row-start-1 p-6 border rounded shadow-md bg-slate-200 md:max-h-max min-w-fit border-slate-300'>
+          <div className='self-start row-start-1 p-6 border rounded shadow-md bg-skin-fill-inverted-muted md:max-h-max min-w-fit border-skin-muted'>
             <h2 className='mb-4 font-medium tracking-wider lg:text-xl'>
               Order Summary
             </h2>
@@ -169,7 +169,7 @@ function Order() {
                   <td>Delivery::</td>
                   <td>{delivery === 0 ? 'FREE' : `£${delivery}`}</td>
                 </tr>
-                <tr className='text-lg font-semibold tracking-wide border-t border-slate-300'>
+                <tr className='text-lg font-semibold tracking-wide border-t border-skin-muted'>
                   <td className='pt-2'>Total:</td>
                   <td className='pt-2'>£{total}</td>
                 </tr>
@@ -177,7 +177,7 @@ function Order() {
             </table>
             <button
               onClick={handlePlaceOrder}
-              className='w-full px-4 py-3 text-sm text-center rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+              className='w-full px-4 py-3 text-sm text-center rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
             >
               {loading ? (
                 <Spinner size='5' message='Processing...' />

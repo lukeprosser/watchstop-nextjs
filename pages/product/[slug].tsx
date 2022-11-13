@@ -62,7 +62,7 @@ export default function ProductDetail({ product }: { product: IProduct }) {
       <div className='container p-6 mx-auto'>
         <div className='mb-8'>
           <Link href='/'>
-            <a className='text-sm text-slate-500 hover:text-slate-700 lg:text-base'>
+            <a className='text-sm text-skin-muted hover:text-skin-hover lg:text-base'>
               <ChevronLeftIcon className='inline-block w-4 h-4 cursor-pointer' />
               Back to products
             </a>
@@ -83,13 +83,13 @@ export default function ProductDetail({ product }: { product: IProduct }) {
             <h1 className='mb-4 text-2xl font-medium tracking-wider lg:text-3xl lg:mb-6'>
               {product.name}
             </h1>
-            <ul className='mb-6 text-sm tracking-wide font-extralight text-slate-700 lg:text-base lg:mb-10'>
+            <ul className='mb-6 text-sm tracking-wide font-extralight text-skin-muted lg:text-base lg:mb-10'>
               <li className=''>Category: {product.category}</li>
               <li>Brand: {product.brand}</li>
               <li>
                 Rating: {product.rating} ({product.numReviews} reviews)
               </li>
-              <li className='mt-4 font-light lg:mt-6 text-slate-900'>
+              <li className='mt-4 font-light lg:mt-6 text-skin-base'>
                 {product.description}
               </li>
             </ul>
@@ -97,13 +97,13 @@ export default function ProductDetail({ product }: { product: IProduct }) {
               <p className='text-lg tracking-wide lg:text-xl'>
                 £{product.price}
               </p>
-              <p className='text-slate-500 lg:text-lg'>
+              <p className='text-skin-muted lg:text-lg'>
                 {!inStock ? 'Out of stock' : `${product.stockCount} in stock`}
               </p>
             </div>
             <button
               type='button'
-              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-red-600 lg:text-base disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed'
+              className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base disabled:bg-skin-button-inverted disabled:text-skin-inverted-disabled disabled:cursor-not-allowed'
               onClick={handleAddToCart}
               disabled={!inStock}
             >

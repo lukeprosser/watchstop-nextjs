@@ -161,7 +161,7 @@ function Account() {
               <div className='mt-8'>
                 <button
                   type='submit'
-                  className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+                  className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
                 >
                   Update
                 </button>

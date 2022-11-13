@@ -3,8 +3,40 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Text color */
+    --color-text-base: #0f172a; /* 900 */
+    --color-text-hover: #94a3b8; /* 300 */
+    --color-text-muted: #64748b; /* 500 */
+    --color-text-accent: #14b8a6; /* 500 */
+    --color-text-accent-hover: #2dd4bf; /* 400 */
+    --color-text-inverted: #f8fafc; /* 50 */
+    --color-text-inverted-muted: #e2e8f0; /* 200 */
+    --color-text-inverted-disabled: #94a3b8; /* 400 */
+    --color-text-error: #dc2626; /* 600 */
+    /* Background color */
+    --color-fill: #0f172a; /* 900 */
+    --color-fill-hover: #64748b; /* 500 */
+    --color-fill-muted: #334155; /* 700 */
+    --color-fill-inverted: #f8fafc; /* 50 */
+    --color-fill-inverted-muted: #e2e8f0; /* 200 */
+    --color-fill-accent: #14b8a6; /* 500 */
+    --color-fill-accent-hover: #2dd4bf; /* 400 */
+    --color-button-inverted: #e2e8f0; /* 200 */
+    --color-button-inverted-hover: #cbd5e1; /* 300 */
+    /* Border color */
+    --color-border-base: #334155; /* 700 */
+    --color-border-muted: #cbd5e1; /* 300 */
+    --color-border-accent: #14b8a6; /* 500 */
+    /* Outline color */
+    --color-outline-base: #334155; /* 700 */
+    --color-outline-muted: #cbd5e1; /* 300 */
+    --color-outline-error: #dc2626; /* 600 */
+  }
+
   body {
-    @apply text-gray-900 bg-slate-50;
+    font-color: var(--color-text-base);
+    background-color: var(--color-fill-inverted);
     /* Align numerals in Raleway font */
     -webkit-font-feature-settings: 'lnum';
     -moz-font-feature-settings: 'lnum';

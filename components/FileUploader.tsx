@@ -22,7 +22,7 @@ export default function FileUploader() {
     <div className='w-1/3'>
       <button
         type='button'
-        className='w-full px-3 py-2 text-xs rounded bg-slate-300 text-slate-900 hover:bg-sky-500 hover:text-slate-50'
+        className='w-full px-3 py-2 text-xs rounded bg-skin-button-inverted text-skin-base hover:bg-skin-button-inverted-hover'
         onClick={handleClick}
       >
         {loading ? <Spinner size='4' message='Uploading...' /> : 'Upload'}

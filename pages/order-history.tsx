@@ -76,13 +76,13 @@ function OrderHistory() {
             {loading ? (
               <Spinner size='5' message='Loading...' />
             ) : error ? (
-              <span className='text-lg font-light tracking-wider text-red-600'>
+              <span className='text-lg font-light tracking-wider text-skin-error'>
                 Error: {error}
               </span>
             ) : (
               <div className='overflow-auto'>
                 <table className='w-full table-auto'>
-                  <thead className='text-left border-b-2 border-slate-300'>
+                  <thead className='text-left border-b-2 border-skin-muted'>
                     <tr>
                       <th className='px-4 py-2'>Order No.</th>
                       <th className='px-4 py-2'>Date</th>
@@ -96,7 +96,7 @@ function OrderHistory() {
                     {orders.map((order: IOrder) => (
                       <tr
                         key={order._id}
-                        className='text-sm border-t border-slate-300 first:border-none'
+                        className='text-sm border-t border-skin-muted first:border-none'
                       >
                         <td className='px-4 py-3'>{order._id}</td>
                         <td className='px-4 py-3'>
@@ -113,7 +113,7 @@ function OrderHistory() {
                         </td>
                         <td className='px-4 py-3'>
                           <Link href={`/order/${order._id}`}>
-                            <a className='p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                            <a className='p-2 text-xs rounded bg-skin-button-inverted hover:bg-skin-button-inverted-hover'>
                               Details
                             </a>
                           </Link>

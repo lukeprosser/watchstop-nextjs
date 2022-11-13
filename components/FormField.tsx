@@ -18,8 +18,8 @@ const Input = ({
   register: UseFormRegisterReturn;
 }) => (
   <input
-    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
-      errors[id] ? 'outline-red-500' : 'outline-slate-300'
+    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-skin-muted outline outline-1 focus:outline-2 ${
+      errors[id] ? 'outline-skin-error' : 'outline-skin-muted'
     }`}
     id={id}
     type={type}
@@ -41,8 +41,8 @@ const TextArea = ({
   register: UseFormRegisterReturn;
 }) => (
   <textarea
-    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-slate-700 outline outline-1 focus:outline-2 ${
-      errors[id] ? 'outline-red-500' : 'outline-slate-300'
+    className={`text-sm w-full p-2 leading-tight rounded shadow appearance-none text-skin-muted outline outline-1 focus:outline-2 ${
+      errors[id] ? 'outline-skin-error' : 'outline-skin-muted'
     }`}
     id={id}
     placeholder={placeholder}
@@ -74,7 +74,7 @@ export default function FormField({
     <div className='mb-4'>
       <label
         htmlFor={id}
-        className='block mb-2 font-medium tracking-wide text-slate-700'
+        className='block mb-2 font-medium tracking-wide text-skin-muted'
       >
         {label}
       </label>
@@ -108,7 +108,7 @@ export default function FormField({
         />
       )}
       {errors[id] ? (
-        <span className='block mt-1 text-xs text-red-500'>
+        <span className='block mt-1 text-xs text-skin-error'>
           {validationError}
         </span>
       ) : (

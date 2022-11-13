@@ -72,7 +72,7 @@ export default function Delivery() {
         />
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
-          className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-slate-200'
+          className='max-w-xl p-6 mx-auto mt-4 border rounded shadow-md border-skin-muted'
         >
           <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Delivery Information
@@ -160,7 +160,7 @@ export default function Delivery() {
           <div className='mt-8'>
             <button
               type='submit'
-              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+              className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
             >
               Continue
             </button>

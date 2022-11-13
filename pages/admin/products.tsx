@@ -157,7 +157,7 @@ function AdminProducts() {
               </h1>
               <button
                 type='button'
-                className='w-max px-3 py-2 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600'
+                className='w-max px-3 py-2 text-sm rounded bg-skin-fill text-skin-inverted hover:bg-skin-fill-hover'
                 onClick={handleProductCreate}
               >
                 {loadingCreate ? (
@@ -170,13 +170,13 @@ function AdminProducts() {
             {loading ? (
               <Spinner size='5' message='Loading...' />
             ) : error ? (
-              <span className='text-lg font-light tracking-wider text-red-600'>
+              <span className='text-lg font-light tracking-wider text-skin-error'>
                 Error: {error}
               </span>
             ) : (
               <div className='overflow-auto'>
                 <table className='w-full table-auto'>
-                  <thead className='text-left border-b-2 border-slate-300'>
+                  <thead className='text-left border-b-2 border-skin-muted'>
                     <tr>
                       <th className='px-4 py-2'>ID</th>
                       <th className='px-4 py-2'>Name</th>
@@ -192,7 +192,7 @@ function AdminProducts() {
                     {products.map((product: IProduct) => (
                       <tr
                         key={product._id}
-                        className='text-sm border-t border-slate-300 first:border-none'
+                        className='text-sm border-t border-skin-muted first:border-none'
                       >
                         <td className='px-4 py-3'>{product._id}</td>
                         <td className='px-4 py-3'>{product.name}</td>
@@ -204,12 +204,12 @@ function AdminProducts() {
                         <td className='px-4 py-3'>
                           <div className='flex gap-2'>
                             <Link href={`/admin/product/${product._id}`}>
-                              <a className='w-1/2 p-2 text-xs text-center rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'>
+                              <a className='w-1/2 p-2 text-xs text-center rounded bg-skin-button-inverted hover:bg-skin-button-inverted-hover'>
                                 Edit
                               </a>
                             </Link>
                             <button
-                              className='w-1/2 p-2 text-xs rounded bg-slate-200 hover:bg-slate-900 hover:text-slate-50'
+                              className='w-1/2 p-2 text-xs rounded bg-skin-button-inverted hover:bg-skin-button-inverted-hover'
                               onClick={() => handleProductDelete(product._id)}
                             >
                               {loadingDelete && deleteId === product._id ? (

@@ -87,7 +87,7 @@ export default function Register() {
       <div className='container p-6 mx-auto'>
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
-          className='max-w-xl p-6 mx-auto border rounded shadow-md border-slate-200'
+          className='max-w-xl p-6 mx-auto border rounded shadow-md border-skin-muted'
         >
           <h1 className='mb-8 text-xl font-semibold tracking-wide lg:text-2xl'>
             Register
@@ -159,7 +159,7 @@ export default function Register() {
           <div className='mt-8'>
             <button
               type='submit'
-              className='w-full px-4 py-3 text-sm rounded bg-slate-900 text-slate-50 hover:bg-sky-600 lg:text-base'
+              className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
             >
               Sign up
             </button>
@@ -168,7 +168,7 @@ export default function Register() {
             <p>
               Already have an account?{' '}
               <Link href={`/login?redirect=${redirect || '/'}`}>
-                <a className='font-medium text-sky-600 hover:text-sky-500'>
+                <a className='font-medium text-skin-accent hover:text-skin-accent-hover'>
                   Sign in
                 </a>
               </Link>

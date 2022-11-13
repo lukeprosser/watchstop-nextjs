@@ -52,7 +52,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <div
       key={product._id}
-      className='max-w-xs overflow-hidden border rounded shadow-md border-slate-300 lg:max-w-sm'
+      className='max-w-xs overflow-hidden border rounded shadow-md border-skin-muted lg:max-w-sm'
     >
       <Link href={`/product/${product.slug}`}>
         <a>
@@ -69,7 +69,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         <span className='font-light'>£{product.price}</span>
         <button
           type='button'
-          className='p-2 text-sm rounded-full bg-slate-900 text-slate-50 hover:bg-red-600 disabled:bg-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed'
+          className='p-2 text-sm rounded-full bg-skin-fill-muted text-skin-inverted hover:bg-skin-fill-accent disabled:bg-skin-button-inverted disabled:text-skin-inverted-disabled disabled:cursor-not-allowed'
           onClick={() => handleAddToCart(product)}
           disabled={!inStock}
         >
@@ -90,7 +90,7 @@ export default function Home({ products }: { products: Array<IProduct> }) {
         <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
           Products
         </h1>
-        <div className='flex flex-wrap items-center justify-center gap-8'>
+        <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-center'>
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
