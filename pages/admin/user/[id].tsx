@@ -158,10 +158,16 @@ function UserEdit({ params }: { params: IParams }) {
                   name='admin'
                   checked={admin}
                   onChange={(e) => setAdmin(e.target.checked)}
+                  disabled={admin}
+                  className={admin ? 'cursor-not-allowed' : ''}
                 />
                 <label
                   htmlFor={'admin'}
-                  className='ml-2 font-medium tracking-wide text-skin-muted'
+                  className={`ml-2 font-medium tracking-wide ${
+                    admin
+                      ? 'text-skin-disabled cursor-not-allowed'
+                      : 'text-skin-muted'
+                  }`}
                 >
                   Admin
                 </label>

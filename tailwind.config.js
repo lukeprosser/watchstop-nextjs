@@ -20,6 +20,7 @@ module.exports = {
           base: 'var(--color-text-base)',
           muted: 'var(--color-text-muted)',
           hover: 'var(--color-text-hover)',
+          disabled: 'var(--color-text-disabled)',
           accent: 'var(--color-text-accent)',
           'accent-muted': 'var(--color-text-accent-muted)',
           'accent-hover': 'var(--color-text-accent-hover)',
