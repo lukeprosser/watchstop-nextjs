@@ -1,6 +1,6 @@
 WatchStop is a full-stack ecommerce website built with TypeScript, React, Next.js, Node.js, MongoDB, and Tailwind CSS.
 
-Click here to view the deployed live demo [https://watchstop-nextjs.vercel.app/](https://watchstop-nextjs.vercel.app/).
+[Click here](https://watchstop-nextjs.vercel.app/) to view the deployed live demo.
 
 This application is hosted on Vercel and the database is deployed on MongoDB Atlas - please allow a few moments for the initial load.
 
@@ -8,7 +8,7 @@ This application is hosted on Vercel and the database is deployed on MongoDB Atl
 
 The following details can be used to log in as a standard user:
 
-- [demo@gmail.com](mailto:demo@gmail.com)
+- demo@gmail.com
 - password123
 
 # Overview
@@ -52,9 +52,9 @@ The following technologies make up the core functionality of the application:
 - React Hook Form - Form construction and validation
 - Notistack - Client-side notifications
 - JSON Web Token & bcrypt - Authentication and encryption
-- PayPal - Payment
+- PayPal - Payment gateway
 - Cloudinary - Image hosting
-- Chart.js & react-chartjs-2
+- Chart.js & react-chartjs-2 - Admin dashboard charts
 
 # Functionality
 
@@ -75,7 +75,7 @@ Notable functionality includes:
 
 # Main Features
 
-Below is an overview of the main features in this application, broken down by page, section, and category:
+Below is an overview of the main features in this application, broken down by page/section/category:
 
 ## Header
 
@@ -155,9 +155,9 @@ Below is an overview of the main features in this application, broken down by pa
 ![Order status - admin user](/public/images/readme/order-status-admin.png)
 ![Order status - standard user](/public/images/readme/order-status-standard.png)
 
-## Standard user account
+## Standard user account
 
-- Accessed by clicking on the user’s name in the header
+- Accessed by clicking on user’s name in header:
 
 ![User account access](/public/images/readme/user-account-access.png)
 
@@ -250,4 +250,4 @@ Form validation is in place across the application to inform the user of input i
 
 # Known issues
 
-- User logout action briefly redirects to ‘application error’ page in production deployment.
+- User logout action sometimes briefly redirects to ‘application error’ page in production deployment.
