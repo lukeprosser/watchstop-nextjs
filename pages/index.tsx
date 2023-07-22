@@ -52,33 +52,33 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <div
       key={product._id}
-      className='max-w-xs overflow-hidden border rounded shadow-md border-skin-muted lg:max-w-sm'
+      className="max-w-xs overflow-hidden border rounded shadow-md border-skin-muted lg:max-w-sm"
     >
       <Link href={`/product/${product.slug}`}>
         <a>
           <Image
             src={product.image}
             alt={product.name}
-            width='1280'
-            height='853'
+            width="1280"
+            height="853"
           />
-          <div className='p-2 flex justify-between items-center'>
-            <h3 className=' font-medium tracking-wide'>{product.name}</h3>
-            <p className='font-thin'>{product.category}</p>
+          <div className="flex items-center justify-between p-2">
+            <h3 className="font-medium tracking-wide ">{product.name}</h3>
+            <p className="font-thin">{product.category}</p>
           </div>
         </a>
       </Link>
-      <div className='flex items-center justify-between p-2'>
-        <span className='font-light'>£{product.price}</span>
+      <div className="flex items-center justify-between p-2">
+        <span className="font-light">£{product.price}</span>
         <button
-          type='button'
-          className='p-2 text-sm rounded-full bg-skin-fill-muted text-skin-inverted hover:bg-skin-fill-accent disabled:bg-skin-button-inverted disabled:text-skin-inverted-disabled disabled:cursor-not-allowed'
+          type="button"
+          className="p-2 text-sm rounded-full bg-skin-fill-muted text-skin-inverted hover:bg-skin-fill-accent disabled:bg-skin-button-inverted disabled:text-skin-inverted-disabled disabled:cursor-not-allowed"
           onClick={() => handleAddToCart(product)}
           disabled={!inStock}
         >
           <ShoppingBagIcon
             className={`w-4 h-4 ${!inStock && 'cursor-not-allowed'}`}
-            role='button'
+            role="button"
           />
         </button>
       </div>
@@ -88,12 +88,12 @@ const ProductCard = ({ product }: { product: IProduct }) => {
 
 export default function Home({ products }: { products: Array<IProduct> }) {
   return (
-    <Layout title='Home'>
-      <div className='container p-6 mx-auto'>
-        <h1 className='mb-4 text-xl font-semibold tracking-wide lg:text-2xl'>
+    <Layout title="Home">
+      <div className="container p-6 mx-auto">
+        <h1 className="mb-4 text-xl font-semibold tracking-wide lg:text-2xl">
           Products
         </h1>
-        <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-center'>
+        <div className="grid items-center justify-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
