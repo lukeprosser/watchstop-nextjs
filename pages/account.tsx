@@ -83,24 +83,24 @@ function Account() {
   };
 
   return (
-    <Layout title='Account'>
-      <div className='container p-6 mx-auto'>
-        <div className='grid-cols-6 md:grid'>
-          <Sidebar items={userSidebarItems} activeItem='account' />
-          <div className='col-span-5 py-4 mb-6 md:pl-8 md:mb-0'>
-            <h1 className='mb-6 text-xl font-semibold tracking-wide lg:text-2xl'>
+    <Layout title="Account">
+      <div className="container p-6 mx-auto">
+        <div className="grid-cols-6 md:grid">
+          <Sidebar items={userSidebarItems} activeItem="account" />
+          <div className="col-span-5 py-4 mb-6 md:pl-8 md:mb-0">
+            <h1 className="mb-6 text-xl font-semibold tracking-wide lg:text-2xl">
               Account
             </h1>
-            <p className='mb-8 font-light'>Update your account details:</p>
+            <p className="mb-8 font-light">Update your account details:</p>
             <form
               onSubmit={handleSubmit(handleFormSubmit)}
-              className='max-w-xl'
+              className="max-w-xl"
             >
               <FormField
-                id='name'
-                label='Name'
-                type='text'
-                placeholder='Name'
+                id="name"
+                label="Name"
+                type="text"
+                placeholder="Name"
                 errors={errors}
                 register={register('name', {
                   required: true,
@@ -113,10 +113,10 @@ function Account() {
                 }
               />
               <FormField
-                id='email'
-                label='Email'
-                type='email'
-                placeholder='Email address'
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="Email address"
                 errors={errors}
                 register={register('email', {
                   required: true,
@@ -129,10 +129,10 @@ function Account() {
                 }
               />
               <FormField
-                id='password'
-                label='Password'
-                type='password'
-                placeholder='Password'
+                id="password"
+                label="Password"
+                type="password"
+                placeholder="Password"
                 errors={errors}
                 register={register('password', {
                   validate: (value) => value === '' || value.length >= 8,
@@ -144,10 +144,10 @@ function Account() {
                 }
               />
               <FormField
-                id='passwordConfirm'
-                label='Confirm password'
-                type='password'
-                placeholder='Password'
+                id="passwordConfirm"
+                label="Confirm password"
+                type="password"
+                placeholder="Password"
                 errors={errors}
                 register={register('passwordConfirm', {
                   validate: (value) => value === '' || value.length >= 8,
@@ -158,10 +158,10 @@ function Account() {
                     : ''
                 }
               />
-              <div className='mt-8'>
+              <div className="mt-8">
                 <button
-                  type='submit'
-                  className='w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base'
+                  type="submit"
+                  className="w-full px-4 py-3 text-sm rounded bg-skin-fill-accent text-skin-inverted hover:bg-skin-fill-accent-hover lg:text-base"
                 >
                   Update
                 </button>

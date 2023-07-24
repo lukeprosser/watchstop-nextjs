@@ -11,7 +11,7 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
 
-describe('Home', () => {
+describe('Home page', () => {
   const products = productData.slice(0, 3);
 
   it('renders a heading', async () => {
