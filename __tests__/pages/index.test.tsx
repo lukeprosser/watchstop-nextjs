@@ -3,9 +3,9 @@
 
 import { render, screen, waitFor } from '../../utils/test-utils';
 import userEvent from '@testing-library/user-event';
+import { useRouter } from 'next/router';
 import Home from '../../pages/index';
 import productData from '../../__mocks__/products.json';
-import { useRouter } from 'next/router';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
@@ -22,7 +22,7 @@ describe('Home', () => {
     await waitFor(() => expect(heading).toBeInTheDocument());
   });
 
-  it('renders 8 products', async () => {
+  it('renders products', async () => {
     render(<Home products={products} />);
     const productHeadings = screen.getAllByRole('heading', {
       level: 3,
@@ -38,7 +38,9 @@ describe('Home', () => {
     }));
     render(<Home products={products} />);
 
-    const productAddToCartButtons = screen.getAllByRole('button');
+    const productAddToCartButtons = screen.getAllByRole('button', {
+      name: 'addtocart-btn',
+    });
 
     await user.click(productAddToCartButtons[0]);
     expect(push).toHaveBeenCalledWith('/cart');

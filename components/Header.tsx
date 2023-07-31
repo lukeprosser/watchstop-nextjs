@@ -11,7 +11,7 @@ import { IProductOrder } from '../constants';
 const Badge = ({ cartItems }: { cartItems: IProductOrder[] }) => {
   return (
     <span
-      className='absolute w-4 h-4 text-center bg-skin-fill-accent rounded-full md:right-0 text-xxs md:top-4'
+      className="absolute w-4 h-4 text-center rounded-full bg-skin-fill-accent md:right-0 text-xxs md:top-4"
       style={{ lineHeight: '15px' }}
     >
       {cartItems.reduce((prev, curr) => prev + curr.quantity, 0)}
@@ -42,30 +42,34 @@ const AccountOptions = ({
 
   return (
     <div
+      aria-label="account-menu"
       className={`${
         showAccountOptions ? `scale-100` : `scale-0`
       } transition origin-[10%_top] md:origin-[75%_top] ease-in-out duration-100 bg-skin-fill-inverted cursor-pointer top-10 absolute z-10 w-32 p-4 border rounded drop-shadow-lg md:right-0 border-skin-base md:py-2 md:text-right md:top-12 before:absolute before:bg-skin-fill-inverted before:content-[""] before:rotate-45 before:rounded-tl before:-top-2 before:left-3 before:w-4 before:h-4 before:border-t-inherit before:border-l-inherit before:md:left-[90px]`}
     >
-      <ul className='text-sm divide-y text-skin-base font-light'>
+      <ul
+        className="text-sm font-light divide-y text-skin-base"
+        aria-label="account-menu-nav"
+      >
         {admin && (
-          <li className='py-2 hover:text-skin-muted'>
-            <Link href='/admin/dashboard'>
+          <li className="py-2 hover:text-skin-muted">
+            <Link href="/admin/dashboard">
               <a>Dashboard</a>
             </Link>
           </li>
         )}
-        <li className='py-2 hover:text-skin-muted'>
-          <Link href='/account'>
+        <li className="py-2 hover:text-skin-muted">
+          <Link href="/account">
             <a>Account</a>
           </Link>
         </li>
-        <li className='py-2 hover:text-skin-muted'>
-          <Link href='/order-history'>
+        <li className="py-2 hover:text-skin-muted">
+          <Link href="/order-history">
             <a>Orders</a>
           </Link>
         </li>
         <li>
-          <button className='py-2 hover:text-skin-muted' onClick={handleLogout}>
+          <button className="py-2 hover:text-skin-muted" onClick={handleLogout}>
             Logout
           </button>
         </li>
@@ -95,36 +99,40 @@ export default function Header(): ReactElement {
   }, []);
 
   return (
-    <header className='text-lg text-skin-inverted bg-skin-fill md:py-0'>
-      <div className='container flex flex-wrap items-center justify-between px-4 py-4 mx-auto md:py-2'>
-        <Link href='/'>
-          <a className='text-xl font-semibold flex items-center tracking-wider'>
+    <header className="text-lg text-skin-inverted bg-skin-fill md:py-0">
+      <div className="container flex flex-wrap items-center justify-between px-4 py-4 mx-auto md:py-2">
+        <Link href="/">
+          <a className="flex items-center text-xl font-semibold tracking-wider">
             WATCHST
-            <ClockIcon className='w-5 h-5' />P
+            <ClockIcon className="w-5 h-5" />P
           </a>
         </Link>
         {showMobileNav ? (
-          <XMarkIcon
-            className='block w-6 h-6 cursor-pointer md:hidden'
-            role='button'
+          <button
+            className="block w-6 h-6 cursor-pointer md:hidden"
+            aria-label="close-btn"
             onClick={() => setShowMobileNav(!showMobileNav)}
-          />
+          >
+            <XMarkIcon />
+          </button>
         ) : (
-          <Bars3Icon
-            className='block w-6 h-6 cursor-pointer md:hidden'
-            role='button'
+          <button
+            className="block w-6 h-6 cursor-pointer md:hidden"
+            aria-label="hamburger-btn"
             onClick={() => setShowMobileNav(!showMobileNav)}
-          />
+          >
+            <Bars3Icon />
+          </button>
         )}
         <nav
           className={`${
             showMobileNav ? '' : 'hidden'
           } w-full md:flex md:items-center md:w-auto`}
         >
-          <ul className='pt-4 text-base tracking-wider text-skin-inverted-muted md:flex md:justify-between md:pt-0'>
-            <li className='relative'>
-              <Link href='/cart'>
-                <a className='block py-2 md:p-4 hover:text-skin-inverted'>
+          <ul className="pt-4 text-base tracking-wider text-skin-inverted-muted md:flex md:justify-between md:pt-0">
+            <li className="relative">
+              <Link href="/cart">
+                <a className="block py-2 md:p-4 hover:text-skin-inverted">
                   Cart
                   {cartItemsExist && cartItems.length > 0 && (
                     <Badge cartItems={cartItems} />
@@ -132,12 +140,12 @@ export default function Header(): ReactElement {
                 </a>
               </Link>
             </li>
-            <li ref={accountMenuRef} className='relative'>
+            <li ref={accountMenuRef} className="relative">
               {userInfoExists && userInfo ? (
                 <>
                   <button
-                    type='button'
-                    className='py-2 md:p-4 hover:text-skin-inverted tracking-wider'
+                    type="button"
+                    className="py-2 tracking-wider md:p-4 hover:text-skin-inverted"
                     onClick={() => setShowAccountOptions(!showAccountOptions)}
                   >
                     {userInfo.name}
@@ -150,8 +158,8 @@ export default function Header(): ReactElement {
                   />
                 </>
               ) : (
-                <Link href='/login'>
-                  <a className='block py-2 md:p-4 hover:text-skin-inverted'>
+                <Link href="/login">
+                  <a className="block py-2 md:p-4 hover:text-skin-inverted">
                     Login
                   </a>
                 </Link>

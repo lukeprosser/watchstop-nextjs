@@ -73,6 +73,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         <button
           type="button"
           className="p-2 text-sm rounded-full bg-skin-fill-muted text-skin-inverted hover:bg-skin-fill-accent disabled:bg-skin-button-inverted disabled:text-skin-inverted-disabled disabled:cursor-not-allowed"
+          aria-label="addtocart-btn"
           onClick={() => handleAddToCart(product)}
           disabled={!inStock}
         >
